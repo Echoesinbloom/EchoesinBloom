@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>The Greenhouse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --w:#fafaf8;--off:#f5f4f0;--paper:#efecea;
+      --rule:rgba(0,0,0,0.07);--rule-m:rgba(0,0,0,0.12);
+      --ink:#181714;--mid:#4a4840;--soft:#8a8880;--faint:#c0bdb8;
+      --moss:#5a7a48;--moss-p:#eef4e8;--moss-d:#3a5a28;--moss-light:#c2d4b8;
+      --gold:#c8920a;--gold-p:#fdf6e0;
+      --dusk:#6a6898;--dusk-p:#eeedf8;--dusk-d:#3a3870;
+      --rose:#a06060;--rose-p:#f8f0ee;
+      --earth:#7a5a40;--earth-p:#f5ede4;
+      --s:'Cormorant Garamond',serif;--n:'Jost',sans-serif;
+    }
+    body{font-family:var(--n);background:var(--off);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+    /* LOCK */
+    #lock{position:fixed;inset:0;background:var(--moss-p);z-index:1000;display:flex;align-items:center;justify-content:center;padding:2rem}
+    #lock.hidden{display:none}
+    .lock-box{background:var(--w);padding:2.5rem;width:100%;max-width:320px;text-align:center}
+    .lock-title{font-family:var(--s);font-size:30px;font-weight:300;font-style:italic;color:var(--ink);margin-bottom:.35rem}
+    .lock-sub{font-family:var(--s);font-size:14px;font-style:italic;color:var(--soft);margin-bottom:1.75rem;line-height:1.55}
+    .lock-rule{width:32px;height:1px;background:var(--moss-light);margin:0 auto 1.75rem}
+    .lock-input{width:100%;border:1px solid var(--rule-m);padding:.75rem 1rem;font-family:var(--n);font-size:15px;color:var(--ink);background:var(--off);outline:none;text-align:center;letter-spacing:.12em;border-radius:0;margin-bottom:.65rem}
+    .lock-input:focus{border-color:var(--moss)}
+    .lock-btn{width:100%;background:var(--moss);color:white;border:none;padding:.85rem;font-family:var(--n);font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-weight:500}
+    .lock-btn:hover{background:var(--moss-d)}
+    .lock-error{font-size:12px;color:var(--rose);margin-top:.5rem;font-style:italic;font-family:var(--s);display:none}
+
+    /* NAV */
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.75rem;border-bottom:1px solid rgba(90,122,72,.15);background:rgba(238,244,232,.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
+    .nav-left{}
+    .nav-private{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--moss);font-weight:500;margin-bottom:.15rem}
+    .nav-name{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink)}
+    .nav-right{display:flex;align-items:center;gap:1.25rem}
+    .nav-date{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+    .nav-lock{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);cursor:pointer;background:none;border:1px solid rgba(90,122,72,.3);font-family:var(--n);font-weight:500;padding:.35rem .75rem;transition:all .2s}
+    .nav-lock:hover{background:var(--moss);color:white}
+
+    /* MAIN */
+    .main{max-width:660px;margin:0 auto;padding:2rem 1.5rem 6rem}
+
+    /* SECTION HEADERS */
+    .sec-head{display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem}
+    .sec-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;white-space:nowrap}
+    .sec-rule{flex:1;height:1px}
+    .s-cur .sec-label{color:var(--moss)} .s-cur .sec-rule{background:rgba(90,122,72,.2)}
+    .s-ech .sec-label{color:var(--dusk)} .s-ech .sec-rule{background:rgba(106,104,152,.2)}
+    .s-add .sec-label{color:var(--earth)} .s-add .sec-rule{background:rgba(122,90,64,.2)}
+    .s-fn  .sec-label{color:var(--gold)}  .s-fn  .sec-rule{background:rgba(200,146,10,.2)}
+    .s-fg  .sec-label{color:var(--rose)}  .s-fg  .sec-rule{background:rgba(160,96,96,.2)}
+    .section{margin-bottom:2.5rem}
+
+    /* CURIOSITIES */
+    .cur-list{display:flex;flex-direction:column;gap:2px}
+    .cur-item{background:var(--w);border:1px solid var(--rule-m);cursor:pointer;transition:border-color .2s}
+    .cur-item:hover{border-color:var(--moss-light)}
+    .cur-item.active{border-color:rgba(90,122,72,.35)}
+    .cur-header{display:flex;align-items:baseline;gap:.9rem;padding:.85rem 1.1rem}
+    .cur-dash{font-size:11px;color:var(--faint);flex-shrink:0}
+    .cur-text{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);flex:1;line-height:1.3}
+    .cur-count{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);flex-shrink:0}
+    .cur-expand{overflow:hidden;max-height:0;transition:max-height .35s ease}
+    .cur-expand.open{max-height:400px}
+    .cur-entries{padding:.75rem 1.1rem .9rem;border-top:1px solid rgba(90,122,72,.12);background:var(--moss-p)}
+    .cur-entry{font-family:var(--s);font-size:13.5px;font-style:italic;color:var(--mid);padding:.3rem 0;border-bottom:1px solid rgba(90,122,72,.1);display:flex;align-items:baseline;gap:.6rem;line-height:1.45}
+    .cur-entry:last-child{border-bottom:none}
+    .cur-entry-mark{width:3px;height:3px;border-radius:50%;background:var(--moss);flex-shrink:0;margin-top:.5em}
+
+    .add-cur{display:flex;gap:.5rem;margin-top:3px}
+    .add-cur-in{flex:1;border:1px dashed var(--rule-m);padding:.65rem .9rem;font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink);background:var(--w);outline:none}
+    .add-cur-in:focus{border-color:var(--moss)}
+    .add-cur-in::placeholder{color:var(--faint)}
+    .add-cur-btn{background:none;border:1px solid var(--moss);color:var(--moss);padding:.65rem 1rem;font-family:var(--n);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:all .2s;white-space:nowrap}
+    .add-cur-btn:hover{background:var(--moss);color:white}
+
+    /* ECHOES */
+    .echo-list{display:flex;flex-direction:column;gap:2px}
+    .echo-card{background:var(--w);border:1px solid var(--rule-m);border-left:2px solid var(--dusk);overflow:hidden}
+    .echo-main{padding:.9rem 1.1rem;cursor:pointer;transition:background .2s}
+    .echo-main:hover{background:var(--off)}
+    .echo-text{font-family:var(--s);font-size:16px;font-style:italic;color:var(--mid);line-height:1.5;margin-bottom:.25rem}
+    .echo-meta{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+    .echo-respond-area{border-top:1px solid var(--rule);background:var(--dusk-p);overflow:hidden;max-height:0;transition:max-height .35s ease}
+    .echo-respond-area.open{max-height:300px}
+
+    /* responses */
+    .echo-responses{padding:.75rem 1.1rem;display:flex;flex-direction:column;gap:.5rem}
+    .echo-response{background:var(--w);border:1px solid rgba(106,104,152,.15);padding:.7rem .9rem}
+    .echo-response-text{font-family:var(--s);font-size:14px;font-style:italic;color:var(--mid);line-height:1.55;margin-bottom:.2rem}
+    .echo-response-date{font-size:9px;color:var(--faint);letter-spacing:.06em}
+    .echo-input-row{display:flex;gap:.5rem;padding:.75rem 1.1rem;border-top:1px solid rgba(106,104,152,.12)}
+    .echo-input{flex:1;border:none;border-bottom:1px solid rgba(106,104,152,.2);padding:.4rem 0;font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink);background:none;outline:none}
+    .echo-input::placeholder{color:var(--faint)}
+    .echo-reply-btn{background:none;border:1px solid var(--dusk);color:var(--dusk);padding:.4rem .9rem;font-family:var(--n);font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:500;flex-shrink:0;transition:all .2s}
+    .echo-reply-btn:hover{background:var(--dusk);color:white}
+    .echo-respond-toggle{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dusk);margin-left:auto;font-weight:500;opacity:.7}
+
+    /* ADD ENTRY */
+    .add-entry{background:var(--w);border:1px solid var(--rule-m);overflow:hidden}
+    .ae-types{display:flex;gap:0;border-bottom:1px solid var(--rule);overflow-x:auto;scrollbar-width:none}
+    .ae-types::-webkit-scrollbar{display:none}
+    .ae-type{padding:.65rem .85rem;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--soft);border:none;background:none;font-family:var(--n);font-weight:400;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0}
+    .ae-type:hover{color:var(--ink)}
+    .ae-type.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:500}
+    .ae-body{padding:1.1rem}
+
+    .ae-photo-zone{border:1px dashed var(--rule-m);padding:1.25rem;text-align:center;cursor:pointer;position:relative;background:var(--off);display:none;margin-bottom:.75rem;transition:background .2s}
+    .ae-photo-zone:hover{background:var(--paper)}
+    .ae-photo-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .ae-photo-zone-lbl{font-family:var(--s);font-size:14px;font-style:italic;color:var(--faint)}
+    .ae-photo-prev{width:100%;max-height:200px;object-fit:cover;display:none;margin-bottom:.75rem}
+
+    .ae-title{width:100%;border:none;border-bottom:1px solid var(--rule-m);padding:.5rem 0;font-family:var(--s);font-size:19px;font-style:italic;color:var(--ink);background:none;outline:none;margin-bottom:.6rem}
+    .ae-title::placeholder{color:var(--faint)}
+    .ae-textarea{width:100%;border:none;background:none;font-family:var(--s);font-size:15px;font-style:italic;color:var(--mid);outline:none;resize:none;min-height:80px;line-height:1.7;margin-bottom:.6rem}
+    .ae-textarea::placeholder{color:var(--faint)}
+
+    .ae-extras{display:none}
+    .ae-extras.show{display:block}
+    .ae-extra-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:.75rem 0 .3rem;font-weight:500;display:block}
+    .ae-extra-area{width:100%;border:none;background:var(--off);padding:.65rem .75rem;font-family:var(--s);font-size:14px;font-style:italic;color:var(--mid);outline:none;resize:none;min-height:60px;line-height:1.6;margin-bottom:.25rem}
+    .ae-extra-area::placeholder{color:var(--faint)}
+
+    .ae-tags{width:100%;border:none;border-bottom:1px solid var(--rule-m);padding:.4rem 0;font-size:12px;color:var(--soft);background:none;outline:none;margin-bottom:.75rem;font-family:var(--n)}
+    .ae-tags::placeholder{color:var(--faint);font-size:11px}
+
+    .ae-threads-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.4rem;font-weight:500}
+    .thread-pills{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.85rem}
+    .tp{font-size:10px;padding:.25rem .65rem;border:1px solid var(--rule-m);cursor:pointer;color:var(--soft);transition:all .15s;font-family:var(--n)}
+    .tp.on{background:var(--moss-p);border-color:rgba(90,122,72,.3);color:var(--moss-d)}
+
+    .ae-pub{display:flex;align-items:center;gap:.75rem;margin-bottom:.85rem}
+    .ae-pub-lbl{font-size:11px;color:var(--soft);flex:1;font-family:var(--s);font-style:italic}
+    .pub-sw{width:34px;height:18px;background:var(--rule-m);border-radius:9px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+    .pub-sw.on{background:var(--moss)}
+    .pub-knob{width:14px;height:14px;background:white;border-radius:50%;position:absolute;top:2px;left:2px;transition:transform .2s}
+    .pub-sw.on .pub-knob{transform:translateX(16px)}
+    .pub-stat{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);flex-shrink:0;min-width:40px}
+
+    .ae-plant{width:100%;background:var(--moss);color:white;border:none;padding:.85rem;font-family:var(--n);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:background .2s}
+    .ae-plant:hover{background:var(--moss-d)}
+
+    /* FEED */
+    .fn-feed{display:flex;flex-direction:column;gap:2px}
+    .fn-card{background:var(--w);border:1px solid var(--rule-m);display:flex;gap:.85rem;padding:.9rem 1.1rem;align-items:flex-start}
+    .fn-thumb{width:52px;height:52px;object-fit:cover;background:var(--paper);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    .fn-type-mark{width:8px;height:8px;border-radius:50%}
+    .fn-body{flex:1;min-width:0}
+    .fn-note{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink);line-height:1.4;margin-bottom:.2rem}
+    .fn-sub{font-family:var(--s);font-size:13px;font-style:italic;color:var(--soft);line-height:1.4;margin-bottom:.25rem}
+    .fn-meta{font-size:9px;color:var(--faint);letter-spacing:.05em;margin-bottom:.25rem}
+    .fn-tags{display:flex;gap:.3rem;flex-wrap:wrap}
+    .fn-tag{font-size:9px;padding:1px 6px;background:var(--off);color:var(--soft)}
+
+    /* FUTURE GARDEN */
+    .fg-list{display:flex;flex-direction:column;gap:2px}
+    .fg-seed{background:var(--w);border:1px solid var(--rule-m);border-left:2px solid var(--rose);padding:.9rem 1.1rem}
+    .fg-seed-text{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);line-height:1.45;margin-bottom:.2rem}
+    .fg-seed-status{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--rose)}
+    .add-fg{display:flex;gap:.5rem;margin-top:3px}
+    .add-fg-in{flex:1;border:1px dashed rgba(160,96,96,.25);padding:.65rem .9rem;font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink);background:var(--w);outline:none}
+    .add-fg-in:focus{border-color:var(--rose)}
+    .add-fg-in::placeholder{color:var(--faint)}
+    .add-fg-btn{background:none;border:1px solid var(--rose);color:var(--rose);padding:.65rem 1rem;font-family:var(--n);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:all .2s;white-space:nowrap}
+    .add-fg-btn:hover{background:var(--rose);color:white}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(16px);background:var(--ink);color:white;padding:.6rem 1.25rem;font-family:var(--s);font-size:14px;font-style:italic;opacity:0;transition:all .3s;pointer-events:none;z-index:500;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    /* empty state */
+    .empty{font-family:var(--s);font-size:15px;font-style:italic;color:var(--faint);padding:.75rem 0}
+  </style>
+</head>
+<body>
+
+<!-- LOCK -->
+<div id="lock">
+  <div class="lock-box">
+    <div class="lock-title">The Greenhouse</div>
+    <div class="lock-sub">This is for you. Not the audience.<br>Come tend what's growing.</div>
+    <div class="lock-rule"></div>
+    <input type="password" class="lock-input" id="lock-input" placeholder="password" onkeydown="if(event.key==='Enter')unlock()">
+    <button class="lock-btn" onclick="unlock()">Enter</button>
+    <div class="lock-error" id="lock-error">That's not it. Try again.</div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-left">
+    <div class="nav-private">Private</div>
+    <div class="nav-name">The Greenhouse</div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-date" id="nav-date"></div>
+    <button class="nav-lock" onclick="lockUp()">Lock</button>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- CURRENT CURIOSITIES -->
+  <div class="section">
+    <div class="sec-head s-cur">
+      <div class="sec-label">Current Curiosity</div>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="cur-list" id="cur-list"></div>
+    <div class="add-cur" style="margin-top:3px">
+      <input class="add-cur-in" type="text" id="new-cur" placeholder="What are you curious about right now...">
+      <button class="add-cur-btn" onclick="addCuriosity()">Plant</button>
+    </div>
+  </div>
+
+  <!-- ECHOES -->
+  <div class="section">
+    <div class="sec-head s-ech">
+      <div class="sec-label">Recent Echoes</div>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="echo-list" id="echo-list"></div>
+  </div>
+
+  <!-- ADD ENTRY -->
+  <div class="section">
+    <div class="sec-head s-add">
+      <div class="sec-label">Add New Entry</div>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="add-entry">
+      <div class="ae-types" id="ae-types"></div>
+      <div class="ae-body">
+        <div class="ae-photo-zone" id="ae-photo-zone">
+          <input type="file" accept="image/*" onchange="loadPhoto(event)">
+          <div class="ae-photo-zone-lbl">Add a photo — tap to choose</div>
+        </div>
+        <img id="ae-photo-prev" class="ae-photo-prev" alt="">
+        <input class="ae-title" type="text" id="ae-title" placeholder="What arrived today...">
+        <textarea class="ae-textarea" id="ae-body-text" placeholder="Write it here. One sentence or a hundred."></textarea>
+        <div class="ae-extras" id="ae-extras">
+          <span class="ae-extra-lbl">Traditional symbolism</span>
+          <textarea class="ae-extra-area" id="ae-symbolism" placeholder="What does this symbol carry across traditions..."></textarea>
+          <span class="ae-extra-lbl">My reflection</span>
+          <textarea class="ae-extra-area" id="ae-reflection" placeholder="What was happening when this appeared? What did it bring up?"></textarea>
+        </div>
+        <input class="ae-tags" type="text" id="ae-tags" placeholder="Tags — season · symbol · feeling · theme">
+        <div class="ae-threads-lbl">Connect to a thread</div>
+        <div class="thread-pills" id="thread-pills"></div>
+        <div class="ae-pub">
+          <div class="ae-pub-lbl">Move to public Field Notes when ready</div>
+          <div class="pub-sw" id="pub-sw" onclick="togglePub()"><div class="pub-knob"></div></div>
+          <div class="pub-stat" id="pub-stat">Private</div>
+        </div>
+        <button class="ae-plant" onclick="plantEntry()">Plant this entry</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECENT FIELD NOTES -->
+  <div class="section">
+    <div class="sec-head s-fn">
+      <div class="sec-label">Recent Field Notes</div>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="fn-feed" id="fn-feed"></div>
+  </div>
+
+  <!-- FUTURE GARDEN -->
+  <div class="section">
+    <div class="sec-head s-fg">
+      <div class="sec-label">Future Garden</div>
+      <div class="sec-rule"></div>
+    </div>
+    <div class="fg-list" id="fg-list"></div>
+    <div class="add-fg" style="margin-top:3px">
+      <input class="add-fg-in" type="text" id="new-fg" placeholder="What are you becoming available for...">
+      <button class="add-fg-btn" onclick="addFG()">Plant</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PW='Sunflower33!';
+function unlock(){
+  if(document.getElementById('lock-input').value===PW){
+    document.getElementById('lock').classList.add('hidden');
+    sessionStorage.setItem('gh','1');
+    init();
+  } else {
+    document.getElementById('lock-error').style.display='block';
+    document.getElementById('lock-input').value='';
+  }
+}
+function lockUp(){sessionStorage.removeItem('gh');location.reload()}
+if(sessionStorage.getItem('gh')==='1'){document.getElementById('lock').classList.add('hidden');init()}
+
+function setDate(){
+  const d=new Date();
+  const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('nav-date').textContent=M[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+}
+
+function load(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+let curiosities,echoes,entries,fgSeeds,selThreads=[],activeType='note',pubOn=false,photoBlob=null;
+
+const THREADS=['wonder','aliveness','body','motherhood','beauty','community','joy','nature','healing','embodiment','creativity','spiral up','becoming'];
+const TYPES=[
+  {id:'note',label:'Note',c:'#9a8050'},
+  {id:'photo',label:'Photo',c:'#7a9068'},
+  {id:'seed',label:'Seed',c:'#8a7060'},
+  {id:'symbol',label:'Symbol',c:'#8a7ab0'},
+  {id:'dream',label:'Dream',c:'#6a6898'},
+  {id:'curiosity',label:'Curiosity',c:'#7a9ab0'},
+  {id:'vision',label:'Vision',c:'#9a7858'},
+  {id:'voice',label:'Voice / Text',c:'#c4847a'},
+];
+
+function init(){
+  setDate();
+  curiosities=load('gh-cur',[
+    {id:1,text:'Community',entries:['First gathering felt like coming home','Looking for my people — June 2026','The fear of being seen and the longing for it'],open:false},
+    {id:2,text:'Moth Wings',entries:['Drawn to light. Devoted, not confused.'],open:false},
+    {id:3,text:'What happens after healing?',entries:["Joy that doesn't need permission","Dancing alone in the kitchen"],open:false},
+    {id:4,text:'Wonder',entries:['Dew on grass at 6am','The frog — third morning','Seed heads in October','Sunflower turning'],open:false},
+    {id:5,text:'Aliveness',entries:['Fascia and memory','The body knows before the mind','Movement as participation'],open:false},
+  ]);
+  echoes=load('gh-echoes',[
+    {id:1,text:'Wonder has appeared 14 times this year.',meta:'Last appeared 3 days ago',responses:[]},
+    {id:2,text:'Community first appeared in June 2026.',meta:'Thread length 8 months',responses:[]},
+    {id:3,text:'You photographed frogs again.',meta:'7 appearances total — pattern: thresholds',responses:["I didn't realize I kept coming back to frogs at moments of transition. But looking at the dates — yes. Every time."]},
+    {id:4,text:'Moth wings has returned after 2 months.',meta:'Symbol — transformation thread',responses:[]},
+  ]);
+  entries=load('gh-entries',[
+    {id:1,type:'photo',title:'The frog on the window — third morning',body:'',tags:'frog · autumn · synchronicity · wonder',threads:['wonder','nature'],date:'Sep 2024',photo:null},
+    {id:2,type:'seed',title:'What if healing is simply creating enough safety to become curious again?',body:'',tags:'healing · curiosity · wonder',threads:['wonder','healing'],date:'Nov 2024',photo:null},
+    {id:3,type:'note',title:'I danced alone in the kitchen for eleven minutes',body:'Nobody saw it. That was the point.',tags:'joy · aliveness · body',threads:['aliveness','joy','body'],date:'Aug 2024',photo:null},
+    {id:4,type:'symbol',title:'Four frogs — all facing the same direction',body:'The week after the first gathering. Between two versions of myself.',tags:'frog · symbol · threshold · synchronicity',threads:['wonder','community','becoming'],date:'Jun 2026',photo:null},
+  ]);
+  fgSeeds=load('gh-fg',[
+    {text:'A book that reads like field notes, memoir, and medicine all at once',status:'growing'},
+    {text:'Retreats in beautiful, quiet places. Small. Permission-based.',status:'planting'},
+    {text:'Wildflower Athlete — movement as aliveness, not punishment',status:'growing'},
+    {text:'Ease without earning it through suffering',status:'planting'},
+  ]);
+  renderAll();
+}
+
+function renderAll(){
+  renderCuriosities();
+  renderEchoes();
+  renderTypes();
+  renderThreadPills();
+  renderFeed();
+  renderFG();
+}
+
+/* CURIOSITIES */
+function renderCuriosities(){
+  const el=document.getElementById('cur-list');
+  el.innerHTML=curiosities.map((c,i)=>`
+    <div class="cur-item${c.open?' active':''}">
+      <div class="cur-header" onclick="toggleCur(${i})">
+        <span class="cur-dash">&mdash;</span>
+        <span class="cur-text">${c.text}</span>
+        <span class="cur-count">${(c.entries||[]).length} echoes</span>
+      </div>
+      <div class="cur-expand${c.open?' open':''}">
+        <div class="cur-entries">
+          ${(c.entries||[]).map(e=>`<div class="cur-entry"><span class="cur-entry-mark"></span>${e}</div>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleCur(i){curiosities[i].open=!curiosities[i].open;save('gh-cur',curiosities);renderCuriosities()}
+function addCuriosity(){
+  const inp=document.getElementById('new-cur');
+  const v=inp.value.trim();if(!v)return;
+  curiosities.unshift({id:Date.now(),text:v,entries:[],open:false});
+  save('gh-cur',curiosities);inp.value='';renderCuriosities();toast('Curiosity planted');
+}
+
+/* ECHOES */
+function renderEchoes(){
+  const el=document.getElementById('echo-list');
+  el.innerHTML=echoes.map((e,i)=>`
+    <div class="echo-card">
+      <div class="echo-main" onclick="toggleEcho(${i})">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem">
+          <div>
+            <div class="echo-text">${e.text}</div>
+            <div class="echo-meta">${e.meta}${e.responses&&e.responses.length?' &middot; '+e.responses.length+' response'+(e.responses.length>1?'s':''):''}</div>
+          </div>
+          <div class="echo-respond-toggle">${e.open?'close':'respond'}</div>
+        </div>
+      </div>
+      <div class="echo-respond-area${e.open?' open':''}">
+        ${e.responses&&e.responses.length?`<div class="echo-responses">${e.responses.map(r=>`
+          <div class="echo-response">
+            <div class="echo-response-text">${r.text||r}</div>
+            <div class="echo-response-date">${r.date||'Earlier'}</div>
+          </div>`).join('')}</div>`:''}
+        <div class="echo-input-row">
+          <input class="echo-input" type="text" id="echo-input-${i}" placeholder="What does this stir in you right now...">
+          <button class="echo-reply-btn" onclick="replyToEcho(${i})">Reply</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleEcho(i){echoes[i].open=!echoes[i].open;save('gh-echoes',echoes);renderEchoes();
+  if(echoes[i].open)setTimeout(()=>{const inp=document.getElementById('echo-input-'+i);if(inp)inp.focus()},350)}
+function replyToEcho(i){
+  const inp=document.getElementById('echo-input-'+i);
+  const v=inp.value.trim();if(!v)return;
+  if(!echoes[i].responses)echoes[i].responses=[];
+  const d=new Date();
+  const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  echoes[i].responses.push({text:v,date:M[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear()});
+  save('gh-echoes',echoes);renderEchoes();toast('Response planted');
+}
+
+/* TYPES */
+function renderTypes(){
+  document.getElementById('ae-types').innerHTML=TYPES.map(t=>`
+    <button class="ae-type${t.id===activeType?' active':''}" onclick="setType('${t.id}')">${t.label}</button>`).join('');
+}
+function setType(id){
+  activeType=id;renderTypes();
+  document.getElementById('ae-photo-zone').style.display=(id==='photo')?'block':'none';
+  document.getElementById('ae-extras').classList.toggle('show',id==='symbol');
+  const ph={note:'What arrived today...',photo:'One sentence about this photo...',seed:'A fragment. Complete as it is.',symbol:'What symbol appeared?',dream:'The dream, written down...',curiosity:'What are you curious about?',vision:'What are you becoming available for?',voice:'Paste voice memo or write freely...'};
+  document.getElementById('ae-title').placeholder=ph[id]||'What arrived today...';
+}
+
+/* THREADS */
+function renderThreadPills(){
+  document.getElementById('thread-pills').innerHTML=THREADS.map(t=>`
+    <div class="tp${selThreads.includes(t)?' on':''}" onclick="toggleThread('${t}')">${t}</div>`).join('');
+}
+function toggleThread(t){
+  if(selThreads.includes(t))selThreads=selThreads.filter(x=>x!==t);else selThreads.push(t);
+  renderThreadPills();
+}
+
+/* PUBLIC */
+function togglePub(){
+  pubOn=!pubOn;
+  document.getElementById('pub-sw').classList.toggle('on',pubOn);
+  document.getElementById('pub-stat').textContent=pubOn?'Public':'Private';
+}
+
+/* PHOTO */
+function loadPhoto(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    photoBlob=ev.target.result;
+    const p=document.getElementById('ae-photo-prev');p.src=ev.target.result;p.style.display='block';
+    document.getElementById('ae-photo-zone').style.display='none';
+  };
+  r.readAsDataURL(f);
+}
+
+/* PLANT */
+function plantEntry(){
+  const title=document.getElementById('ae-title').value.trim();
+  if(!title){toast('Add a note first');return;}
+  const d=new Date();
+  const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const entry={
+    id:Date.now(),type:activeType,title,
+    body:document.getElementById('ae-body-text').value.trim(),
+    symbolism:document.getElementById('ae-symbolism').value.trim(),
+    reflection:document.getElementById('ae-reflection').value.trim(),
+    tags:document.getElementById('ae-tags').value.trim(),
+    threads:[...selThreads],public:pubOn,
+    date:M[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear(),
+    photo:photoBlob||null,
+  };
+  entries.unshift(entry);
+  save('gh-entries',entries);
+  updateEchoes(entry);
+  // reset
+  document.getElementById('ae-title').value='';
+  document.getElementById('ae-body-text').value='';
+  document.getElementById('ae-symbolism').value='';
+  document.getElementById('ae-reflection').value='';
+  document.getElementById('ae-tags').value='';
+  document.getElementById('ae-photo-prev').style.display='none';
+  document.getElementById('ae-photo-zone').style.display=activeType==='photo'?'block':'none';
+  photoBlob=null;selThreads=[];pubOn=false;
+  document.getElementById('pub-sw').classList.remove('on');
+  document.getElementById('pub-stat').textContent='Private';
+  renderThreadPills();renderFeed();toast('Planted');
+}
+
+function updateEchoes(entry){
+  if(!entry.threads||!entry.threads.length)return;
+  entry.threads.forEach(t=>{
+    const count=entries.filter(e=>e.threads&&e.threads.includes(t)).length;
+    if(count>1){
+      const msg='"'+t+'" has now appeared in '+count+' entries.';
+      if(!echoes.find(e=>e.text===msg)){
+        echoes.unshift({id:Date.now(),text:msg,meta:'Just now',responses:[]});
+        if(echoes.length>10)echoes.pop();
+        save('gh-echoes',echoes);renderEchoes();
+      }
+    }
+  });
+}
+
+/* FEED */
+function renderFeed(){
+  const el=document.getElementById('fn-feed');
+  const recent=entries.slice(0,8);
+  if(!recent.length){el.innerHTML=`<div class="empty">Nothing planted yet. Add your first entry above.</div>`;return;}
+  el.innerHTML=recent.map(e=>{
+    const tc=TYPES.find(t=>t.id===e.type);
+    const color=tc?tc.c:'#9a9080';
+    return`<div class="fn-card">
+      ${e.photo
+        ?`<img src="${e.photo}" class="fn-thumb" style="object-fit:cover" alt="">`
+        :`<div class="fn-thumb"><div class="fn-type-mark" style="background:${color}"></div></div>`}
+      <div class="fn-body">
+        <div class="fn-note">${e.title}</div>
+        ${e.body?`<div class="fn-sub">${e.body}</div>`:''}
+        <div class="fn-meta">${e.type} &middot; ${e.date} &middot; ${e.public?'public':'private'}</div>
+        ${e.tags?`<div class="fn-tags">${e.tags.split('·').map(t=>`<span class="fn-tag">${t.trim()}</span>`).join('')}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* FG */
+function renderFG(){
+  const el=document.getElementById('fg-list');
+  el.innerHTML=fgSeeds.map(s=>`
+    <div class="fg-seed">
+      <div class="fg-seed-text">${s.text}</div>
+      <div class="fg-seed-status">${s.status==='growing'?'Growing':'Being planted'}</div>
+    </div>`).join('');
+}
+function addFG(){
+  const inp=document.getElementById('new-fg');
+  const v=inp.value.trim();if(!v)return;
+  fgSeeds.unshift({text:v,status:'planting'});
+  save('gh-fg',fgSeeds);inp.value='';renderFG();toast('Planted in the Future Garden');
+}
+
+/* TOAST */
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.id==='new-cur'){addCuriosity()}
+  if(e.key==='Enter'&&e.target.id==='new-fg'){addFG()}
+});
+
+window.unlock=unlock;window.lockUp=lockUp;
+window.toggleCur=toggleCur;window.addCuriosity=addCuriosity;
+window.toggleEcho=toggleEcho;window.replyToEcho=replyToEcho;
+window.setType=setType;window.toggleThread=toggleThread;
+window.togglePub=togglePub;window.loadPhoto=loadPhoto;
+window.plantEntry=plantEntry;window.addFG=addFG;
+</script>
+</body>
+</html>
