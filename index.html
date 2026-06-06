@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Echoes in Bloom — A documented relationship with life. Not a healing website. The question of what comes after.">
+  <meta property="og:title" content="Echoes in Bloom">
+  <meta property="og:description" content="A documented relationship with life.">
+  <meta property="og:type" content="website">
+  <title>Echoes in Bloom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-name">Echoes in Bloom</div>
+    <div class="nav-links">
+      <a href="#field-notes" class="nl">Field Notes</a>
+      <a href="#spiral-up" class="nl">Spiral Up</a>
+      <a href="#echoes" class="nl">Echoes</a>
+      <a href="#bloom" class="nl">Bloom</a>
+      <a href="#greenhouse" class="nl nl-gh">
+        <span class="nl-gh-dot"></span>Greenhouse
+      </a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-season">
+      <span class="hero-season-line"></span>
+      Summer 2025
+    </div>
+    <h1 class="hero-title">What happens<br>after survival.</h1>
+    <p class="hero-body">Not a healing website. The question of what comes after — what joy actually feels like in the body, how we learn wonder again, what we do with this one life once we've stopped merely recovering from it.</p>
+    <a href="#field-notes" class="hero-cta">Come walk with me <span class="cta-line"></span></a>
+  </div>
+
+  <!-- GREENHOUSE -->
+  <section class="gh" id="greenhouse">
+    <div class="gh-inner">
+      <div class="gh-left">
+        <div class="gh-marker">The Greenhouse</div>
+        <h2 class="gh-heading">Currently<br>incubating</h2>
+        <p class="gh-note">Seeds that arrived this season. Not yet ready to bloom. That's the point.</p>
+      </div>
+      <div class="gh-right">
+        <div class="gh-seeds">
+          <!-- UPDATE: Replace these seeds with your current ones -->
+          <div class="gh-seed">What if healing is simply creating enough safety to become curious again?</div>
+          <div class="gh-seed">The body's relationship to trust, before the mind catches up.</div>
+          <div class="gh-seed">Play as the most serious practice I know.</div>
+          <div class="gh-seed">Moth wings. I keep coming back to moth wings.</div>
+        </div>
+        <button class="gh-enter">Enter the greenhouse <span class="gh-enter-line"></span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CURRENT CURIOSITY -->
+  <div class="cur">
+    <div class="cur-head">
+      <div class="cur-lbl">Current curiosity</div>
+      <div class="cur-rule"></div>
+    </div>
+
+    <!-- UPDATE: Replace these curiosities with your current ones -->
+    <div class="ci" onclick="toggleCuriosity(this)">
+      <span class="ci-dash">&mdash;</span>
+      <span class="ci-t">What does joy actually feel like in the body?</span>
+      <span class="ci-badge b-alive">Alive</span>
+    </div>
+    <div class="cx">
+      <div class="cx-in">Not the concept. The sensation. Where does it land? How long does it stay before the nervous system decides it's safe to keep?</div>
+    </div>
+
+    <div class="ci" onclick="toggleCuriosity(this)">
+      <span class="ci-dash">&mdash;</span>
+      <span class="ci-t">Community after isolation</span>
+      <span class="ci-badge b-alive">Alive</span>
+    </div>
+    <div class="cx">
+      <div class="cx-in">Not just finding people. Learning to believe again that you are worth being found.</div>
+    </div>
+
+    <div class="ci" onclick="toggleCuriosity(this)">
+      <span class="ci-dash">&mdash;</span>
+      <span class="ci-t">Aliveness</span>
+      <span class="ci-badge b-alive">Alive</span>
+    </div>
+    <div class="cx">
+      <div class="cx-in">Not happiness. Closer to participation. The moment you stop watching your life and start being inside it.</div>
+    </div>
+
+    <div class="ci" onclick="toggleCuriosity(this)">
+      <span class="ci-dash">&mdash;</span>
+      <span class="ci-t">Moth wings</span>
+      <span class="ci-badge b-seed">Seed</span>
+    </div>
+    <div class="cx">
+      <div class="cx-in">No further explanation yet.</div>
+    </div>
+
+    <div class="ci" onclick="toggleCuriosity(this)">
+      <span class="ci-dash">&mdash;</span>
+      <span class="ci-t">Fascia and memory</span>
+      <span class="ci-badge b-new">New</span>
+    </div>
+    <div class="cx">
+      <div class="cx-in">The fascia holds things the mind has already moved on from. Learning to listen there first.</div>
+    </div>
+  </div>
+
+  <!-- FIELD NOTES -->
+  <section class="fn" id="field-notes">
+    <div class="fn-head">
+      <div class="fn-lbl">Field Notes &middot; What I witnessed</div>
+      <button class="fn-wander">wander the field &rarr;</button>
+    </div>
+
+    <!-- TOP ROW: 2 large photos -->
+    <div class="pg pg-2">
+
+      <!-- UPDATE: Replace src with your actual photo path e.g. photos/frog-window.jpg -->
+      <div class="pc">
+        <div class="scene" style="min-height:320px;background:#b8c8a8">
+          <img src="photos/field-note-1.jpg" alt="The frog on the window" class="pc-img" onerror="this.style.display='none'">
+        </div>
+        <div class="pcc">
+          <div class="pcc-note">The frog on the window &mdash; third morning in a row.</div>
+          <div class="pcc-meta">Autumn &middot; Wonder &middot; Synchronicity</div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <div class="scene" style="min-height:320px;background:#c0d0d8">
+          <img src="photos/field-note-2.jpg" alt="Dew on grass" class="pc-img" onerror="this.style.display='none'">
+        </div>
+        <div class="pcc">
+          <div class="pcc-note">Dew on grass at 6am. I didn&rsquo;t have words for it.</div>
+          <div class="pcc-meta">Summer &middot; Awe &middot; Morning</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM ROW: 3 smaller photos -->
+    <div class="pg pg-3" style="margin-top:2px">
+
+      <div class="pc">
+        <div class="scene" style="min-height:220px;background:#c8b870">
+          <img src="photos/field-note-3.jpg" alt="Sunflower" class="pc-img" onerror="this.style.display='none'">
+        </div>
+        <div class="pcc">
+          <div class="pcc-note">She said: so do you, Mama.</div>
+          <div class="pcc-meta">Motherhood &middot; Love</div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <div class="scene" style="min-height:220px;background:#b8b0c8">
+          <img src="photos/field-note-4.jpg" alt="Butterfly" class="pc-img" onerror="this.style.display='none'">
+        </div>
+        <div class="pcc">
+          <div class="pcc-note">She landed on my arm while I was crying. I didn&rsquo;t move for four minutes.</div>
+          <div class="pcc-meta">Summer &middot; Awe &middot; Butterfly</div>
+        </div>
+      </div>
+
+      <div class="pc">
+        <div class="scene" style="min-height:220px;background:#d0c8b8">
+          <img src="photos/field-note-5.jpg" alt="Field note" class="pc-img" onerror="this.style.display='none'">
+        </div>
+        <div class="pcc">
+          <div class="pcc-note">A feather on the porch. I kept it anyway.</div>
+          <div class="pcc-meta">Spring &middot; Grief &middot; Feather</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BLOOM -->
+  <section class="bloom" id="bloom">
+    <div class="bloom-lbl">From the bloom</div>
+
+    <!-- UPDATE: Replace with your actual essays and stories -->
+    <div class="bi">
+      <div class="bi-k">Spiral Up &middot; Spring &middot; Essay</div>
+      <div class="bi-t">On beginning again &mdash; for the sixth time</div>
+      <div class="bi-e">I have started over so many times. I used to call it failure. Now I recognize it as the nature of seeds &mdash; they do not bloom once. They give themselves to the ground, again and again.</div>
+    </div>
+
+    <div class="bi">
+      <div class="bi-k">Bloom &middot; Summer &middot; Aliveness</div>
+      <div class="bi-t">I danced alone in the kitchen for eleven minutes</div>
+      <div class="bi-e">Nobody saw it. That was the point. Joy that doesn&rsquo;t need a witness is a different kind of joy entirely.</div>
+    </div>
+
+    <div class="bi">
+      <div class="bi-k">Motherhood &middot; Summer</div>
+      <div class="bi-t">Tending without forcing</div>
+      <div class="bi-e">My daughter asked why sunflowers turn. I told her they follow the light. She said, so do you, Mama. And I didn&rsquo;t know how to answer.</div>
+    </div>
+
+  </section>
+
+  <!-- ECHOES -->
+  <section class="ech" id="echoes">
+    <div class="ech-lbl">Echoes &middot; What recurs</div>
+    <div class="ech-quote">"The butterfly appeared three times that summer. I stopped calling it coincidence around the second time."</div>
+    <div class="sym-row">
+      <!-- UPDATE: Add your own symbols as they accumulate -->
+      <div class="sym">butterfly</div>
+      <div class="sym">frog</div>
+      <div class="sym">feather</div>
+      <div class="sym">dew</div>
+      <div class="sym">moth</div>
+      <div class="sym">seed head</div>
+      <div class="sym">moonlight</div>
+      <div class="sym">spiral</div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <div class="about">
+    <div class="about-photo-col">
+      <!-- UPDATE: Replace with your actual photo -->
+      <img src="photos/hannah.jpg" alt="Hannah" class="a-img" onerror="this.style.background='#d8d0c0'">
+      <div class="a-cap">Hannah</div>
+    </div>
+    <div class="about-text-col">
+      <div class="a-name">Hannah</div>
+      <!-- UPDATE: Make this yours. This is a starting point. -->
+      <div class="a-body">
+        I got emotional over dew on grass. I carried a turkey feather because of a song lyric. I talk to frogs. I dance in my room.<br><br>
+        I am trying to learn <strong>the language of aliveness</strong> while raising a son and documenting the whole strange beautiful thing as I go.<br><br>
+        Echoes in Bloom is the record.
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot-l">Come walk with me.</div>
+    <div class="foot-r">Summer 2025 &middot; Echoes in Bloom</div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
