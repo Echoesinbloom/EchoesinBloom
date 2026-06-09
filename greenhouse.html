@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>The Greenhouse — Echoes in Bloom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --w:#fafaf8;--off:#f5f4f0;--paper:#efecea;
+      --rule:rgba(0,0,0,0.07);--rule-m:rgba(0,0,0,0.12);
+      --ink:#181714;--mid:#4a4840;--soft:#8a8880;--faint:#c0bdb8;
+      --moss:#5a7a48;--moss-p:#eef4e8;--moss-d:#3a5a28;--moss-light:#c2d4b8;
+      --gold:#c8920a;--gold-p:#fdf6e0;
+      --dusk:#6a6898;--dusk-p:#eeedf8;
+      --rose:#a06060;--rose-p:#f8f0ee;
+      --earth:#7a5a40;--earth-p:#f5ede4;
+      --s:'Cormorant Garamond',serif;--n:'Jost',sans-serif;
+    }
+    body{font-family:var(--n);background:var(--off);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+    /* LOCK */
+    #lock{position:fixed;inset:0;background:var(--moss-p);z-index:1000;display:flex;align-items:center;justify-content:center;padding:2rem}
+    #lock.hidden{display:none}
+    .lock-box{background:var(--w);padding:2.5rem;width:100%;max-width:320px;text-align:center}
+    .lock-title{font-family:var(--s);font-size:30px;font-weight:300;font-style:italic;color:var(--ink);margin-bottom:.35rem}
+    .lock-sub{font-family:var(--s);font-size:14px;font-style:italic;color:var(--soft);margin-bottom:1.5rem;line-height:1.55}
+    .lock-rule{width:32px;height:1px;background:var(--moss-light);margin:0 auto 1.5rem}
+    .lock-input{width:100%;border:1px solid var(--rule-m);padding:.75rem 1rem;font-family:var(--n);font-size:15px;color:var(--ink);background:var(--off);outline:none;text-align:center;letter-spacing:.12em;margin-bottom:.65rem}
+    .lock-input:focus{border-color:var(--moss)}
+    .lock-btn{width:100%;background:var(--moss);color:white;border:none;padding:.85rem;font-family:var(--n);font-size:11px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-weight:500}
+    .lock-btn:hover{background:var(--moss-d)}
+    .lock-error{font-size:12px;color:var(--rose);margin-top:.5rem;font-style:italic;font-family:var(--s);display:none}
+
+    /* NAV */
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid rgba(90,122,72,.15);background:rgba(238,244,232,.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
+    .nav-private{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--moss);font-weight:500;margin-bottom:.1rem}
+    .nav-name{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink)}
+    .nav-right{display:flex;align-items:center;gap:.75rem}
+    .nav-date{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+    .nav-btn{font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;background:none;border:1px solid rgba(90,122,72,.3);font-family:var(--n);font-weight:500;padding:.3rem .7rem;transition:all .2s;color:var(--moss)}
+    .nav-btn:hover{background:var(--moss);color:white}
+    .nav-btn.secondary{color:var(--soft);border-color:var(--rule-m)}
+    .nav-btn.secondary:hover{background:var(--ink);color:white;border-color:var(--ink)}
+
+    /* TABS */
+    .tabs{display:flex;border-bottom:1px solid var(--rule-m);background:var(--w);overflow-x:auto;scrollbar-width:none}
+    .tabs::-webkit-scrollbar{display:none}
+    .tab{padding:.75rem 1.1rem;font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:var(--soft);border:none;background:none;font-family:var(--n);font-weight:400;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0}
+    .tab:hover{color:var(--ink)}
+    .tab.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:500}
+
+    /* MAIN */
+    .main{max-width:680px;margin:0 auto;padding:1.75rem 1.25rem 6rem}
+    .view{display:none}
+    .view.active{display:block}
+
+    /* SEC HEADERS */
+    .sec-head{display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem}
+    .sec-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;white-space:nowrap}
+    .sec-rule{flex:1;height:1px}
+    .s-cur .sec-label{color:var(--moss)}.s-cur .sec-rule{background:rgba(90,122,72,.2)}
+    .s-ech .sec-label{color:var(--dusk)}.s-ech .sec-rule{background:rgba(106,104,152,.2)}
+    .s-add .sec-label{color:var(--earth)}.s-add .sec-rule{background:rgba(122,90,64,.2)}
+    .s-fn  .sec-label{color:var(--gold)}.s-fn  .sec-rule{background:rgba(200,146,10,.2)}
+    .s-fg  .sec-label{color:var(--rose)}.s-fg  .sec-rule{background:rgba(160,96,96,.2)}
+    .s-bloom .sec-label{color:var(--moss-d)}.s-bloom .sec-rule{background:rgba(58,90,40,.2)}
+    .section{margin-bottom:2rem}
+
+    /* CURIOSITIES */
+    .cur-list{display:flex;flex-direction:column;gap:2px}
+    .cur-item{background:var(--w);border:1px solid var(--rule-m)}
+    .cur-header{display:flex;align-items:baseline;gap:.9rem;padding:.85rem 1rem;cursor:pointer}
+    .cur-header:hover .cur-text{color:var(--ink)}
+    .cur-dash{font-size:11px;color:var(--faint);flex-shrink:0}
+    .cur-text{font-family:var(--s);font-size:17px;font-style:italic;color:var(--mid);flex:1;line-height:1.3;transition:color .2s}
+    .cur-actions{display:flex;gap:.4rem;align-items:center;flex-shrink:0}
+    .cur-count{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+    .ic-btn{background:none;border:none;cursor:pointer;color:var(--faint);font-size:13px;padding:.1rem .25rem;transition:color .2s;font-family:var(--n)}
+    .ic-btn:hover{color:var(--ink)}
+    .cur-expand{overflow:hidden;max-height:0;transition:max-height .35s ease}
+    .cur-expand.open{max-height:400px}
+    .cur-entries-inner{padding:.6rem 1rem .85rem;border-top:1px solid rgba(90,122,72,.12);background:var(--moss-p)}
+    .cur-entry{font-family:var(--s);font-size:13.5px;font-style:italic;color:var(--mid);padding:.28rem 0;border-bottom:1px solid rgba(90,122,72,.1);display:flex;align-items:baseline;gap:.5rem;line-height:1.4}
+    .cur-entry:last-child{border-bottom:none}
+    .cur-entry-dot{width:3px;height:3px;border-radius:50%;background:var(--moss);flex-shrink:0;margin-top:.5em}
+    .add-inline{display:flex;gap:.4rem;margin-top:.5rem}
+    .add-inline-in{flex:1;border:none;border-bottom:1px solid rgba(90,122,72,.2);padding:.35rem 0;font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink);background:none;outline:none}
+    .add-inline-in::placeholder{color:var(--faint)}
+    .add-inline-btn{background:none;border:none;color:var(--moss);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:var(--n);font-weight:500;padding:.35rem .6rem;flex-shrink:0}
+
+    .add-row{display:flex;gap:.4rem;margin-top:2px}
+    .add-in{flex:1;border:1px dashed var(--rule-m);padding:.65rem .9rem;font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink);background:var(--w);outline:none}
+    .add-in:focus{border-color:var(--moss)}
+    .add-in::placeholder{color:var(--faint)}
+    .add-btn{background:none;border:1px solid var(--moss);color:var(--moss);padding:.65rem 1rem;font-family:var(--n);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:all .2s;white-space:nowrap}
+    .add-btn:hover{background:var(--moss);color:white}
+    .add-btn.rose{border-color:var(--rose);color:var(--rose)}
+    .add-btn.rose:hover{background:var(--rose);color:white}
+
+    /* ECHOES */
+    .echo-list{display:flex;flex-direction:column;gap:2px}
+    .echo-card{background:var(--w);border:1px solid var(--rule-m);border-left:2px solid var(--dusk);overflow:hidden}
+    .echo-top{padding:.85rem 1rem;cursor:pointer;transition:background .2s}
+    .echo-top:hover{background:var(--off)}
+    .echo-row{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+    .echo-text{font-family:var(--s);font-size:16px;font-style:italic;color:var(--mid);line-height:1.5;margin-bottom:.2rem;flex:1}
+    .echo-meta{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+    .echo-toggle{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dusk);flex-shrink:0;font-weight:500;padding-top:.2rem}
+    .echo-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
+    .echo-body.open{max-height:500px}
+    .echo-responses{padding:.6rem 1rem;display:flex;flex-direction:column;gap:.4rem}
+    .echo-resp{background:var(--dusk-p);border:1px solid rgba(106,104,152,.15);padding:.65rem .85rem}
+    .echo-resp-text{font-family:var(--s);font-size:14px;font-style:italic;color:var(--mid);line-height:1.5;margin-bottom:.2rem}
+    .echo-resp-date{font-size:9px;color:var(--faint);letter-spacing:.05em}
+    .echo-reply-row{display:flex;gap:.4rem;padding:.6rem 1rem;border-top:1px solid rgba(106,104,152,.1)}
+    .echo-reply-in{flex:1;border:none;border-bottom:1px solid rgba(106,104,152,.2);padding:.35rem 0;font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink);background:none;outline:none}
+    .echo-reply-in::placeholder{color:var(--faint)}
+    .echo-reply-btn{background:none;border:1px solid var(--dusk);color:var(--dusk);padding:.35rem .85rem;font-family:var(--n);font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-weight:500;flex-shrink:0;transition:all .2s}
+    .echo-reply-btn:hover{background:var(--dusk);color:white}
+
+    /* ADD ENTRY */
+    .add-entry-box{background:var(--w);border:1px solid var(--rule-m);overflow:hidden}
+    .ae-types{display:flex;border-bottom:1px solid var(--rule);overflow-x:auto;scrollbar-width:none}
+    .ae-types::-webkit-scrollbar{display:none}
+    .ae-type{padding:.6rem .85rem;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--soft);border:none;background:none;font-family:var(--n);font-weight:400;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0}
+    .ae-type:hover{color:var(--ink)}
+    .ae-type.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:500}
+    .ae-form{padding:1.1rem}
+    .ae-photo-zone{border:1px dashed var(--rule-m);padding:1.1rem;text-align:center;cursor:pointer;position:relative;background:var(--off);display:none;margin-bottom:.7rem;transition:background .2s}
+    .ae-photo-zone:hover{background:var(--paper)}
+    .ae-photo-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .ae-photo-zone-lbl{font-family:var(--s);font-size:14px;font-style:italic;color:var(--faint)}
+    .ae-photo-prev{width:100%;max-height:200px;object-fit:cover;display:none;margin-bottom:.7rem}
+    .ae-field{width:100%;border:none;border-bottom:1px solid var(--rule-m);padding:.5rem 0;font-family:var(--s);font-style:italic;color:var(--ink);background:none;outline:none;margin-bottom:.55rem}
+    .ae-field::placeholder{color:var(--faint)}
+    .ae-title-f{font-size:19px}
+    .ae-area{width:100%;border:none;background:none;font-family:var(--s);font-size:15px;font-style:italic;color:var(--mid);outline:none;resize:none;min-height:75px;line-height:1.7;margin-bottom:.55rem}
+    .ae-area::placeholder{color:var(--faint)}
+    .ae-tags-f{width:100%;border:none;border-bottom:1px solid var(--rule-m);padding:.4rem 0;font-size:12px;color:var(--soft);background:none;outline:none;margin-bottom:.7rem;font-family:var(--n)}
+    .ae-tags-f::placeholder{color:var(--faint);font-size:11px}
+    .ae-extras{display:none}
+    .ae-extras.show{display:block}
+    .ae-extra-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:.7rem 0 .3rem;font-weight:500;display:block}
+    .ae-extra-area{width:100%;border:none;background:var(--off);padding:.6rem .75rem;font-family:var(--s);font-size:14px;font-style:italic;color:var(--mid);outline:none;resize:none;min-height:55px;line-height:1.6;margin-bottom:.25rem}
+    .ae-extra-area::placeholder{color:var(--faint)}
+    .ae-threads-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.4rem;font-weight:500}
+    .thread-pills{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.8rem}
+    .tp{font-size:10px;padding:.22rem .6rem;border:1px solid var(--rule-m);cursor:pointer;color:var(--soft);transition:all .15s;font-family:var(--n)}
+    .tp.on{background:var(--moss-p);border-color:rgba(90,122,72,.3);color:var(--moss-d)}
+    .ae-bottom{display:flex;align-items:center;gap:.75rem;margin-bottom:.8rem}
+    .ae-pub-lbl{font-size:11px;color:var(--soft);flex:1;font-family:var(--s);font-style:italic}
+    .sw{width:34px;height:18px;background:var(--rule-m);border-radius:9px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+    .sw.on{background:var(--moss)}
+    .sw-knob{width:14px;height:14px;background:white;border-radius:50%;position:absolute;top:2px;left:2px;transition:transform .2s}
+    .sw.on .sw-knob{transform:translateX(16px)}
+    .sw-stat{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);flex-shrink:0;min-width:40px}
+    .ae-plant-btn{width:100%;background:var(--moss);color:white;border:none;padding:.85rem;font-family:var(--n);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:background .2s}
+    .ae-plant-btn:hover{background:var(--moss-d)}
+    .ae-plant-btn:disabled{background:var(--faint);cursor:not-allowed}
+
+    /* ENTRIES FEED */
+    .feed{display:flex;flex-direction:column;gap:2px}
+    .entry-card{background:var(--w);border:1px solid var(--rule-m);overflow:hidden}
+    .entry-top{display:flex;gap:.85rem;padding:.9rem 1rem;align-items:flex-start}
+    .entry-thumb{width:52px;height:52px;object-fit:cover;background:var(--paper);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    .entry-type-dot{width:8px;height:8px;border-radius:50%}
+    .entry-body{flex:1;min-width:0}
+    .entry-title{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink);line-height:1.4;margin-bottom:.2rem}
+    .entry-sub{font-family:var(--s);font-size:13px;font-style:italic;color:var(--soft);line-height:1.4;margin-bottom:.2rem}
+    .entry-meta{font-size:9px;color:var(--faint);letter-spacing:.05em;margin-bottom:.25rem}
+    .entry-tags{display:flex;gap:.3rem;flex-wrap:wrap}
+    .entry-tag{font-size:9px;padding:1px 6px;background:var(--off);color:var(--soft)}
+    .entry-actions{display:flex;gap:.4rem;padding:.5rem 1rem;border-top:1px solid var(--rule);background:var(--off)}
+    .entry-btn{background:none;border:1px solid var(--rule-m);padding:.3rem .75rem;font-family:var(--n);font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:var(--soft);transition:all .2s}
+    .entry-btn:hover{color:var(--ink);border-color:var(--ink)}
+    .entry-btn.bloom-btn{border-color:rgba(90,122,72,.3);color:var(--moss)}
+    .entry-btn.bloom-btn.on{background:var(--moss-p)}
+    .entry-btn.bloom-btn:hover{background:var(--moss);color:white}
+    .entry-btn.delete-btn:hover{background:#fee;border-color:var(--rose);color:var(--rose)}
+    .bloom-badge{font-size:9px;padding:2px 7px;background:var(--moss-p);color:var(--moss-d);border:1px solid rgba(90,122,72,.2);margin-left:auto;flex-shrink:0;letter-spacing:.08em;text-transform:uppercase;align-self:flex-start;margin-top:.1rem}
+
+    /* EDIT MODAL */
+    .modal-bg{display:none;position:fixed;inset:0;background:rgba(18,17,14,.6);z-index:200;align-items:center;justify-content:center;padding:1.25rem}
+    .modal-bg.open{display:flex}
+    .modal{background:var(--w);width:100%;max-width:480px;max-height:88vh;overflow-y:auto;position:relative}
+    .modal-head{padding:1rem 1.25rem;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--w);z-index:1}
+    .modal-title{font-family:var(--s);font-size:20px;font-style:italic;color:var(--ink)}
+    .modal-close{background:none;border:none;cursor:pointer;color:var(--faint);font-size:18px;line-height:1}
+    .modal-body{padding:1.25rem}
+    .modal-field{width:100%;border:none;border-bottom:1px solid var(--rule-m);padding:.5rem 0;font-family:var(--s);font-style:italic;color:var(--ink);background:none;outline:none;margin-bottom:.65rem}
+    .modal-field::placeholder{color:var(--faint)}
+    .modal-title-f{font-size:18px}
+    .modal-area{width:100%;border:none;background:var(--off);padding:.65rem .75rem;font-family:var(--s);font-size:14px;font-style:italic;color:var(--mid);outline:none;resize:none;min-height:80px;line-height:1.65;margin-bottom:.65rem}
+    .modal-area::placeholder{color:var(--faint)}
+    .modal-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:.35rem;display:block;font-weight:500}
+    .modal-save{width:100%;background:var(--moss);color:white;border:none;padding:.85rem;font-family:var(--n);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-weight:500;margin-top:.5rem}
+    .modal-save:hover{background:var(--moss-d)}
+
+    /* BLOOM QUEUE */
+    .bloom-queue{display:flex;flex-direction:column;gap:.5rem}
+    .bq-card{background:var(--w);border:1px solid rgba(90,122,72,.2);border-left:3px solid var(--moss);padding:1rem}
+    .bq-title{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink);margin-bottom:.3rem}
+    .bq-body{font-family:var(--s);font-size:14px;font-style:italic;color:var(--soft);margin-bottom:.4rem;line-height:1.55}
+    .bq-meta{font-size:9px;color:var(--faint);letter-spacing:.08em}
+    .bq-empty{font-family:var(--s);font-size:15px;font-style:italic;color:var(--faint);padding:.5rem 0;line-height:1.6}
+
+    /* FUTURE GARDEN */
+    .fg-list{display:flex;flex-direction:column;gap:2px}
+    .fg-card{background:var(--w);border:1px solid var(--rule-m);border-left:2px solid var(--rose);padding:.85rem 1rem;display:flex;align-items:flex-start;gap:.75rem}
+    .fg-body{flex:1}
+    .fg-text{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);line-height:1.45;margin-bottom:.2rem}
+    .fg-status{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--rose)}
+    .fg-del{background:none;border:none;cursor:pointer;color:var(--faint);font-size:13px;padding:.1rem;flex-shrink:0;transition:color .2s}
+    .fg-del:hover{color:var(--rose)}
+
+    /* LOADING */
+    .loading{font-family:var(--s);font-size:15px;font-style:italic;color:var(--faint);padding:1rem 0;text-align:center}
+    .empty{font-family:var(--s);font-size:15px;font-style:italic;color:var(--faint);padding:.5rem 0}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(12px);background:var(--ink);color:white;padding:.55rem 1.1rem;font-family:var(--s);font-size:14px;font-style:italic;opacity:0;transition:all .3s;pointer-events:none;z-index:500;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  </style>
+</head>
+<body>
+
+<!-- LOCK -->
+<div id="lock">
+  <div class="lock-box">
+    <div class="lock-title">The Greenhouse</div>
+    <div class="lock-sub">This is for you. Not the audience.<br>Come tend what's growing.</div>
+    <div class="lock-rule"></div>
+    <input type="password" class="lock-input" id="lock-input" placeholder="password" onkeydown="if(event.key==='Enter')unlock()">
+    <button class="lock-btn" onclick="unlock()">Enter</button>
+    <div class="lock-error" id="lock-error">That's not it. Try again.</div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div>
+    <div class="nav-private">Private</div>
+    <div class="nav-name">The Greenhouse</div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-date" id="nav-date"></div>
+    <button class="nav-btn secondary" onclick="lockUp()">Lock</button>
+  </div>
+</nav>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('home',this)">Home</button>
+  <button class="tab" onclick="showTab('entries',this)">All Entries</button>
+  <button class="tab" onclick="showTab('bloom',this)">Bloom Queue</button>
+  <button class="tab" onclick="showTab('garden',this)">Future Garden</button>
+</div>
+
+<div class="main">
+
+  <!-- HOME TAB -->
+  <div class="view active" id="view-home">
+
+    <div class="section">
+      <div class="sec-head s-cur">
+        <div class="sec-label">Current Curiosity</div>
+        <div class="sec-rule"></div>
+      </div>
+      <div class="cur-list" id="cur-list"><div class="loading">Loading...</div></div>
+      <div class="add-row" style="margin-top:3px">
+        <input class="add-in" type="text" id="new-cur" placeholder="What are you curious about right now...">
+        <button class="add-btn" onclick="addCuriosity()">Plant</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head s-ech">
+        <div class="sec-label">Recent Echoes</div>
+        <div class="sec-rule"></div>
+      </div>
+      <div class="echo-list" id="echo-list"><div class="loading">Loading...</div></div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head s-add">
+        <div class="sec-label">Add New Entry</div>
+        <div class="sec-rule"></div>
+      </div>
+      <div class="add-entry-box">
+        <div class="ae-types" id="ae-types"></div>
+        <div class="ae-form">
+          <div class="ae-photo-zone" id="ae-photo-zone">
+            <input type="file" accept="image/*" onchange="loadPhoto(event)">
+            <div class="ae-photo-zone-lbl">Tap to add a photo</div>
+          </div>
+          <img id="ae-photo-prev" class="ae-photo-prev" alt="">
+          <input class="ae-field ae-title-f" type="text" id="ae-title" placeholder="What arrived today...">
+          <textarea class="ae-area" id="ae-body" placeholder="Write it here. One sentence or a hundred."></textarea>
+          <div class="ae-extras" id="ae-extras">
+            <span class="ae-extra-lbl">Traditional symbolism</span>
+            <textarea class="ae-extra-area" id="ae-symbolism" placeholder="What does this symbol carry across traditions..."></textarea>
+            <span class="ae-extra-lbl">My reflection</span>
+            <textarea class="ae-extra-area" id="ae-reflection" placeholder="What was happening when this appeared? What did it bring up?"></textarea>
+          </div>
+          <input class="ae-tags-f" type="text" id="ae-tags" placeholder="Tags — season · symbol · feeling">
+          <div class="ae-threads-lbl">Connect to a thread</div>
+          <div class="thread-pills" id="thread-pills"></div>
+          <div class="ae-bottom">
+            <div class="ae-pub-lbl">Ready to bloom — move to public site</div>
+            <div class="sw" id="pub-sw" onclick="togglePub()"><div class="sw-knob"></div></div>
+            <div class="sw-stat" id="pub-stat">Private</div>
+          </div>
+          <button class="ae-plant-btn" id="plant-btn" onclick="plantEntry()">Plant this entry</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="sec-head s-fn">
+        <div class="sec-label">Recent Field Notes</div>
+        <div class="sec-rule"></div>
+      </div>
+      <div class="feed" id="recent-feed"><div class="loading">Loading...</div></div>
+    </div>
+
+  </div>
+
+  <!-- ALL ENTRIES TAB -->
+  <div class="view" id="view-entries">
+    <div class="section">
+      <div class="sec-head s-fn">
+        <div class="sec-label">All Entries</div>
+        <div class="sec-rule"></div>
+      </div>
+      <div class="feed" id="all-feed"><div class="loading">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- BLOOM QUEUE TAB -->
+  <div class="view" id="view-bloom">
+    <div class="section">
+      <div class="sec-head s-bloom">
+        <div class="sec-label">Ready to Bloom</div>
+        <div class="sec-rule"></div>
+      </div>
+      <div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--soft);line-height:1.65;margin-bottom:1.25rem">
+        These entries are marked ready for the public site. Share this page with Claude to update the website in one go.
+      </div>
+      <div class="bloom-queue" id="bloom-queue"><div class="loading">Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- FUTURE GARDEN TAB -->
+  <div class="view" id="view-garden">
+    <div class="section">
+      <div class="sec-head s-fg">
+        <div class="sec-label">Future Garden</div>
+        <div class="sec-rule"></div>
+      </div>
+      <div class="fg-list" id="fg-list"><div class="loading">Loading...</div></div>
+      <div class="add-row" style="margin-top:3px">
+        <input class="add-in" type="text" id="new-fg" placeholder="What are you becoming available for...">
+        <button class="add-btn rose" onclick="addFG()">Plant</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="edit-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">Edit entry</div>
+      <button class="modal-close" onclick="closeEdit()">&#x00D7;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id">
+      <span class="modal-lbl">Title</span>
+      <input class="modal-field modal-title-f" type="text" id="edit-title" placeholder="Title...">
+      <span class="modal-lbl">Body</span>
+      <textarea class="modal-area" id="edit-body" placeholder="Body..."></textarea>
+      <span class="modal-lbl">Symbolism</span>
+      <textarea class="modal-area" id="edit-symbolism" placeholder="Traditional symbolism..."></textarea>
+      <span class="modal-lbl">Reflection</span>
+      <textarea class="modal-area" id="edit-reflection" placeholder="My reflection..."></textarea>
+      <span class="modal-lbl">Tags</span>
+      <input class="modal-field" style="font-size:14px" type="text" id="edit-tags" placeholder="Tags...">
+      <button class="modal-save" onclick="saveEdit()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://polewlvnwokvvoajsdfy.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_MhZlQIwtcZyLf7iicRAYcQ_s7UY8tWs';
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const PW = 'Sunflower33!';
+const THREADS = ['wonder','aliveness','body','motherhood','beauty','community','joy','nature','healing','embodiment','creativity','spiral up','becoming'];
+const TYPES = [
+  {id:'note',label:'Note',c:'#9a8050'},
+  {id:'photo',label:'Photo',c:'#7a9068'},
+  {id:'seed',label:'Seed',c:'#8a7060'},
+  {id:'symbol',label:'Symbol',c:'#8a7ab0'},
+  {id:'dream',label:'Dream',c:'#6a6898'},
+  {id:'curiosity',label:'Curiosity',c:'#7a9ab0'},
+  {id:'vision',label:'Vision',c:'#9a7858'},
+  {id:'voice',label:'Voice / Text',c:'#c4847a'},
+];
+
+let activeType = 'note';
+let selThreads = [];
+let pubOn = false;
+let photoBlob = null;
+let editingId = null;
+
+// ── LOCK ──
+function unlock(){
+  if(document.getElementById('lock-input').value === PW){
+    document.getElementById('lock').classList.add('hidden');
+    sessionStorage.setItem('gh','1');
+    initApp();
+  } else {
+    document.getElementById('lock-error').style.display='block';
+    document.getElementById('lock-input').value='';
+  }
+}
+function lockUp(){ sessionStorage.removeItem('gh'); location.reload(); }
+if(sessionStorage.getItem('gh')==='1'){
+  document.getElementById('lock').classList.add('hidden');
+  initApp();
+}
+
+// ── INIT ──
+function initApp(){
+  setDate();
+  buildTypes();
+  buildThreadPills();
+  loadAll();
+}
+
+function setDate(){
+  const d = new Date();
+  const M = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('nav-date').textContent = M[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+}
+
+function dateLabel(){
+  const d = new Date();
+  const M = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return M[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+}
+
+// ── TABS ──
+function showTab(id, btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='entries') loadAllEntries();
+  if(id==='bloom') loadBloomQueue();
+  if(id==='garden') loadFG();
+}
+
+// ── LOAD ALL ──
+async function loadAll(){
+  await Promise.all([loadCuriosities(), loadEchoes(), loadRecentEntries()]);
+}
+
+// ── CURIOSITIES ──
+async function loadCuriosities(){
+  const el = document.getElementById('cur-list');
+  const { data, error } = await db.from('curiosities').select('*').eq('active', true).order('created_at', {ascending:false});
+  if(error){ el.innerHTML='<div class="empty">Could not load.</div>'; return; }
+  if(!data.length){ el.innerHTML='<div class="empty">Nothing yet. Plant your first curiosity below.</div>'; return; }
+  el.innerHTML = data.map(c=>`
+    <div class="cur-item" id="cur-${c.id}">
+      <div class="cur-header" onclick="toggleCur('${c.id}')">
+        <span class="cur-dash">&mdash;</span>
+        <span class="cur-text">${c.text}</span>
+        <div class="cur-actions">
+          <span class="cur-count">${(c.entries||[]).length} echoes</span>
+          <button class="ic-btn" onclick="event.stopPropagation();deleteCuriosity('${c.id}')" title="Remove">&#x00D7;</button>
+        </div>
+      </div>
+      <div class="cur-expand" id="cur-exp-${c.id}">
+        <div class="cur-entries-inner">
+          ${(c.entries||[]).map(e=>`<div class="cur-entry"><span class="cur-entry-dot"></span>${e}</div>`).join('')}
+          <div class="add-inline">
+            <input class="add-inline-in" type="text" id="cur-add-${c.id}" placeholder="Add a connected entry...">
+            <button class="add-inline-btn" onclick="addCurEntry('${c.id}')">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleCur(id){
+  const exp = document.getElementById('cur-exp-'+id);
+  const isOpen = exp.classList.contains('open');
+  document.querySelectorAll('.cur-expand').forEach(e=>e.classList.remove('open'));
+  if(!isOpen) exp.classList.add('open');
+}
+
+async function addCuriosity(){
+  const inp = document.getElementById('new-cur');
+  const v = inp.value.trim(); if(!v) return;
+  const { error } = await db.from('curiosities').insert({text:v, entries:[], active:true});
+  if(!error){ inp.value=''; loadCuriosities(); toast('Curiosity planted'); }
+}
+
+async function deleteCuriosity(id){
+  await db.from('curiosities').update({active:false}).eq('id',id);
+  loadCuriosities(); toast('Removed');
+}
+
+async function addCurEntry(id){
+  const inp = document.getElementById('cur-add-'+id);
+  const v = inp.value.trim(); if(!v) return;
+  const { data } = await db.from('curiosities').select('entries').eq('id',id).single();
+  const entries = [...(data.entries||[]), v];
+  await db.from('curiosities').update({entries}).eq('id',id);
+  inp.value=''; loadCuriosities(); toast('Added');
+}
+
+// ── ECHOES ──
+async function loadEchoes(){
+  const el = document.getElementById('echo-list');
+  // Generate echoes from entry patterns
+  const { data: entries } = await db.from('entries').select('threads, title, created_at').order('created_at', {ascending:false});
+  if(!entries || !entries.length){ el.innerHTML='<div class="empty">Echoes will appear as your archive grows.</div>'; return; }
+
+  // Count threads
+  const threadCount = {};
+  entries.forEach(e=>(e.threads||[]).forEach(t=>{threadCount[t]=(threadCount[t]||0)+1}));
+  const echoes = Object.entries(threadCount)
+    .filter(([,c])=>c>1)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,5)
+    .map(([t,c])=>({text:`"${t}" has appeared in ${c} entr${c===1?'y':'ies'}.`, meta:`Thread · ${c} appearances`}));
+
+  if(!echoes.length){ el.innerHTML='<div class="empty">Echoes will appear as your archive grows.</div>'; return; }
+
+  const { data: responses } = await db.from('echo_responses').select('*').order('created_at',{ascending:false});
+
+  el.innerHTML = echoes.map((e,i)=>{
+    const resp = (responses||[]).filter(r=>r.echo_text===e.text);
+    return`<div class="echo-card">
+      <div class="echo-top" onclick="toggleEcho(${i})">
+        <div class="echo-row">
+          <div>
+            <div class="echo-text">${e.text}</div>
+            <div class="echo-meta">${e.meta}${resp.length?' &middot; '+resp.length+' response'+(resp.length>1?'s':''):''}</div>
+          </div>
+          <div class="echo-toggle" id="echo-tog-${i}">respond</div>
+        </div>
+      </div>
+      <div class="echo-body" id="echo-body-${i}">
+        ${resp.length?`<div class="echo-responses">${resp.map(r=>`
+          <div class="echo-resp">
+            <div class="echo-resp-text">${r.response}</div>
+            <div class="echo-resp-date">${new Date(r.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>
+          </div>`).join('')}</div>`:''}
+        <div class="echo-reply-row">
+          <input class="echo-reply-in" type="text" id="echo-in-${i}" data-echo="${e.text}" placeholder="What does this stir in you right now...">
+          <button class="echo-reply-btn" onclick="replyEcho(${i})">Reply</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleEcho(i){
+  const body = document.getElementById('echo-body-'+i);
+  const tog = document.getElementById('echo-tog-'+i);
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.echo-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('[id^="echo-tog-"]').forEach(t=>t.textContent='respond');
+  if(!isOpen){ body.classList.add('open'); tog.textContent='close';
+    setTimeout(()=>{const inp=document.getElementById('echo-in-'+i);if(inp)inp.focus()},350); }
+}
+
+async function replyEcho(i){
+  const inp = document.getElementById('echo-in-'+i);
+  const v = inp.value.trim(); if(!v) return;
+  const echoText = inp.dataset.echo;
+  await db.from('echo_responses').insert({echo_text:echoText, response:v});
+  inp.value=''; loadEchoes(); toast('Response planted');
+}
+
+// ── ENTRY FORM ──
+function buildTypes(){
+  document.getElementById('ae-types').innerHTML = TYPES.map(t=>
+    `<button class="ae-type${t.id===activeType?' active':''}" onclick="setType('${t.id}')">${t.label}</button>`).join('');
+}
+function buildThreadPills(){
+  document.getElementById('thread-pills').innerHTML = THREADS.map(t=>
+    `<div class="tp${selThreads.includes(t)?' on':''}" onclick="toggleThread('${t}')">${t}</div>`).join('');
+}
+function setType(id){
+  activeType=id; buildTypes();
+  document.getElementById('ae-photo-zone').style.display=(id==='photo')?'block':'none';
+  document.getElementById('ae-extras').classList.toggle('show', id==='symbol');
+  const ph={note:'What arrived today...',photo:'One sentence about this photo...',seed:'A fragment. Complete as it is.',symbol:'What symbol appeared?',dream:'The dream, written down...',curiosity:'What are you curious about?',vision:'What are you becoming available for?',voice:'Paste voice memo or write freely...'};
+  document.getElementById('ae-title').placeholder = ph[id]||'What arrived today...';
+}
+function toggleThread(t){
+  if(selThreads.includes(t)) selThreads=selThreads.filter(x=>x!==t);
+  else selThreads.push(t);
+  buildThreadPills();
+}
+function togglePub(){
+  pubOn=!pubOn;
+  document.getElementById('pub-sw').classList.toggle('on',pubOn);
+  document.getElementById('pub-stat').textContent=pubOn?'Public':'Private';
+}
+function loadPhoto(e){
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    photoBlob=ev.target.result;
+    const p=document.getElementById('ae-photo-prev');
+    p.src=ev.target.result; p.style.display='block';
+    document.getElementById('ae-photo-zone').style.display='none';
+  };
+  r.readAsDataURL(f);
+}
+
+async function plantEntry(){
+  const title = document.getElementById('ae-title').value.trim();
+  if(!title){ toast('Add a title first'); return; }
+  const btn = document.getElementById('plant-btn');
+  btn.disabled=true; btn.textContent='Planting...';
+
+  const entry = {
+    type: activeType,
+    title,
+    body: document.getElementById('ae-body').value.trim(),
+    symbolism: document.getElementById('ae-symbolism').value.trim(),
+    reflection: document.getElementById('ae-reflection').value.trim(),
+    tags: document.getElementById('ae-tags').value.trim(),
+    threads: [...selThreads],
+    public: pubOn,
+    bloom_ready: pubOn,
+    date_label: dateLabel(),
+    photo_url: photoBlob || null,
+  };
+
+  const { error } = await db.from('entries').insert(entry);
+  if(error){ toast('Error saving — try again'); btn.disabled=false; btn.textContent='Plant this entry'; return; }
+
+  // reset
+  document.getElementById('ae-title').value='';
+  document.getElementById('ae-body').value='';
+  document.getElementById('ae-symbolism').value='';
+  document.getElementById('ae-reflection').value='';
+  document.getElementById('ae-tags').value='';
+  document.getElementById('ae-photo-prev').style.display='none';
+  document.getElementById('ae-photo-zone').style.display=activeType==='photo'?'block':'none';
+  photoBlob=null; selThreads=[]; pubOn=false;
+  document.getElementById('pub-sw').classList.remove('on');
+  document.getElementById('pub-stat').textContent='Private';
+  buildThreadPills();
+  btn.disabled=false; btn.textContent='Plant this entry';
+  loadAll(); toast('Planted');
+}
+
+// ── ENTRIES ──
+function entryHTML(e, showAll=false){
+  const tc = TYPES.find(t=>t.id===e.type);
+  const color = tc?tc.c:'#9a9080';
+  return`<div class="entry-card" id="ecard-${e.id}">
+    <div class="entry-top">
+      ${e.photo_url
+        ?`<img src="${e.photo_url}" class="entry-thumb" style="object-fit:cover" alt="">`
+        :`<div class="entry-thumb"><div class="entry-type-dot" style="background:${color}"></div></div>`}
+      <div class="entry-body">
+        <div class="entry-title">${e.title}</div>
+        ${e.body?`<div class="entry-sub">${e.body}</div>`:''}
+        <div class="entry-meta">${e.type} &middot; ${e.date_label||''} &middot; ${e.public?'public':'private'}</div>
+        ${e.tags?`<div class="entry-tags">${e.tags.split('·').map(t=>`<span class="entry-tag">${t.trim()}</span>`).join('')}</div>`:''}
+      </div>
+      ${e.bloom_ready?`<div class="bloom-badge">Bloom</div>`:''}
+    </div>
+    <div class="entry-actions">
+      <button class="entry-btn" onclick="openEdit('${e.id}')">Edit</button>
+      <button class="entry-btn bloom-btn${e.bloom_ready?' on':''}" onclick="toggleBloom('${e.id}',${e.bloom_ready})">${e.bloom_ready?'In bloom queue':'Ready to bloom'}</button>
+      <button class="entry-btn delete-btn" onclick="deleteEntry('${e.id}')">Delete</button>
+    </div>
+  </div>`;
+}
+
+async function loadRecentEntries(){
+  const el = document.getElementById('recent-feed');
+  const { data, error } = await db.from('entries').select('*').order('created_at',{ascending:false}).limit(6);
+  if(error||!data||!data.length){ el.innerHTML='<div class="empty">Nothing planted yet. Add your first entry above.</div>'; return; }
+  el.innerHTML = data.map(e=>entryHTML(e)).join('');
+}
+
+async function loadAllEntries(){
+  const el = document.getElementById('all-feed');
+  el.innerHTML='<div class="loading">Loading...</div>';
+  const { data, error } = await db.from('entries').select('*').order('created_at',{ascending:false});
+  if(error||!data||!data.length){ el.innerHTML='<div class="empty">No entries yet.</div>'; return; }
+  el.innerHTML = data.map(e=>entryHTML(e,true)).join('');
+}
+
+async function loadBloomQueue(){
+  const el = document.getElementById('bloom-queue');
+  el.innerHTML='<div class="loading">Loading...</div>';
+  const { data, error } = await db.from('entries').select('*').eq('bloom_ready',true).order('created_at',{ascending:false});
+  if(error||!data||!data.length){
+    el.innerHTML=`<div class="bq-empty">Nothing in the bloom queue yet.<br>Mark entries "Ready to bloom" and they'll appear here.</div>`;
+    return;
+  }
+  el.innerHTML = data.map(e=>`
+    <div class="bq-card">
+      ${e.photo_url?`<img src="${e.photo_url}" style="width:100%;max-height:160px;object-fit:cover;margin-bottom:.75rem" alt="">`:''}
+      <div class="bq-title">${e.title}</div>
+      ${e.body?`<div class="bq-body">${e.body}</div>`:''}
+      <div class="bq-meta">${e.type} &middot; ${e.date_label||''} &middot; ${e.tags||''}</div>
+    </div>`).join('');
+}
+
+async function toggleBloom(id, current){
+  await db.from('entries').update({bloom_ready:!current}).eq('id',id);
+  loadRecentEntries();
+  toast(!current?'Added to bloom queue':'Removed from bloom queue');
+}
+
+async function deleteEntry(id){
+  if(!confirm('Delete this entry? This cannot be undone.')) return;
+  await db.from('entries').delete().eq('id',id);
+  const card = document.getElementById('ecard-'+id);
+  if(card) card.remove();
+  toast('Deleted');
+}
+
+// ── EDIT ──
+async function openEdit(id){
+  const { data } = await db.from('entries').select('*').eq('id',id).single();
+  if(!data) return;
+  editingId = id;
+  document.getElementById('edit-id').value = id;
+  document.getElementById('edit-title').value = data.title||'';
+  document.getElementById('edit-body').value = data.body||'';
+  document.getElementById('edit-symbolism').value = data.symbolism||'';
+  document.getElementById('edit-reflection').value = data.reflection||'';
+  document.getElementById('edit-tags').value = data.tags||'';
+  document.getElementById('edit-modal').classList.add('open');
+}
+function closeEdit(){ document.getElementById('edit-modal').classList.remove('open'); editingId=null; }
+async function saveEdit(){
+  if(!editingId) return;
+  const updates = {
+    title: document.getElementById('edit-title').value.trim(),
+    body: document.getElementById('edit-body').value.trim(),
+    symbolism: document.getElementById('edit-symbolism').value.trim(),
+    reflection: document.getElementById('edit-reflection').value.trim(),
+    tags: document.getElementById('edit-tags').value.trim(),
+  };
+  await db.from('entries').update(updates).eq('id', editingId);
+  closeEdit(); loadAll(); toast('Saved');
+}
+
+// ── FUTURE GARDEN ──
+async function loadFG(){
+  const el = document.getElementById('fg-list');
+  el.innerHTML='<div class="loading">Loading...</div>';
+  const { data, error } = await db.from('future_garden').select('*').order('created_at',{ascending:false});
+  if(error||!data||!data.length){ el.innerHTML='<div class="empty">Nothing planted yet.</div>'; return; }
+  el.innerHTML = data.map(s=>`
+    <div class="fg-card" id="fg-${s.id}">
+      <div class="fg-body">
+        <div class="fg-text">${s.text}</div>
+        <div class="fg-status">${s.status==='growing'?'Growing':'Being planted'}</div>
+      </div>
+      <button class="fg-del" onclick="deleteFG('${s.id}')" title="Remove">&#x00D7;</button>
+    </div>`).join('');
+}
+async function addFG(){
+  const inp = document.getElementById('new-fg');
+  const v = inp.value.trim(); if(!v) return;
+  await db.from('future_garden').insert({text:v, status:'planting'});
+  inp.value=''; loadFG(); toast('Planted in Future Garden');
+}
+async function deleteFG(id){
+  await db.from('future_garden').delete().eq('id',id);
+  const el = document.getElementById('fg-'+id);
+  if(el) el.remove();
+  toast('Removed');
+}
+
+// ── TOAST ──
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+// Enter key shortcuts
+document.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && e.target.id==='new-cur') addCuriosity();
+  if(e.key==='Enter' && e.target.id==='new-fg') addFG();
+});
+
+// Expose globals
+window.unlock=unlock; window.lockUp=lockUp;
+window.showTab=showTab;
+window.toggleCur=toggleCur; window.addCuriosity=addCuriosity; window.deleteCuriosity=deleteCuriosity; window.addCurEntry=addCurEntry;
+window.toggleEcho=toggleEcho; window.replyEcho=replyEcho;
+window.setType=setType; window.toggleThread=toggleThread; window.togglePub=togglePub; window.loadPhoto=loadPhoto; window.plantEntry=plantEntry;
+window.toggleBloom=toggleBloom; window.deleteEntry=deleteEntry; window.openEdit=openEdit; window.closeEdit=closeEdit; window.saveEdit=saveEdit;
+window.addFG=addFG; window.deleteFG=deleteFG;
+</script>
+</body>
+</html>
