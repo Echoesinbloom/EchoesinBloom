@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Echoes in Bloom — A documented relationship with life. Not a healing website. The question of what comes after.">
+  <meta name="description" content="Echoes in Bloom — A documented relationship with life.">
   <meta property="og:title" content="Echoes in Bloom">
-  <meta property="og:description" content="A documented relationship with life.">
-  <meta property="og:type" content="website">
   <title>Echoes in Bloom</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,36 +13,36 @@
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --linen:#f2ece0;--linen-shadow:#e8e0d0;--parch:#ede4d4;
-      --deep:#16120c;--deep-mid:#1e1a10;--deep-surface:#16120c;
-      --amber:#c87030;--monarch:#8b5e3c;--rust:#a0522d;--amber-deep:#a05020;--amber-wash:#f5e8d8;
+      --linen:#f2ece0;--linen-s:#e8e0d0;--parch:#ede4d4;
+      --deep:#16120c;--deep-mid:#1e1a10;--deep-surf:#16120c;
+      --amber:#c87030;--amber-d:#a05020;--amber-w:#f5e8d8;
+      --monarch:#8b5e3c;--rust:#a0522d;
       --moss:#6a8a58;--moss-d:#4a6038;
       --fog:#8a9aaa;--fog-pale:#c8d0d8;--fog-dim:#607888;
       --on-dark:#f0e4cc;--on-dark-mid:#b09878;--on-dark-soft:#886858;
       --ink:#1a1710;--ink-mid:#3a3428;--ink-soft:#6a6258;--ink-faint:#a89e90;
       --rule:rgba(40,30,15,.09);--rule-m:rgba(40,30,15,.14);
       --s:'Cormorant Garamond',serif;--n:'Jost',sans-serif;
+      color-scheme:light only;
     }
-    :root{color-scheme:light only}
     body{font-family:var(--n);background:var(--linen);color:var(--ink);-webkit-font-smoothing:antialiased}
-
 
     /* MOON */
     .moon-display{font-size:10px;color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:color .2s;white-space:nowrap;font-family:var(--n);font-weight:400}
     .moon-display:hover{color:var(--ink-soft)}
-    .moon-panel{display:none;background:var(--deep);border-bottom:1px solid rgba(200,112,48,.1);background-image:radial-gradient(ellipse at 80% 50%, rgba(200,112,48,.06) 0%, transparent 60%)}
+    .moon-panel{display:none;background:var(--deep);border-bottom:1px solid rgba(200,112,48,.1)}
     .moon-panel.open{display:block}
     .moon-current{padding:1.5rem 2rem;border-bottom:1px solid rgba(255,255,255,.05)}
-    .mp-top{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:.5rem;flex-wrap:wrap}
+    .mp-top{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:.6rem;flex-wrap:wrap}
     .mp-phase{font-family:var(--s);font-size:18px;font-style:italic;color:var(--on-dark)}
-    .mp-sign{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fog);font-weight:500}
-    .mp-energy{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);font-weight:500}
+    .mp-sign{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--fog);font-weight:500}
+    .mp-energy{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);font-weight:500}
     .mp-para{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-mid);line-height:1.72;margin-bottom:.85rem;max-width:580px}
-    .mp-expand-btn{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fog-pale);background:none;border:1px solid rgba(138,154,170,.25);cursor:pointer;font-family:var(--n);font-weight:500;padding:.35rem .85rem;transition:all .2s;display:inline-block;margin-top:.25rem}
+    .mp-expand-btn{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fog-pale);background:none;border:1px solid rgba(138,154,170,.25);cursor:pointer;font-family:var(--n);font-weight:500;padding:.35rem .85rem;transition:all .2s}
     .mp-expand-btn:hover{color:white;border-color:var(--fog-pale)}
     .mp-deep{display:none;margin-top:1.25rem;border-top:1px solid rgba(255,255,255,.06);padding-top:1.25rem}
     .mp-deep.open{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
-    .mp-deep-section{margin-bottom:0}
+    .mp-deep-section{}
     .mp-deep-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--fog-dim);font-weight:500;margin-bottom:.35rem}
     .mp-deep-text{font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-mid);line-height:1.65}
     .mp-prompt{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark);line-height:1.65;padding:.75rem 1rem;border-left:2px solid rgba(200,112,48,.3);grid-column:1/-1;margin-top:.25rem}
@@ -55,13 +53,14 @@
     .mn-preview{font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-mid);line-height:1.6}
     .moon-cycle{padding:.85rem 2rem;display:flex;flex-wrap:wrap;gap:.5rem 1.25rem}
     .mc-item{font-size:10px;color:var(--on-dark-soft);letter-spacing:.06em;display:flex;align-items:center;gap:.4rem}
-    .mc-dot{width:5px;height:5px;border-radius:50%;background:var(--on-dark-soft);flex-shrink:0}
+    .mc-dot{width:4px;height:4px;border-radius:50%;background:var(--on-dark-soft);flex-shrink:0}
     .mc-name{font-family:var(--s);font-style:italic}
-    .mc-date{color:var(--on-dark-soft);opacity:.55}
+    .mc-date{opacity:.55}
+
     /* NAV */
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--rule);background:var(--linen);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
-    .nav-name{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);letter-spacing:.02em;cursor:pointer}
-    .nav-links{display:flex;gap:2.25rem;align-items:center}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--rule);background:var(--linen);position:sticky;top:0;z-index:100}
+    .nav-name{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);letter-spacing:.02em}
+    .nav-links{display:flex;gap:2rem;align-items:center}
     .nl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;font-family:var(--n);font-weight:400;transition:color .2s}
     .nl:hover{color:var(--ink)}
     .nl-gh{color:var(--moss);font-weight:500;display:flex;align-items:center;gap:.35rem}
@@ -70,7 +69,7 @@
     /* HERO */
     .hero{padding:5.5rem 2rem 5rem;max-width:580px}
     .hero-season{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:2.5rem;display:flex;align-items:center;gap:.75rem}
-    .hero-line{width:18px;height:1px;background:var(--ink-faint)}
+    .hero-line{width:18px;height:1px;background:var(--ink-faint);display:inline-block}
     .hero-title{font-family:var(--s);font-size:clamp(42px,7vw,60px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.04;margin-bottom:1.75rem;letter-spacing:-.01em}
     .hero-body{font-family:var(--s);font-size:19px;font-style:italic;color:var(--ink-mid);line-height:1.78;max-width:440px;margin-bottom:2.75rem}
     .hero-cta{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none;font-family:var(--n);display:inline-flex;align-items:center;gap:1rem;transition:color .25s}
@@ -102,7 +101,7 @@
     .ci-t{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink-mid);flex:1;transition:color .2s;line-height:1.3}
     .ci-badge{font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;font-weight:500;margin-left:auto;flex-shrink:0}
     .b-alive{background:rgba(106,138,88,.1);color:var(--moss)}
-    .b-seed{background:var(--linen-shadow);color:var(--ink-soft);border:1px solid var(--rule-m)}
+    .b-seed{background:var(--linen-s);color:var(--ink-soft);border:1px solid var(--rule-m)}
     .b-new{background:rgba(138,154,170,.1);color:var(--fog-dim)}
     .cx{overflow:hidden;max-height:0;transition:max-height .35s ease}
     .cx.open{max-height:200px}
@@ -111,30 +110,27 @@
     /* FIELD NOTES */
     .fn{padding:3.5rem 0 0}
     .fn-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 2rem;margin-bottom:1.75rem}
-    .fn-wander{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);background:none;border:none;cursor:pointer;transition:color .2s}
-    .fn-wander:hover{color:var(--ink)}
+    .fn-wander{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);background:none;border:none;cursor:pointer}
     .pg{display:grid;gap:2px;background:var(--rule)}
     .pg-2{grid-template-columns:2fr 1fr}
     .pg-3{grid-template-columns:1fr 1fr 1fr}
-    .pc{position:relative;overflow:hidden;cursor:pointer;background:var(--parch)}
-    .scene{width:100%;height:100%;position:relative;overflow:hidden;transition:transform .55s}
+    .pc{position:relative;overflow:hidden;cursor:pointer;background:var(--parch);min-height:200px}
+    .scene{width:100%;height:100%;position:relative;overflow:hidden;transition:transform .55s;min-height:inherit}
     .pc:hover .scene{transform:scale(1.025)}
     .pc-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
     .pcc{position:absolute;bottom:0;left:0;right:0;padding:1rem 1.25rem;background:linear-gradient(transparent,rgba(16,12,6,.65));opacity:0;transform:translateY(4px);transition:all .3s}
     .pc:hover .pcc{opacity:1;transform:translateY(0)}
     .pcc-note{font-family:var(--s);font-size:14px;font-style:italic;color:rgba(255,255,255,.92);line-height:1.4;margin-bottom:.2rem}
     .pcc-meta{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.42)}
-
-    /* admin delete btn on photo */
-    .pc-admin-del{display:none;position:absolute;top:.5rem;right:.5rem;background:rgba(180,60,60,.85);color:white;border:none;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;cursor:pointer;font-family:var(--n);z-index:5}
+    .pc-admin-del{display:none;position:absolute;top:.5rem;right:.5rem;background:rgba(160,50,50,.85);color:white;border:none;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;cursor:pointer;font-family:var(--n);z-index:5}
     body.admin-mode .pc-admin-del{display:block}
 
     /* BLOOM */
-    .bloom{background:var(--amber-wash);border-top:1px solid rgba(200,112,48,.12);padding:4.5rem 2rem}
+    .bloom{background:var(--amber-w);border-top:1px solid rgba(200,112,48,.12);padding:4.5rem 2rem}
     .bloom-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--amber);margin-bottom:2.5rem}
     .bi{padding:1.85rem 0;border-bottom:1px solid rgba(200,112,48,.12);max-width:640px;position:relative}
     .bi:last-child{border-bottom:none}
-    .bi:hover .bi-t{color:var(--amber-deep)}
+    .bi:hover .bi-t{color:var(--amber-d)}
     .bi-k{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(160,80,32,.5);margin-bottom:.5rem}
     .bi-t{font-family:var(--s);font-size:26px;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:.5rem;transition:color .25s}
     .bi-e{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.72}
@@ -152,90 +148,81 @@
 
     /* ABOUT */
     .about{padding:4.5rem 2rem;border-top:1px solid var(--rule);display:grid;grid-template-columns:160px 1fr;gap:3.5rem;align-items:start;max-width:700px}
-    .a-img{width:160px;height:220px;object-fit:cover;background:var(--linen-shadow);border:1px solid var(--rule);display:block}
+    .a-img{width:160px;height:220px;object-fit:cover;background:var(--linen-s);border:1px solid var(--rule);display:block}
     .a-cap{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:.5rem}
     .a-name{font-family:var(--s);font-size:34px;font-weight:300;font-style:italic;color:var(--ink);margin-bottom:1.25rem;line-height:1.05}
     .a-body{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-mid);line-height:1.82}
     .a-body strong{font-weight:400;color:var(--ink)}
-    /* admin edit about */
-    .a-edit-btn{display:none;margin-top:1rem;background:none;border:1px solid var(--rule-m);padding:.4rem .9rem;font-family:var(--n);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft);transition:all .2s}
-    .a-edit-btn:hover{border-color:var(--ink);color:var(--ink)}
+    .a-edit-btn{display:none;margin-top:1rem;background:none;border:1px solid var(--rule-m);padding:.4rem .9rem;font-family:var(--n);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft)}
     body.admin-mode .a-edit-btn{display:inline-block}
-    .a-edit-area{display:none;width:100%;border:none;border-bottom:1px solid var(--rule-m);background:none;font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-mid);outline:none;resize:none;min-height:120px;line-height:1.82;margin-bottom:.5rem}
-    .a-save-btn{display:none;background:var(--moss);color:white;border:none;padding:.4rem .9rem;font-family:var(--n);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
 
     /* FOOTER */
-    .foot{padding:2rem;background:var(--deep);display:flex;align-items:center;justify-content:space-between;background-image:radial-gradient(ellipse at 50% 0%, rgba(200,112,48,.06) 0%, transparent 60%)}
+    .foot{padding:2rem;background:var(--deep);display:flex;align-items:center;justify-content:space-between;background-image:radial-gradient(ellipse at 50% 0%, rgba(200,112,48,.05) 0%, transparent 60%)}
     .foot-l{font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-mid)}
     .foot-r{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--on-dark-soft)}
-    /* hidden admin trigger in footer */
-    .foot-admin-trigger{cursor:pointer;opacity:.2;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .5rem;transition:opacity .3s;color:var(--on-dark-soft);font-family:var(--n);border:1px solid rgba(255,255,255,.08)}
-    .foot-admin-trigger:hover{opacity:.5;border-color:rgba(255,255,255,.2)}
+    .foot-admin{cursor:pointer;opacity:.18;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-soft);font-family:var(--n);border:1px solid rgba(255,255,255,.08);padding:.25rem .5rem;transition:opacity .3s}
+    .foot-admin:hover{opacity:.45}
 
-    /* ADMIN MODAL */
-    .admin-modal{display:none;position:fixed;inset:0;background:rgba(26,23,16,.7);z-index:500;align-items:center;justify-content:center;padding:2rem}
-    .admin-modal.open{display:flex}
+    /* ADMIN */
+    .admin-bar{display:none;background:var(--deep);padding:.5rem 2rem;align-items:center;justify-content:space-between;position:sticky;top:64px;z-index:99;border-bottom:1px solid rgba(200,112,48,.15)}
+    body.admin-mode .admin-bar{display:flex}
+    .admin-bar-lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);font-weight:500}
+    .admin-btn-sm{font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;background:none;border:1px solid rgba(255,255,255,.15);font-family:var(--n);font-weight:500;padding:.3rem .75rem;transition:all .2s;color:var(--on-dark-soft)}
+    .admin-btn-sm:hover{background:rgba(255,255,255,.08)}
+    .admin-btn-amber{border-color:rgba(200,112,48,.4);color:var(--amber)}
+    .admin-btn-amber:hover{background:var(--amber);color:white}
+    .admin-modal-bg{display:none;position:fixed;inset:0;background:rgba(16,12,8,.8);z-index:500;align-items:center;justify-content:center;padding:1.25rem}
+    .admin-modal-bg.open{display:flex}
     .admin-box{background:var(--linen);padding:2rem;width:100%;max-width:320px;text-align:center}
     .admin-title{font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink);margin-bottom:1rem}
     .admin-input{width:100%;border:none;border-bottom:1px solid var(--rule-m);padding:.5rem 0;font-family:var(--n);font-size:15px;color:var(--ink);background:none;outline:none;text-align:center;letter-spacing:.12em;margin-bottom:.75rem}
     .admin-input:focus{border-bottom-color:var(--moss)}
-    .admin-btn{width:100%;background:var(--moss);color:white;border:none;padding:.75rem;font-family:var(--n);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
-    .admin-btn:hover{background:var(--moss-d)}
+    .admin-submit{width:100%;background:var(--moss);color:white;border:none;padding:.75rem;font-family:var(--n);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
     .admin-err{font-size:12px;color:var(--amber);margin-top:.5rem;font-style:italic;font-family:var(--s);display:none}
-    .admin-bar{display:none;background:var(--deep);padding:.5rem 2rem;align-items:center;justify-content:space-between;position:sticky;top:64px;z-index:99}
-    body.admin-mode .admin-bar{display:flex}
-    .admin-bar-lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);font-weight:500}
-    .admin-bar-exit{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-soft);background:none;border:1px solid rgba(255,255,255,.1);padding:.3rem .75rem;cursor:pointer;font-family:var(--n)}
 
-
-    /* ADMIN EDITING */
-    .admin-edit-btn{display:none;font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid rgba(200,112,48,.3);color:var(--amber);padding:.2rem .5rem;cursor:pointer;font-family:var(--n);margin-left:.5rem;transition:all .2s}
-    body.admin-mode .admin-edit-btn{display:inline-block}
-    .admin-edit-btn:hover{background:var(--amber);color:white}
-    .admin-editable{position:relative}
-    .inline-edit-area{width:100%;border:none;border-bottom:1px solid var(--amber);background:none;font-family:var(--s);font-style:italic;color:inherit;outline:none;resize:none;line-height:inherit;font-size:inherit;padding:.25rem 0}
-    .inline-edit-save{background:var(--moss);color:white;border:none;padding:.3rem .75rem;font-family:var(--n);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.35rem;display:inline-block}
-    .admin-section-note{display:none;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-family:var(--n);margin-bottom:.75rem;padding:.3rem .6rem;border:1px solid rgba(200,112,48,.2);background:rgba(200,112,48,.05)}
-    body.admin-mode .admin-section-note{display:inline-block}
-    /* LOADING */
-    .fn-loading{min-height:200px;display:flex;align-items:center;justify-content:center;font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint)}
-    .bloom-loading{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint)}
+    /* EDIT OVERLAY */
+    .edit-overlay{display:none;position:fixed;inset:0;background:rgba(16,12,8,.85);z-index:400;overflow-y:auto;padding:2rem}
+    .edit-overlay.open{display:block}
+    .edit-inner{max-width:620px;margin:0 auto;background:var(--linen);padding:2rem}
+    .edit-section-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.75rem;margin-top:1.5rem}
+    .edit-section-lbl:first-of-type{margin-top:0}
+    .edit-field{width:100%;border:none;border-bottom:1px solid var(--rule-m);background:none;font-family:var(--s);font-style:italic;color:var(--ink-mid);outline:none;resize:none;line-height:1.55;padding:.25rem 0;margin-bottom:.4rem;font-size:15px;min-height:44px}
+    .edit-input{width:100%;border:none;border-bottom:1px solid var(--rule-m);background:none;font-family:var(--s);font-style:italic;color:var(--ink-mid);outline:none;padding:.25rem 0;margin-bottom:.4rem;font-size:16px}
+    .edit-sub-lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.2rem;margin-top:.5rem;display:block;font-weight:500}
+    .edit-bloom-block{padding:.75rem;background:var(--linen-s);margin-bottom:.75rem}
 
     @media(max-width:640px){
       .gh-inner{grid-template-columns:1fr;gap:2rem}
       .about{grid-template-columns:1fr}
       .pg-2,.pg-3{grid-template-columns:1fr}
-      .nav-links{gap:1.25rem}
-      .hero{padding:3.5rem 1.25rem 3rem}
-      .gh,.bloom,.ech,.cur,.about{padding-left:1.25rem;padding-right:1.25rem}
+      .nav-links{gap:1rem}
+      .hero,.gh,.bloom,.ech,.cur,.about{padding-left:1.25rem;padding-right:1.25rem}
+      .mp-deep.open{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
 
-<!-- ADMIN BAR -->
 <div class="admin-bar">
   <div class="admin-bar-lbl">Admin mode</div>
-  <div style="display:flex;gap:.75rem">
-    <button class="admin-bar-exit" style="background:var(--amber);border-color:var(--amber);color:white" onclick="openAdminEditModal()">Edit content</button>
-    <button class="admin-bar-exit" onclick="exitAdmin()">Exit</button>
+  <div style="display:flex;gap:.5rem">
+    <button class="admin-btn-sm admin-btn-amber" onclick="openEditOverlay()">Edit content</button>
+    <button class="admin-btn-sm" onclick="exitAdmin()">Exit</button>
   </div>
 </div>
 
 <nav class="nav">
   <div class="nav-name">Echoes in Bloom</div>
   <div class="nav-links">
+    <div class="moon-display" id="moon-display" onclick="toggleMoon()"></div>
     <a href="#field-notes" class="nl">Field Notes</a>
     <a href="#spiral-up" class="nl">Spiral Up</a>
     <a href="#echoes" class="nl">Echoes</a>
     <a href="#bloom" class="nl">Bloom</a>
-    <div class="moon-display" id="moon-display" onclick="toggleMoon()" title="Moon phase"></div>
     <a href="https://greenhouse.echoesinbloom.co" class="nl nl-gh"><span class="gh-pip"></span>Greenhouse</a>
   </div>
 </nav>
 
-
-<!-- MOON PANEL -->
 <div class="moon-panel" id="moon-panel">
   <div class="moon-current">
     <div class="mp-top">
@@ -265,15 +252,13 @@
   <div class="moon-cycle" id="moon-cycle"></div>
 </div>
 
-<!-- HERO -->
 <div class="hero">
-  <div class="hero-season"><span class="hero-line"></span><span id="hero-season-text">Summer 2025</span></div>
+  <div class="hero-season"><span class="hero-line"></span>Summer 2025</div>
   <h1 class="hero-title">What happens<br>after survival.</h1>
   <p class="hero-body">Not a healing website. The question of what comes after — what joy actually feels like in the body, how we learn wonder again, what we do with this one life once we've stopped merely recovering from it.</p>
   <a href="#field-notes" class="hero-cta">Come walk with me <span class="cta-rule"></span></a>
 </div>
 
-<!-- GREENHOUSE -->
 <section class="gh" id="greenhouse">
   <div class="gh-inner">
     <div>
@@ -282,9 +267,6 @@
       <p class="gh-note">Seeds that arrived this season. Not yet ready to bloom. That's the point.</p>
     </div>
     <div>
-      <div>
-        <div class="admin-section-note">Admin — click any seed to edit</div>
-      </div>
       <div class="gh-seeds" id="gh-seeds">
         <div class="gh-seed">What if healing is simply creating enough safety to become curious again?</div>
         <div class="gh-seed">The body's relationship to trust, before the mind catches up.</div>
@@ -296,8 +278,7 @@
   </div>
 </section>
 
-<!-- CURRENT CURIOSITY -->
-<div class="cur" id="spiral-up"><div class="admin-section-note">Admin — editing curiosity list coming soon</div>
+<div class="cur" id="spiral-up">
   <div class="sec-head"><div class="sec-lbl">Current curiosity</div><div class="sec-rule"></div></div>
   <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">What does joy actually feel like in the body?</span><span class="ci-badge b-alive">Alive</span></div>
   <div class="cx"><div class="cx-in">Not the concept. The sensation. Where does it land? How long does it stay before the nervous system decides it's safe to keep?</div></div>
@@ -306,28 +287,50 @@
   <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">Aliveness</span><span class="ci-badge b-alive">Alive</span></div>
   <div class="cx"><div class="cx-in">Not happiness. Closer to participation. The moment you stop watching your life and start being inside it.</div></div>
   <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">Moth wings</span><span class="ci-badge b-seed">Seed</span></div>
-  <div class="cx"><div class="cx-in">No further explanation yet.</div></div>
+  <div class="cx"><div class="cx-in">No further explanation yet. That's fine.</div></div>
   <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">Fascia and memory</span><span class="ci-badge b-new">New</span></div>
   <div class="cx"><div class="cx-in">The fascia holds things the mind has already moved on from. Learning to listen there first.</div></div>
 </div>
 
-<!-- FIELD NOTES -->
 <section class="fn" id="field-notes">
   <div class="fn-head">
     <div class="sec-lbl">Field Notes &middot; What I witnessed</div>
     <button class="fn-wander">wander the field &rarr;</button>
   </div>
-  <div id="fn-grid"><div class="fn-loading">Loading field notes...</div></div>
+  <div id="fn-grid">
+    <div class="pg pg-2" style="margin-bottom:2px">
+      <div class="pc" style="min-height:320px"><div class="scene" style="min-height:320px;background:#a0b088"><img src="photos/field-note-1.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">The frog on the window &mdash; third morning in a row.</div><div class="pcc-meta">Autumn &middot; Wonder &middot; Synchronicity</div></div></div>
+      <div class="pc" style="min-height:320px"><div class="scene" style="min-height:320px;background:#98a4a8"><img src="photos/field-note-2.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">Dew on grass at 6am. I didn&rsquo;t have words for it.</div><div class="pcc-meta">Summer &middot; Awe &middot; Morning</div></div></div>
+    </div>
+    <div class="pg pg-3" style="margin-top:2px">
+      <div class="pc" style="min-height:220px"><div class="scene" style="min-height:220px;background:#b09840"><img src="photos/field-note-3.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">She said: so do you, Mama.</div><div class="pcc-meta">Motherhood &middot; Love</div></div></div>
+      <div class="pc" style="min-height:220px"><div class="scene" style="min-height:220px;background:#807090"><img src="photos/field-note-4.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">She landed on my arm while I was crying. Four minutes.</div><div class="pcc-meta">Summer &middot; Awe &middot; Butterfly</div></div></div>
+      <div class="pc" style="min-height:220px"><div class="scene" style="min-height:220px;background:#b0a898"><img src="photos/field-note-5.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">A feather on the porch. I kept it anyway.</div><div class="pcc-meta">Spring &middot; Grief &middot; Feather</div></div></div>
+    </div>
+  </div>
 </section>
 
-<!-- BLOOM -->
 <section class="bloom" id="bloom">
   <div class="bloom-lbl">From the bloom</div>
-  <div class="admin-section-note">Admin — click any entry to edit or delete</div>
-  <div id="bloom-entries"><div class="bloom-loading">Loading...</div></div>
+  <div id="bloom-entries">
+    <div class="bi">
+      <div class="bi-k">Spiral Up &middot; Spring &middot; Essay</div>
+      <div class="bi-t">On beginning again &mdash; for the sixth time</div>
+      <div class="bi-e">I have started over so many times. I used to call it failure. Now I recognize it as the nature of seeds &mdash; they do not bloom once.</div>
+    </div>
+    <div class="bi">
+      <div class="bi-k">Bloom &middot; Summer &middot; Aliveness</div>
+      <div class="bi-t">I danced alone in the kitchen for eleven minutes</div>
+      <div class="bi-e">Nobody saw it. That was the point. Joy that doesn&rsquo;t need a witness is a different kind of joy entirely.</div>
+    </div>
+    <div class="bi">
+      <div class="bi-k">Motherhood &middot; Summer</div>
+      <div class="bi-t">Tending without forcing</div>
+      <div class="bi-e">My daughter asked why sunflowers turn. I told her they follow the light. She said, so do you, Mama.</div>
+    </div>
+  </div>
 </section>
 
-<!-- ECHOES -->
 <section class="ech" id="echoes">
   <div class="ech-lbl"><span>Echoes &middot; What recurs</span><span class="ech-rule"></span></div>
   <div class="ech-quote" id="ech-quote">&ldquo;The butterfly appeared three times that summer. I stopped calling it coincidence around the second time.&rdquo;</div>
@@ -339,56 +342,237 @@
   </div>
 </section>
 
-<!-- ABOUT -->
 <div class="about">
   <div>
-    <img src="photos/hannah.jpg" alt="Hannah" class="a-img" onerror="this.style.background='var(--linen-shadow)'">
+    <img src="photos/hannah.jpg" alt="Hannah" class="a-img" onerror="this.style.background='var(--linen-s)'">
     <div class="a-cap">Hannah</div>
   </div>
   <div>
     <div class="a-name">Hannah</div>
     <div class="a-body" id="a-body">I got emotional over dew on grass. I carried a turkey feather because of a song lyric. I talk to frogs. I dance in my room.<br><br>I am trying to learn <strong>the language of aliveness</strong> while raising a son and documenting the whole strange beautiful thing as I go.<br><br>Echoes in Bloom is the record.</div>
-    <button class="a-edit-btn" onclick="editAbout()">Edit</button>
-    <textarea class="a-edit-area" id="a-edit-area" placeholder="Write your about text..."></textarea>
-    <button class="a-save-btn" id="a-save-btn" onclick="saveAbout()">Save</button>
+    <button class="a-edit-btn" onclick="editAbout()">Edit about me</button>
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer class="foot">
   <div class="foot-l">Come walk with me.</div>
-  <div class="foot-r" id="foot-year">Summer 2025 &middot; Echoes in Bloom</div>
-  <div class="foot-admin-trigger" onclick="openAdminModal()" title="Admin">&#9679; admin</div>
+  <div class="foot-r">Summer 2025 &middot; Echoes in Bloom</div>
+  <div class="foot-admin" onclick="openAdminModal()">admin</div>
 </footer>
 
-<!-- ADMIN MODAL -->
-<div class="admin-modal" id="admin-modal">
+<div class="admin-modal-bg" id="admin-modal">
   <div class="admin-box">
     <div class="admin-title">Admin</div>
     <input type="password" class="admin-input" id="admin-input" placeholder="password" onkeydown="if(event.key==='Enter')checkAdmin()">
-    <button class="admin-btn" onclick="checkAdmin()">Enter</button>
+    <button class="admin-submit" onclick="checkAdmin()">Enter</button>
     <div class="admin-err" id="admin-err">Wrong password</div>
     <div style="margin-top:.75rem"><button onclick="closeAdminModal()" style="background:none;border:none;font-size:11px;color:var(--ink-faint);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;font-family:var(--n)">Cancel</button></div>
   </div>
 </div>
 
+<div class="edit-overlay" id="edit-overlay">
+  <div class="edit-inner">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;border-bottom:1px solid var(--rule);padding-bottom:1rem">
+      <div style="font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink)">Edit Site Content</div>
+      <button onclick="closeEditOverlay()" style="background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:20px">&times;</button>
+    </div>
+    <div class="edit-section-lbl">Greenhouse Seeds</div>
+    <div id="edit-seeds-fields"></div>
+    <div class="edit-section-lbl">Current Curiosities</div>
+    <div id="edit-cur-fields"></div>
+    <div class="edit-section-lbl">Bloom Entries</div>
+    <div id="edit-bloom-fields"></div>
+    <div class="edit-section-lbl">About Me</div>
+    <textarea class="edit-field" id="edit-about" style="min-height:120px;font-size:16px"></textarea>
+    <div style="display:flex;gap:.75rem;margin-top:1.25rem">
+      <button onclick="saveAllEdits()" style="background:var(--moss);color:white;border:none;padding:.75rem 1.5rem;font-family:var(--n);font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:500">Save All</button>
+      <button onclick="closeEditOverlay()" style="background:none;border:1px solid var(--rule-m);padding:.75rem 1.5rem;font-family:var(--n);font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft)">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const SUPABASE_URL='https://polewlvnwokvvoajsdfy.supabase.co';
-const SUPABASE_KEY='sb_publishable_MhZlQIwtcZyLf7iicRAYcQ_s7UY8tWs';
+const SB_URL='https://polewlvnwokvvoajsdfy.supabase.co';
+const SB_KEY='sb_publishable_MhZlQIwtcZyLf7iicRAYcQ_s7UY8tWs';
 const ADMIN_PW='Sunflower33!';
 const {createClient}=supabase;
-const db=createClient(SUPABASE_URL,SUPABASE_KEY);
+const db=createClient(SB_URL,SB_KEY);
 
+// MOON DATA
+const MOON_DEEP={
+  'New Moon':{para:'The dark before the beginning. This is the moment of pure potential — when the slate is wiped clean and new intentions can take root.',astro:'The moon sits between the earth and sun, its illuminated face turned away from us. We are in the dark, which is not absence but possibility.',agri:'Plant above-ground crops now. Seeds sown at the New Moon germinate quickly, drawing energy from the building light. Leafy greens, herbs, and flowers all benefit from being planted in this phase.',astro2:'The New Moon in each sign carries the flavour of that sign. In Virgo, intentions around healing, craft, and discernment take root most deeply.',prompt:'What are you ready to begin? What needs to be cleared before something new can grow?'},
+  'Waxing Crescent':{para:'The first sliver of light returning. This is the phase of commitment — you have set your intention, now you take the first steps toward it.',astro:'The moon is moving away from the sun, its lit face slowly turning toward us. Energy is building, momentum is possible.',agri:'Continue planting above-ground crops. Good for transplanting seedlings. Water generously — moisture is drawn upward in the waxing cycle.',astro2:'The crescent asks: are you willing to show up for what you said you wanted? Small consistent actions matter more than grand gestures now.',prompt:'What first step have you been avoiding? What would it look like to show up for this?'},
+  'First Quarter':{para:'Half-lit and decisive. You may encounter the first resistance — the moment when the intention meets reality and you have to choose to continue.',astro:'The moon is at a 90-degree angle to the sun. Half illuminated. A moment of tension between where you were and where you are going.',agri:'A good time for cultivating — weeding, pruning, and tending. The energy supports action and decision-making. Plant beans and grains.',astro2:'This phase asks you to make decisions. What needs to be released to move forward? What habit or belief is slowing the growth?',prompt:'Where are you meeting resistance? Is the resistance a sign to stop, or a sign that something real is being built?'},
+  'Waxing Gibbous':{para:'Almost full. You can see the shape of what you have been building. This is a time of refinement — adjusting, editing, preparing for the fullness that is coming.',astro:'The moon is nearly fully illuminated, growing larger each night. Maximum energy is approaching. Plants and tides feel it.',agri:'Water and fertilise. The waxing energy pulls moisture and nutrients upward. Harvest herbs and flowers for maximum potency.',astro2:'Review and refine. What needs to be adjusted before the Full Moon reveals everything? What are you still carrying that does not belong?',prompt:'What have you built so far? What still needs tending before it is ready to be seen?'},
+  'Full Moon':{para:'Everything is illuminated. What has been growing in the dark is now fully visible — to you and to others. This is a moment of revelation, completion, and release.',astro:'The moon is directly opposite the sun, fully illuminated from our perspective. Tides are at their highest. The gravitational pull is strongest.',agri:'Harvest now for maximum potency. Root vegetables are fullest. Avoid planting — the energy is too intense for germination.',astro2:'What is being revealed? The Full Moon lights up what has been hidden — in our lives and in ourselves. Emotions run close to the surface for good reason.',prompt:'What has been revealed to you this cycle? What are you ready to release? What are you celebrating?'},
+  'Waning Gibbous':{para:'The light is beginning to recede. This is a time of gratitude and sharing — you have received, now you give back, teach, and integrate.',astro:'The moon is past full and beginning to wane. Still bright, but retreating. The intense energy of the Full Moon is softening into reflection.',agri:'Harvest root vegetables and crops meant for storage. Prune fruit trees and shrubs — cuts made now heal more cleanly. Avoid planting.',astro2:'The disseminating phase is for sharing what you have learned. Who needs to hear what you now know? What wisdom wants to move through you?',prompt:'What did this cycle teach you? What are you grateful for? What do you want to share or pass on?'},
+  'Last Quarter':{para:'Half-lit again, but now retreating. This is a time of release, forgiveness, and clearing. Let go of what did not work without judgment.',astro:'The moon is again at a 90-degree angle to the sun, but now on the other side. The energy is turning inward. Reflection deepens.',agri:'Rest the soil. Clear, weed, and compost. A good time to turn compost and prepare beds for future planting. Harvest root crops for storage.',astro2:'Release without attachment. What beliefs, habits, or relationships have outlived their season? The Last Quarter supports honest endings.',prompt:'What are you ready to let go of? What has run its course? What would make space for something new?'},
+  'Waning Crescent':{para:'The final sliver before the dark. A time of rest, surrender, and preparation. You do not need to do anything right now. Just rest.',astro:'Only a thin crescent remains visible, rising just before dawn. The moon is almost back to where the cycle began. The dark is coming and it is not to be feared.',agri:'Rest the soil and yourself. Plant garlic — one of the few crops that benefits from the waning crescent. Prepare and plan for the next cycle.',astro2:'The Balsamic Moon is the most mystical phase — a time for dreams, visions, and deep inner knowing. Pay attention to what arrives in the quiet.',prompt:'What do you need to surrender? What is asking for rest? What visions or dreams are arriving as you slow down?'}
+};
+const MOON_SYMBOLS={'New Moon':'○','Waxing Crescent':'◑','First Quarter':'◑','Waxing Gibbous':'◑','Full Moon':'●','Waning Gibbous':'◐','Last Quarter':'◐','Waning Crescent':'◐'};
+const MOON_NEXT={'New Moon':'A thin crescent will appear — the first invitation to act on what you have been intending.','Waxing Crescent':'The moon reaches its first major decision point. Momentum is building toward the full light.','First Quarter':'The waxing energy intensifies. You are past the halfway point toward fullness.','Waxing Gibbous':'The Full Moon approaches. What you have been building is about to be fully illuminated.','Full Moon':'The light begins to recede. A time of gratitude, sharing, and integration begins.','Waning Gibbous':'A moment of decision and release. The cycle is moving toward completion.','Last Quarter':'The final quiet before the dark. Rest, surrender, and prepare.','Waning Crescent':'The cycle begins again. The slate is cleared. New intentions can take root.'};
 
-window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
-
-// ── TOAST ──
-function toast(msg){
-  let t=document.getElementById('site-toast');
-  if(!t){t=document.createElement('div');t.id='site-toast';t.style.cssText='position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(12px);background:var(--deep);color:var(--on-dark);padding:.55rem 1.1rem;font-family:var(--s);font-size:14px;font-style:italic;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap;border-left:2px solid var(--amber)';document.body.appendChild(t)}
-  t.textContent=msg;t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';
-  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(12px)'},2200);
+function getMoonData(date){
+  const phases=['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'];
+  const signs=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+  const energy=['Intention','Growth','Decision','Refinement','Illumination','Gratitude','Release','Surrender'];
+  const known=new Date(2000,0,6,18,14);
+  const cycle=29.53058867;
+  const diff=(date-known)/(1000*60*60*24);
+  const phase=((diff%cycle)+cycle)%cycle;
+  const idx=Math.min(Math.floor((phase/cycle)*8),7);
+  const signIdx=Math.min(Math.floor(((diff%27.32)+27.32)%27.32/27.32*12),11);
+  return{name:phases[idx],sign:signs[signIdx],energy:energy[idx],idx};
 }
+
+function getMoonCalendar(){
+  const today=new Date();
+  const transitions=[];
+  let lastIdx=getMoonData(today).idx;
+  for(let i=1;i<=34;i++){
+    const d=new Date(today);d.setDate(today.getDate()+i);
+    const data=getMoonData(d);
+    if(data.idx!==lastIdx){transitions.push({date:d,name:data.name,sign:data.sign,days:i});lastIdx=data.idx;}
+  }
+  return transitions;
+}
+
+function initMoon(){
+  const d=getMoonData(new Date());
+  const deep=MOON_DEEP[d.name]||{};
+  const sym=MOON_SYMBOLS[d.name]||'○';
+  const display=document.getElementById('moon-display');
+  if(display)display.innerHTML=`<span style="opacity:.65">${sym}</span>${d.name}`;
+  document.getElementById('mp-phase').textContent=d.name;
+  document.getElementById('mp-sign').textContent='Moon in '+d.sign;
+  document.getElementById('mp-energy').textContent=d.energy;
+  document.getElementById('mp-para').textContent=deep.para||'';
+  document.getElementById('mp-astro').textContent=deep.astro||'';
+  document.getElementById('mp-agri').textContent=deep.agri||'';
+  document.getElementById('mp-astro2').textContent=deep.astro2||'';
+  document.getElementById('mp-prompt').textContent=deep.prompt||'';
+  const cal=getMoonCalendar();
+  const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if(cal.length>0){
+    const next=cal[0];
+    document.getElementById('moon-next').innerHTML=`<div class="mn-label">Next &mdash; in ${next.days} day${next.days===1?'':'s'}</div><div class="mn-name">${next.name}</div><div class="mn-date">${M[next.date.getMonth()]} ${next.date.getDate()} &middot; Moon in ${next.sign}</div><div class="mn-preview">${MOON_NEXT[next.name]||''}</div>`;
+  }
+  const rest=cal.slice(1);
+  if(rest.length){
+    document.getElementById('moon-cycle').innerHTML=rest.map(t=>`<div class="mc-item"><div class="mc-dot"></div><span class="mc-name">${t.name}</span><span class="mc-date">${M[t.date.getMonth()]} ${t.date.getDate()}</span></div>`).join('');
+  }
+}
+function toggleMoon(){document.getElementById('moon-panel').classList.toggle('open')}
+function toggleMoonDeep(){document.getElementById('mp-deep').classList.toggle('open')}
+
+// CURIOSITY ACCORDION
+function toggleCi(el){
+  const cx=el.nextElementSibling;
+  const isOpen=cx.classList.contains('open');
+  document.querySelectorAll('.cx.open').forEach(c=>c.classList.remove('open'));
+  if(!isOpen)cx.classList.add('open');
+}
+
+// LOAD SUPABASE CONTENT
+async function loadDynamicContent(){
+  // Field notes from Supabase
+  const{data:photos}=await db.from('entries').select('*').eq('public',true).eq('type','photo').order('created_at',{ascending:false}).limit(5);
+  if(photos&&photos.length){
+    const cards=photos.map((e,i)=>`<div class="pc" style="min-height:${i===0?'320px':'220px'};position:relative"><div class="scene" style="min-height:inherit">${e.photo_url?`<img src="${e.photo_url}" class="pc-img" alt="">`:`<div style="width:100%;height:100%;background:#a0b088;min-height:inherit"></div>`}</div><div class="pcc"><div class="pcc-note">${e.title}</div><div class="pcc-meta">${e.tags||e.date_label||''}</div></div><button class="pc-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.pc'))">Remove</button></div>`);
+    const top=cards.slice(0,2);const bot=cards.slice(2);
+    let html=`<div class="pg pg-2" style="margin-bottom:2px">${top.join('')}</div>`;
+    if(bot.length)html+=`<div class="pg pg-${bot.length}" style="margin-top:2px">${bot.join('')}</div>`;
+    document.getElementById('fn-grid').innerHTML=html;
+  }
+  // Bloom from Supabase
+  const{data:bloom}=await db.from('entries').select('*').eq('public',true).neq('type','photo').order('created_at',{ascending:false}).limit(6);
+  if(bloom&&bloom.length){
+    document.getElementById('bloom-entries').innerHTML=bloom.map(e=>`<div class="bi"><div class="bi-k">${(e.branches||[]).join(' &middot; ')}${e.date_label?' &middot; '+e.date_label:''}</div><div class="bi-t">${e.title}</div>${e.body?`<div class="bi-e">${e.body}</div>`:''}<button class="bi-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.bi'))">Remove</button></div>`).join('');
+  }
+  // Echoes symbols
+  const{data:entries}=await db.from('entries').select('threads').eq('public',true);
+  if(entries&&entries.length){
+    const counts={};entries.forEach(e=>(e.threads||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
+    const top=Object.entries(counts).filter(([,c])=>c>1).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([t])=>t);
+    if(top.length)document.getElementById('sym-row').innerHTML=top.map(t=>`<div class="sym">${t}</div>`).join('');
+  }
+  // Load saved local edits
+  loadLocalEdits();
+}
+
+async function unpublishEntry(id,el){
+  if(!confirm('Remove from public site?'))return;
+  await db.from('entries').update({public:false,bloom_ready:false}).eq('id',id);
+  if(el)el.remove();
+  toast('Removed');
+}
+
+// LOCAL EDITS
+function loadLocalEdits(){
+  const seeds=localStorage.getItem('eib-seeds');
+  if(seeds){const el=document.getElementById('gh-seeds');if(el)el.innerHTML=JSON.parse(seeds).map(s=>`<div class="gh-seed">${s}</div>`).join('');}
+  const curs=localStorage.getItem('eib-curs');
+  if(curs){const data=JSON.parse(curs);document.querySelectorAll('.ci-t').forEach((el,i)=>{if(data[i])el.textContent=data[i];});}
+  const bloom=localStorage.getItem('eib-bloom-local');
+  if(bloom){const data=JSON.parse(bloom);document.querySelectorAll('.bi').forEach((el,i)=>{if(!data[i])return;const t=el.querySelector('.bi-t');const e=el.querySelector('.bi-e');const k=el.querySelector('.bi-k');if(t&&data[i].title)t.textContent=data[i].title;if(e&&data[i].excerpt)e.textContent=data[i].excerpt;if(k&&data[i].kicker)k.textContent=data[i].kicker;});}
+  const about=localStorage.getItem('eib-about');
+  if(about){const el=document.getElementById('a-body');if(el)el.innerHTML=about;}
+}
+
+// ADMIN
+function openAdminModal(){document.getElementById('admin-modal').classList.add('open');setTimeout(()=>document.getElementById('admin-input').focus(),100)}
+function closeAdminModal(){document.getElementById('admin-modal').classList.remove('open');document.getElementById('admin-input').value='';document.getElementById('admin-err').style.display='none'}
+function checkAdmin(){
+  if(document.getElementById('admin-input').value===ADMIN_PW){
+    closeAdminModal();document.body.classList.add('admin-mode');sessionStorage.setItem('eib-admin','1');toast('Admin mode on');
+  } else {document.getElementById('admin-err').style.display='block';document.getElementById('admin-input').value='';}
+}
+function exitAdmin(){document.body.classList.remove('admin-mode');sessionStorage.removeItem('eib-admin')}
+if(sessionStorage.getItem('eib-admin')==='1')document.body.classList.add('admin-mode');
+
+// EDIT OVERLAY
+function openEditOverlay(){
+  const seeds=Array.from(document.querySelectorAll('.gh-seed')).map(s=>s.textContent.trim());
+  const curs=Array.from(document.querySelectorAll('.ci-t')).map(c=>c.textContent.trim());
+  const blooms=Array.from(document.querySelectorAll('.bi')).map(b=>({kicker:b.querySelector('.bi-k')?.textContent.trim()||'',title:b.querySelector('.bi-t')?.textContent.trim()||'',excerpt:b.querySelector('.bi-e')?.textContent.trim()||''}));
+  document.getElementById('edit-seeds-fields').innerHTML=seeds.map((s,i)=>`<textarea class="edit-field" id="es-${i}">${s}</textarea>`).join('');
+  document.getElementById('edit-cur-fields').innerHTML=curs.map((c,i)=>`<input class="edit-input" id="ec-${i}" type="text" value="${c.replace(/"/g,'&quot;')}">`).join('');
+  document.getElementById('edit-bloom-fields').innerHTML=blooms.map((b,i)=>`<div class="edit-bloom-block"><span class="edit-sub-lbl">Kicker</span><input class="edit-input" id="ebk-${i}" type="text" value="${b.kicker.replace(/"/g,'&quot;')}"><span class="edit-sub-lbl">Title</span><input class="edit-input" id="ebt-${i}" type="text" value="${b.title.replace(/"/g,'&quot;')}" style="font-size:18px;font-family:var(--s)"><span class="edit-sub-lbl">Excerpt</span><textarea class="edit-field" id="ebe-${i}">${b.excerpt}</textarea></div>`).join('');
+  document.getElementById('edit-about').value=document.getElementById('a-body')?.innerText||'';
+  document.getElementById('edit-overlay').classList.add('open');
+  window._editCounts={seeds:seeds.length,curs:curs.length,blooms:blooms.length};
+}
+function closeEditOverlay(){document.getElementById('edit-overlay').classList.remove('open')}
+function saveAllEdits(){
+  const{seeds,curs,blooms}=window._editCounts;
+  const newSeeds=[];for(let i=0;i<seeds;i++){const v=document.getElementById('es-'+i)?.value.trim();if(v)newSeeds.push(v);}
+  localStorage.setItem('eib-seeds',JSON.stringify(newSeeds));
+  const seedsEl=document.getElementById('gh-seeds');if(seedsEl)seedsEl.innerHTML=newSeeds.map(s=>`<div class="gh-seed">${s}</div>`).join('');
+  const newCurs=[];for(let i=0;i<curs;i++){const v=document.getElementById('ec-'+i)?.value.trim();if(v)newCurs.push(v);}
+  localStorage.setItem('eib-curs',JSON.stringify(newCurs));
+  document.querySelectorAll('.ci-t').forEach((el,i)=>{if(newCurs[i])el.textContent=newCurs[i];});
+  const newBlooms=[];for(let i=0;i<blooms;i++){newBlooms.push({kicker:document.getElementById('ebk-'+i)?.value.trim()||'',title:document.getElementById('ebt-'+i)?.value.trim()||'',excerpt:document.getElementById('ebe-'+i)?.value.trim()||''});}
+  localStorage.setItem('eib-bloom-local',JSON.stringify(newBlooms));
+  document.querySelectorAll('.bi').forEach((el,i)=>{if(!newBlooms[i])return;const t=el.querySelector('.bi-t');const e=el.querySelector('.bi-e');const k=el.querySelector('.bi-k');if(t)t.textContent=newBlooms[i].title;if(e)e.textContent=newBlooms[i].excerpt;if(k)k.textContent=newBlooms[i].kicker;});
+  const about=document.getElementById('edit-about')?.value.trim();
+  if(about){localStorage.setItem('eib-about',about);const el=document.getElementById('a-body');if(el)el.innerHTML=about;}
+  closeEditOverlay();toast('Saved');
+}
+function editAbout(){openEditOverlay()}
+
+// TOAST
+function toast(msg){let t=document.getElementById('site-toast');if(!t){t=document.createElement('div');t.id='site-toast';t.style.cssText='position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(12px);background:var(--deep);color:var(--on-dark);padding:.55rem 1.1rem;font-family:var(--s);font-size:14px;font-style:italic;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap;border-left:2px solid var(--amber)';document.body.appendChild(t)}t.textContent=msg;t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(12px)'},2200);}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  initMoon();
+  loadDynamicContent();
+});
+
+window.toggleMoon=toggleMoon;window.toggleMoonDeep=toggleMoonDeep;
+window.toggleCi=toggleCi;
+window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
+window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
+window.unpublishEntry=unpublishEntry;
 </script>
 </body>
 </html>
