@@ -16,11 +16,11 @@
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
       --linen:#f2ece0;--linen-shadow:#e8e0d0;--parch:#ede4d4;
-      --deep:#221e14;--deep-mid:#2c2618;--deep-surface:#2a2318;
-      --amber:#c87030;--amber-deep:#a05020;--amber-wash:#f5e8d8;
+      --deep:#16120c;--deep-mid:#1e1a10;--deep-surface:#2a2318;
+      --amber:#c87030;--monarch:#8b5e3c;--rust:#a0522d;--amber-deep:#a05020;--amber-wash:#f5e8d8;
       --moss:#6a8a58;--moss-d:#4a6038;
       --fog:#8a9aaa;--fog-pale:#c8d0d8;--fog-dim:#607888;
-      --on-dark:#ede0c8;--on-dark-mid:#a89070;--on-dark-soft:#786848;
+      --on-dark:#f0e4cc;--on-dark-mid:#b09878;--on-dark-soft:#886858;
       --ink:#1a1710;--ink-mid:#3a3428;--ink-soft:#6a6258;--ink-faint:#a89e90;
       --rule:rgba(40,30,15,.09);--rule-m:rgba(40,30,15,.14);
       --s:'Cormorant Garamond',serif;--n:'Jost',sans-serif;
@@ -187,6 +187,16 @@
     .admin-bar-lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);font-weight:500}
     .admin-bar-exit{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-soft);background:none;border:1px solid rgba(255,255,255,.1);padding:.3rem .75rem;cursor:pointer;font-family:var(--n)}
 
+
+    /* ADMIN EDITING */
+    .admin-edit-btn{display:none;font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid rgba(200,112,48,.3);color:var(--amber);padding:.2rem .5rem;cursor:pointer;font-family:var(--n);margin-left:.5rem;transition:all .2s}
+    body.admin-mode .admin-edit-btn{display:inline-block}
+    .admin-edit-btn:hover{background:var(--amber);color:white}
+    .admin-editable{position:relative}
+    .inline-edit-area{width:100%;border:none;border-bottom:1px solid var(--amber);background:none;font-family:var(--s);font-style:italic;color:inherit;outline:none;resize:none;line-height:inherit;font-size:inherit;padding:.25rem 0}
+    .inline-edit-save{background:var(--moss);color:white;border:none;padding:.3rem .75rem;font-family:var(--n);font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-top:.35rem;display:inline-block}
+    .admin-section-note{display:none;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-family:var(--n);margin-bottom:.75rem;padding:.3rem .6rem;border:1px solid rgba(200,112,48,.2);background:rgba(200,112,48,.05)}
+    body.admin-mode .admin-section-note{display:inline-block}
     /* LOADING */
     .fn-loading{min-height:200px;display:flex;align-items:center;justify-content:center;font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint)}
     .bloom-loading{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint)}
@@ -269,7 +279,10 @@
       <p class="gh-note">Seeds that arrived this season. Not yet ready to bloom. That's the point.</p>
     </div>
     <div>
-      <div class="gh-seeds" id="gh-seeds">
+      <div>
+        <div class="admin-section-note">Admin — click any seed to edit</div>
+      </div>
+      <div class="gh-seeds" id="gh-seeds" onclick="adminEditSeeds()">
         <div class="gh-seed">What if healing is simply creating enough safety to become curious again?</div>
         <div class="gh-seed">The body's relationship to trust, before the mind catches up.</div>
         <div class="gh-seed">Play as the most serious practice I know.</div>
@@ -281,7 +294,7 @@
 </section>
 
 <!-- CURRENT CURIOSITY -->
-<div class="cur" id="spiral-up">
+<div class="cur" id="spiral-up"><div class="admin-section-note">Admin — editing curiosity list coming soon</div>
   <div class="sec-head"><div class="sec-lbl">Current curiosity</div><div class="sec-rule"></div></div>
   <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">What does joy actually feel like in the body?</span><span class="ci-badge b-alive">Alive</span></div>
   <div class="cx"><div class="cx-in">Not the concept. The sensation. Where does it land? How long does it stay before the nervous system decides it's safe to keep?</div></div>
@@ -307,6 +320,7 @@
 <!-- BLOOM -->
 <section class="bloom" id="bloom">
   <div class="bloom-lbl">From the bloom</div>
+  <div class="admin-section-note">Admin — click any entry to edit or delete</div>
   <div id="bloom-entries"><div class="bloom-loading">Loading...</div></div>
 </section>
 
@@ -361,6 +375,51 @@ const SUPABASE_KEY='sb_publishable_MhZlQIwtcZyLf7iicRAYcQ_s7UY8tWs';
 const ADMIN_PW='Sunflower33!';
 const {createClient}=supabase;
 const db=createClient(SUPABASE_URL,SUPABASE_KEY);
+
+
+// ADMIN FULL EDITING
+function adminEditSeeds(){
+  if(!document.body.classList.contains('admin-mode'))return;
+  const current=document.getElementById('gh-seeds').innerHTML;
+  const seeds=Array.from(document.querySelectorAll('.gh-seed')).map(s=>s.textContent.trim());
+  const modal=document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;background:rgba(20,16,10,.7);z-index:300;display:flex;align-items:center;justify-content:center;padding:1.5rem';
+  modal.innerHTML=`<div style="background:var(--linen);padding:1.5rem;width:100%;max-width:520px;max-height:80vh;overflow-y:auto">
+    <div style="font-family:var(--s);font-size:20px;font-style:italic;color:var(--ink);margin-bottom:1rem">Edit Greenhouse Seeds</div>
+    ${seeds.map((s,i)=>`
+      <div style="margin-bottom:.75rem">
+        <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.25rem">Seed ${i+1}</div>
+        <textarea id="seed-edit-${i}" style="width:100%;border:none;border-bottom:1px solid rgba(40,30,15,.15);background:none;font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);outline:none;resize:none;min-height:50px;line-height:1.55;padding:.25rem 0">${s}</textarea>
+      </div>`).join('')}
+    <div style="display:flex;gap:.5rem;margin-top:1rem">
+      <button onclick="saveSeeds(${seeds.length})" style="background:var(--moss);color:white;border:none;padding:.6rem 1.25rem;font-family:var(--n);font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer">Save</button>
+      <button onclick="this.closest('[style*=fixed]').remove()" style="background:none;border:1px solid rgba(40,30,15,.15);padding:.6rem 1.25rem;font-family:var(--n);font-size:10px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft)">Cancel</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+function saveSeeds(count){
+  const seedsEl=document.getElementById('gh-seeds');
+  const newSeeds=[];
+  for(let i=0;i<count;i++){
+    const v=document.getElementById('seed-edit-'+i).value.trim();
+    if(v)newSeeds.push(v);
+  }
+  localStorage.setItem('eib-seeds',JSON.stringify(newSeeds));
+  seedsEl.innerHTML=newSeeds.map(s=>`<div class="gh-seed">${s}</div>`).join('');
+  document.querySelector('[style*=fixed]').remove();
+  toast('Seeds saved');
+}
+
+function loadSavedSeeds(){
+  const saved=localStorage.getItem('eib-seeds');
+  if(saved){
+    const seeds=JSON.parse(saved);
+    const el=document.getElementById('gh-seeds');
+    if(el)el.innerHTML=seeds.map(s=>`<div class="gh-seed">${s}</div>`).join('');
+  }
+}
 
 // ── INIT ──
 
@@ -447,6 +506,7 @@ function toggleMoonDeep(){document.getElementById('mp-deep').classList.toggle('o
 window.toggleMoon=toggleMoon;window.toggleMoonDeep=toggleMoonDeep;
 document.addEventListener('DOMContentLoaded',()=>{
   initMoon();
+  loadSavedSeeds();
   loadFieldNotes();
   loadBloom();
   loadEchoes();
@@ -589,7 +649,7 @@ function checkAdmin(){
 }
 function exitAdmin(){document.body.classList.remove('admin-mode');sessionStorage.removeItem('eib-admin')}
 if(sessionStorage.getItem('eib-admin')==='1')document.body.classList.add('admin-mode');
-window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
+window.openAdminModal=openAdminModal;window.adminEditSeeds=adminEditSeeds;window.saveSeeds=saveSeeds;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 
 // ── TOAST ──
 function toast(msg){
