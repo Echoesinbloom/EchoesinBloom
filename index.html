@@ -32,13 +32,32 @@
     /* MOON */
     .moon-display{font-size:11px;color:var(--ink-faint);letter-spacing:.08em;cursor:pointer;display:flex;align-items:center;gap:.35rem;transition:color .2s;white-space:nowrap}
     .moon-display:hover{color:var(--ink-soft)}
-    .moon-glyph{font-size:14px;line-height:1}
-    .moon-panel{display:none;background:var(--deep);padding:1rem 2rem;border-bottom:1px solid rgba(200,112,48,.1);background-image:radial-gradient(ellipse at 80% 50%, rgba(200,112,48,.06) 0%, transparent 60%)}
-    .moon-panel.open{display:flex;gap:2rem;align-items:baseline;flex-wrap:wrap}
-    .mp-phase{font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark)}
+    .moon-panel{display:none;background:var(--deep);border-bottom:1px solid rgba(200,112,48,.1);background-image:radial-gradient(ellipse at 80% 50%, rgba(200,112,48,.06) 0%, transparent 60%)}
+    .moon-panel.open{display:block}
+    .moon-current{padding:1.5rem 2rem;border-bottom:1px solid rgba(255,255,255,.05)}
+    .mp-top{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:.5rem;flex-wrap:wrap}
+    .mp-phase{font-family:var(--s);font-size:20px;font-style:italic;color:var(--on-dark)}
     .mp-sign{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fog);font-weight:500}
     .mp-energy{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);font-weight:500}
-    .mp-agri{font-family:var(--s);font-size:13px;font-style:italic;color:var(--on-dark-mid);flex-basis:100%}
+    .mp-para{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-mid);line-height:1.72;margin-bottom:.85rem;max-width:580px}
+    .mp-expand-btn{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fog-dim);background:none;border:none;cursor:pointer;font-family:var(--n);font-weight:500;padding:0;transition:color .2s}
+    .mp-expand-btn:hover{color:var(--fog-pale)}
+    .mp-deep{display:none;margin-top:1.25rem;border-top:1px solid rgba(255,255,255,.06);padding-top:1.25rem}
+    .mp-deep.open{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+    .mp-deep-section{margin-bottom:0}
+    .mp-deep-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--fog-dim);font-weight:500;margin-bottom:.35rem}
+    .mp-deep-text{font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-mid);line-height:1.65}
+    .mp-prompt{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark);line-height:1.65;padding:.75rem 1rem;border-left:2px solid rgba(200,112,48,.3);grid-column:1/-1;margin-top:.25rem}
+    .moon-next{padding:1rem 2rem;border-bottom:1px solid rgba(255,255,255,.05)}
+    .mn-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--fog-dim);font-weight:500;margin-bottom:.4rem}
+    .mn-name{font-family:var(--s);font-size:17px;font-style:italic;color:var(--on-dark);margin-bottom:.2rem}
+    .mn-date{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--fog-dim);margin-bottom:.3rem}
+    .mn-preview{font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-mid);line-height:1.6}
+    .moon-cycle{padding:.85rem 2rem;display:flex;flex-wrap:wrap;gap:.5rem 1.25rem}
+    .mc-item{font-size:10px;color:var(--on-dark-soft);letter-spacing:.06em;display:flex;align-items:center;gap:.4rem}
+    .mc-dot{width:5px;height:5px;border-radius:50%;background:var(--on-dark-soft);flex-shrink:0}
+    .mc-name{font-family:var(--s);font-style:italic}
+    .mc-date{color:var(--on-dark-soft);opacity:.55}
     /* NAV */
     .nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--rule);background:var(--linen);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
     .nav-name{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);letter-spacing:.02em;cursor:pointer}
@@ -205,10 +224,32 @@
 
 <!-- MOON PANEL -->
 <div class="moon-panel" id="moon-panel">
-  <div class="mp-phase" id="mp-phase"></div>
-  <div class="mp-sign" id="mp-sign"></div>
-  <div class="mp-energy" id="mp-energy"></div>
-  <div class="mp-agri" id="mp-agri"></div>
+  <div class="moon-current">
+    <div class="mp-top">
+      <div class="mp-phase" id="mp-phase"></div>
+      <div class="mp-sign" id="mp-sign"></div>
+      <div class="mp-energy" id="mp-energy"></div>
+    </div>
+    <div class="mp-para" id="mp-para"></div>
+    <button class="mp-expand-btn" onclick="toggleMoonDeep()">Read more about this phase</button>
+    <div class="mp-deep" id="mp-deep">
+      <div class="mp-deep-section">
+        <div class="mp-deep-lbl">Astronomical</div>
+        <div class="mp-deep-text" id="mp-astro"></div>
+      </div>
+      <div class="mp-deep-section">
+        <div class="mp-deep-lbl">Agricultural</div>
+        <div class="mp-deep-text" id="mp-agri"></div>
+      </div>
+      <div class="mp-deep-section">
+        <div class="mp-deep-lbl">Astrological</div>
+        <div class="mp-deep-text" id="mp-astro2"></div>
+      </div>
+      <div class="mp-prompt" id="mp-prompt"></div>
+    </div>
+  </div>
+  <div class="moon-next" id="moon-next"></div>
+  <div class="moon-cycle" id="moon-cycle"></div>
 </div>
 
 <!-- HERO -->
@@ -325,42 +366,85 @@ const db=createClient(SUPABASE_URL,SUPABASE_KEY);
 
 // MOON PHASE
 function getMoonData(date){
-  const phases=[
-    {name:'New Moon',ag:'Begin new projects. Plant above-ground crops.',energy:'Intention'},
-    {name:'Waxing Crescent',ag:'Good for planting. Build momentum.',energy:'Growth'},
-    {name:'First Quarter',ag:'Take action. Cultivate and tend.',energy:'Decision'},
-    {name:'Waxing Gibbous',ag:'Refine and adjust. Water generously.',energy:'Refinement'},
-    {name:'Full Moon',ag:'Harvest. Gather. High energy in plants.',energy:'Illumination'},
-    {name:'Waning Gibbous',ag:'Harvest root vegetables. Prune fruit trees.',energy:'Gratitude'},
-    {name:'Last Quarter',ag:'Rest the soil. Clear and compost.',energy:'Release'},
-    {name:'Waning Crescent',ag:'Rest. Prepare for new cycle. Plant garlic.',energy:'Surrender'},
-  ];
-  const glyphs=['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
+  const phases=['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'];
   const signs=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+  const ag=['Begin new projects. Plant above-ground crops.','Good for planting. Build momentum.','Take action. Cultivate and tend.','Refine and adjust. Water generously.','Harvest. Gather. High energy in plants.','Harvest root vegetables. Prune fruit trees.','Rest the soil. Clear and compost.','Rest. Prepare for new cycle. Plant garlic.'];
+  const energy=['Intention','Growth','Decision','Refinement','Illumination','Gratitude','Release','Surrender'];
   const known=new Date(2000,0,6,18,14);
   const cycle=29.53058867;
   const diff=(date-known)/(1000*60*60*24);
   const phase=((diff%cycle)+cycle)%cycle;
   const idx=Math.min(Math.floor((phase/cycle)*8),7);
   const signIdx=Math.min(Math.floor(((diff%27.32)+27.32)%27.32/27.32*12),11);
-  return{...phases[idx],glyph:glyphs[idx],sign:signs[signIdx]};
+  return{name:phases[idx],sign:signs[signIdx],ag:ag[idx],energy:energy[idx]};
+}
+
+const MOON_DEEP={
+  'New Moon':{para:'The dark before the beginning. This is the moment of pure potential — when the slate is wiped clean and new intentions can take root.',astro:'The moon sits between the earth and sun, its illuminated face turned away from us. We are in the dark, which is not absence but possibility.',agri:'Plant above-ground crops now. Seeds sown at the New Moon germinate quickly, drawing energy from the building light. Leafy greens, herbs, and flowers all benefit from being planted in this phase.',astro2:'The New Moon in each sign carries the flavour of that sign. In Virgo, intentions around healing, craft, and discernment take root most deeply.',prompt:'What are you ready to begin? What needs to be cleared before something new can grow?'},
+  'Waxing Crescent':{para:'The first sliver of light returning. This is the phase of commitment — you have set your intention, now you take the first steps toward it.',astro:'The moon is moving away from the sun, its lit face slowly turning toward us. Energy is building, momentum is possible.',agri:'Continue planting above-ground crops. Good for transplanting seedlings. Water generously — moisture is drawn upward in the waxing cycle.',astro2:'The crescent asks: are you willing to show up for what you said you wanted? Small consistent actions matter more than grand gestures now.',prompt:'What first step have you been avoiding? What would it look like to show up for this?'},
+  'First Quarter':{para:'Half-lit and decisive. You may encounter the first resistance — the moment when the intention meets reality and you have to choose to continue.',astro:'The moon is at a 90-degree angle to the sun. Half illuminated. A moment of tension between where you were and where you are going.',agri:'A good time for cultivating — weeding, pruning, and tending. The energy supports action and decision-making. Plant beans and grains.',astro2:'This phase asks you to make decisions. What needs to be released to move forward? What habit or belief is slowing the growth?',prompt:'Where are you meeting resistance? Is the resistance a sign to stop, or a sign that something real is being built?'},
+  'Waxing Gibbous':{para:'Almost full. You can see the shape of what you have been building. This is a time of refinement — adjusting, editing, preparing for the fullness that is coming.',astro:'The moon is nearly fully illuminated, growing larger each night. Maximum energy is approaching. Plants and tides feel it.',agri:'Water and fertilise. The waxing energy pulls moisture and nutrients upward. Harvest herbs and flowers for maximum potency.',astro2:'Review and refine. What needs to be adjusted before the Full Moon reveals everything? What are you still carrying that does not belong?',prompt:'What have you built so far? What still needs tending before it is ready to be seen?'},
+  'Full Moon':{para:'Everything is illuminated. What has been growing in the dark is now fully visible — to you and to others. This is a moment of revelation, completion, and release.',astro:'The moon is directly opposite the sun, fully illuminated from our perspective. Tides are at their highest. The gravitational pull is strongest.',agri:'Harvest now for maximum potency. Root vegetables are fullest. Avoid planting — the energy is too intense for germination.',astro2:'What is being revealed? The Full Moon lights up what has been hidden — in our lives and in ourselves. Emotions run close to the surface for good reason.',prompt:'What has been revealed to you this cycle? What are you ready to release? What are you celebrating?'},
+  'Waning Gibbous':{para:'The light is beginning to recede. This is a time of gratitude and sharing — you have received, now you give back, teach, and integrate.',astro:'The moon is past full and beginning to wane. Still bright, but retreating. The intense energy of the Full Moon is softening into reflection.',agri:'Harvest root vegetables and crops meant for storage. Prune fruit trees and shrubs — cuts made now heal more cleanly. Avoid planting.',astro2:'The disseminating phase is for sharing what you have learned. Who needs to hear what you now know? What wisdom wants to move through you?',prompt:'What did this cycle teach you? What are you grateful for? What do you want to share or pass on?'},
+  'Last Quarter':{para:'Half-lit again, but now retreating. This is a time of release, forgiveness, and clearing. Let go of what did not work without judgment.',astro:'The moon is again at a 90-degree angle to the sun, but now on the other side. The energy is turning inward. Reflection deepens.',agri:'Rest the soil. Clear, weed, and compost. A good time to turn compost and prepare beds for future planting. Harvest root crops for storage.',astro2:'Release without attachment. What beliefs, habits, or relationships have outlived their season? The Last Quarter supports honest endings.',prompt:'What are you ready to let go of? What has run its course? What would make space for something new?'},
+  'Waning Crescent':{para:'The final sliver before the dark. A time of rest, surrender, and preparation. You do not need to do anything right now. Just rest.',astro:'Only a thin crescent remains visible, rising just before dawn. The moon is almost back to where the cycle began. The dark is coming and it is not to be feared.',agri:'Rest the soil and yourself. Plant garlic — one of the few crops that benefits from the waning crescent. Prepare and plan for the next cycle.',astro2:'The Balsamic Moon is the most mystical phase — a time for dreams, visions, and deep inner knowing. Pay attention to what arrives in the quiet.',prompt:'What do you need to surrender? What is asking for rest? What visions or dreams are arriving as you slow down?'}
+};
+
+const MOON_NEXT_PREVIEW={
+  'New Moon':'A thin crescent will appear — the first invitation to act on what you have been intending.',
+  'Waxing Crescent':'The moon reaches its first major decision point. Momentum is building toward the full light.',
+  'First Quarter':'The waxing energy intensifies. You are past the halfway point toward fullness.',
+  'Waxing Gibbous':'The Full Moon approaches. What you have been building is about to be fully illuminated.',
+  'Full Moon':'The light begins to recede. A time of gratitude, sharing, and integration begins.',
+  'Waning Gibbous':'A moment of decision and release. The cycle is moving toward completion.',
+  'Last Quarter':'The final quiet before the dark. Rest, surrender, and prepare.',
+  'Waning Crescent':'The cycle begins again. The slate is cleared. New intentions can take root.'
+};
+
+function getMoonCalendar(){
+  const today=new Date();
+  const transitions=[];
+  let lastIdx=getMoonData(today).phase_num||0;
+  const d0=getMoonData(today);lastIdx=['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'].indexOf(d0.name);
+  for(let i=1;i<=34;i++){
+    const d=new Date(today);d.setDate(today.getDate()+i);
+    const data=getMoonData(d);
+    const idx=['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'].indexOf(data.name);
+    if(idx!==lastIdx){transitions.push({date:d,name:data.name,sign:data.sign,daysFromNow:i});lastIdx=idx;}
+  }
+  return transitions;
 }
 
 function initMoon(){
   const d=getMoonData(new Date());
+  const deep=MOON_DEEP[d.name]||{};
   const display=document.getElementById('moon-display');
-  if(display)display.innerHTML=`<span class="moon-glyph">${d.glyph}</span><span>${d.name}</span>`;
-  document.getElementById('mp-phase').textContent=d.glyph+' '+d.name;
+  if(display)display.innerHTML=`<span>${d.name}</span>`;
+  document.getElementById('mp-phase').textContent=d.name;
   document.getElementById('mp-sign').textContent='Moon in '+d.sign;
   document.getElementById('mp-energy').textContent=d.energy;
-  document.getElementById('mp-agri').textContent=d.ag;
+  document.getElementById('mp-para').textContent=deep.para||'';
+  document.getElementById('mp-astro').textContent=deep.astro||'';
+  document.getElementById('mp-agri').textContent=deep.agri||'';
+  document.getElementById('mp-astro2').textContent=deep.astro2||'';
+  document.getElementById('mp-prompt').textContent=deep.prompt||'';
+
+  const cal=getMoonCalendar();
+  const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if(cal.length>0){
+    const next=cal[0];
+    const preview=MOON_NEXT_PREVIEW[next.name]||'';
+    document.getElementById('moon-next').innerHTML=`<div class="mn-label">Next — in ${next.daysFromNow} day${next.daysFromNow===1?'':'s'}</div><div class="mn-name">${next.name}</div><div class="mn-date">${M[next.date.getMonth()]} ${next.date.getDate()} &middot; Moon in ${next.sign}</div><div class="mn-preview">${preview}</div>`;
+  }
+  const rest=cal.slice(1);
+  if(rest.length>0){
+    document.getElementById('moon-cycle').innerHTML=rest.map(t=>`<div class="mc-item"><div class="mc-dot"></div><span class="mc-name">${t.name}</span><span class="mc-date">${M[t.date.getMonth()]} ${t.date.getDate()}</span></div>`).join('');
+  }
 }
 
-function toggleMoon(){
-  const panel=document.getElementById('moon-panel');
-  panel.classList.toggle('open');
-}
-window.toggleMoon=toggleMoon;
+function toggleMoon(){document.getElementById('moon-panel').classList.toggle('open')}
+function toggleMoonDeep(){document.getElementById('mp-deep').classList.toggle('open')}
+window.toggleMoon=toggleMoon;window.toggleMoonDeep=toggleMoonDeep;
 document.addEventListener('DOMContentLoaded',()=>{
   initMoon();
   loadFieldNotes();
