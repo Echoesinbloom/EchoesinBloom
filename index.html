@@ -299,7 +299,7 @@
   <div class="hero-season"><span class="hero-line"></span>Summer 2025</div>
   <h1 class="hero-title">What happens<br>after survival.</h1>
   <p class="hero-body">Not a healing website. The question of what comes after — what joy actually feels like in the body, how we learn wonder again, what we do with this one life once we've stopped merely recovering from it.</p>
-  <a href="#field-notes" class="hero-cta">Come walk with me <span class="cta-rule"></span></a>
+  <a href="#field-notes" class="hero-cta">Come see <span class="cta-rule"></span></a>
 </div>
 
 <section class="gh" id="greenhouse">
@@ -419,6 +419,13 @@
       <div style="font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink)">Edit Site Content</div>
       <button onclick="closeEditOverlay()" style="background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:20px">&times;</button>
     </div>
+    <div class="edit-section-lbl">Hero Section</div>
+    <span class="edit-sub-lbl">Season / date line</span>
+    <input class="edit-input" id="eh-season" type="text" value="Summer 2025">
+    <span class="edit-sub-lbl">Opening paragraph</span>
+    <textarea class="edit-field" id="eh-body" style="min-height:80px">Not a healing website. The question of what comes after — what joy actually feels like in the body, how we learn wonder again, what we do with this one life once we've stopped merely recovering from it.</textarea>
+    <span class="edit-sub-lbl">Call to action text</span>
+    <input class="edit-input" id="eh-cta" type="text" value="Come see">
     <div class="edit-section-lbl">Greenhouse Seeds</div>
     <div id="edit-seeds-fields"></div>
     <div class="edit-section-lbl">Current Curiosities</div>
@@ -670,6 +677,12 @@ function loadLocalEdits(){
   if(curs){const data=JSON.parse(curs);document.querySelectorAll('.ci-t').forEach((el,i)=>{if(data[i])el.textContent=data[i];});}
   const bloom=localStorage.getItem('eib-bloom-local');
   if(bloom){const data=JSON.parse(bloom);document.querySelectorAll('.bi').forEach((el,i)=>{if(!data[i])return;const t=el.querySelector('.bi-t');const e=el.querySelector('.bi-e');const k=el.querySelector('.bi-k');if(t&&data[i].title)t.textContent=data[i].title;if(e&&data[i].excerpt)e.textContent=data[i].excerpt;if(k&&data[i].kicker)k.textContent=data[i].kicker;});}
+  const season=localStorage.getItem('eib-season');
+  if(season){const el=document.querySelector('.hero-season span:last-child');if(el)el.textContent=season;}
+  const heroBody=localStorage.getItem('eib-body');
+  if(heroBody){const el=document.querySelector('.hero-body');if(el)el.textContent=heroBody;}
+  const heroCta=localStorage.getItem('eib-cta');
+  if(heroCta){const el=document.querySelector('.hero-cta');if(el)el.innerHTML=heroCta+' <span class="cta-rule"></span>';}
   const about=localStorage.getItem('eib-about');
   if(about){const el=document.getElementById('a-body');if(el)el.innerHTML=about;}
 }
@@ -690,6 +703,9 @@ function openEditOverlay(){
   const seeds=Array.from(document.querySelectorAll('.gh-seed')).map(s=>s.textContent.trim());
   const curs=Array.from(document.querySelectorAll('.ci-t')).map(c=>c.textContent.trim());
   const blooms=Array.from(document.querySelectorAll('.bi')).map(b=>({kicker:b.querySelector('.bi-k')?.textContent.trim()||'',title:b.querySelector('.bi-t')?.textContent.trim()||'',excerpt:b.querySelector('.bi-e')?.textContent.trim()||''}));
+  document.getElementById('eh-season').value=document.querySelector('.hero-season span:last-child')?.textContent||'Summer 2025';
+  document.getElementById('eh-body').value=document.querySelector('.hero-body')?.textContent||'';
+  document.getElementById('eh-cta').value=document.querySelector('.hero-cta')?.textContent?.replace('Come see','Come see').trim().replace(/[→\s]+$/,'')||'Come see';
   document.getElementById('edit-seeds-fields').innerHTML=seeds.map((s,i)=>`<textarea class="edit-field" id="es-${i}">${s}</textarea>`).join('');
   document.getElementById('edit-cur-fields').innerHTML=curs.map((c,i)=>`<input class="edit-input" id="ec-${i}" type="text" value="${c.replace(/"/g,'&quot;')}">`).join('');
   document.getElementById('edit-bloom-fields').innerHTML=blooms.map((b,i)=>`<div class="edit-bloom-block"><span class="edit-sub-lbl">Kicker</span><input class="edit-input" id="ebk-${i}" type="text" value="${b.kicker.replace(/"/g,'&quot;')}"><span class="edit-sub-lbl">Title</span><input class="edit-input" id="ebt-${i}" type="text" value="${b.title.replace(/"/g,'&quot;')}" style="font-size:18px;font-family:var(--s)"><span class="edit-sub-lbl">Excerpt</span><textarea class="edit-field" id="ebe-${i}">${b.excerpt}</textarea></div>`).join('');
@@ -711,6 +727,13 @@ function saveAllEdits(){
   document.querySelectorAll('.bi').forEach((el,i)=>{if(!newBlooms[i])return;const t=el.querySelector('.bi-t');const e=el.querySelector('.bi-e');const k=el.querySelector('.bi-k');if(t)t.textContent=newBlooms[i].title;if(e)e.textContent=newBlooms[i].excerpt;if(k)k.textContent=newBlooms[i].kicker;});
   const about=document.getElementById('edit-about')?.value.trim();
   if(about){localStorage.setItem('eib-about',about);const el=document.getElementById('a-body');if(el)el.innerHTML=about;}
+  // Save hero
+  const season=document.getElementById('eh-season')?.value.trim();
+  const body=document.getElementById('eh-body')?.value.trim();
+  const cta=document.getElementById('eh-cta')?.value.trim();
+  if(season){localStorage.setItem('eib-season',season);const el=document.querySelector('.hero-season span:last-child');if(el)el.textContent=season;}
+  if(body){localStorage.setItem('eib-body',body);const el=document.querySelector('.hero-body');if(el)el.textContent=body;}
+  if(cta){localStorage.setItem('eib-cta',cta);const el=document.querySelector('.hero-cta');if(el)el.innerHTML=cta+' <span class="cta-rule"></span>';}
   closeEditOverlay();toast('Saved');
 }
 function editAbout(){openEditOverlay()}
