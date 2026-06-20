@@ -224,6 +224,32 @@
     .space-filtered{opacity:.25;pointer-events:none}
     .entry-hidden{display:none}
 
+
+    /* PUBLIC ECHO THREADS */
+    .fn-note{background:white;border:1px solid var(--rule-m);margin-bottom:2px}
+    .fn-note-top{display:grid;grid-template-columns:200px 1fr;min-height:200px}
+    .fn-note-img{background:var(--parch);overflow:hidden;position:relative}
+    .fn-note-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+    .fn-note-content{padding:1.25rem}
+    .fn-note-date{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.5rem}
+    .fn-note-title{font-family:var(--s);font-size:20px;font-style:italic;color:var(--ink);line-height:1.3;margin-bottom:.5rem}
+    .fn-note-body{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-mid);line-height:1.65;margin-bottom:.6rem}
+    .fn-note-threads{display:flex;gap:.3rem;flex-wrap:wrap}
+    .fn-note-thread{font-family:var(--s);font-size:12px;font-style:italic;color:var(--ink-faint);cursor:pointer;transition:color .2s}
+    .fn-note-thread:hover{color:var(--amber)}
+    .fn-note-thread::before{content:'#'}
+    .fn-echoes{border-top:1px solid var(--rule);padding:.85rem 1.25rem;background:var(--linen)}
+    .fn-echoes-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--fog-dim);font-weight:500;margin-bottom:.75rem}
+    .fn-echo-item{padding:.65rem 0;border-bottom:1px solid var(--rule)}
+    .fn-echo-item:last-of-type{border-bottom:none}
+    .fn-echo-date{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.2rem}
+    .fn-echo-title{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink);margin-bottom:.2rem}
+    .fn-echo-body{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-mid);line-height:1.6}
+    .fn-echo-threads{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.35rem}
+    .fn-echo-thread{font-family:var(--s);font-size:11px;font-style:italic;color:var(--ink-faint);cursor:pointer}
+    .fn-echo-thread:hover{color:var(--amber)}
+    .fn-echo-thread::before{content:'#'}
+
     @media(max-width:640px){
       .gh-inner{grid-template-columns:1fr;gap:2rem}
       .about{grid-template-columns:1fr}
@@ -666,6 +692,22 @@ async function loadDynamicContent(){
   loadLocalEdits();
 }
 
+
+async function loadPublicEchoes(entryId){
+  const{data}=await db.from('note_echoes').select('*').eq('parent_entry_id',entryId).eq('public',true).order('created_at',{ascending:true});
+  if(!data||!data.length) return;
+  const el=document.getElementById('fn-echoes-'+entryId);
+  if(!el) return;
+  el.style.display='block';
+  el.innerHTML=`<div class="fn-echoes-lbl">Echoes &mdash; the conversation continues</div>`+
+    data.map(e=>`<div class="fn-echo-item">
+      <div class="fn-echo-date">${e.date_label||''} ${e.moon_phase?'&middot; '+e.moon_phase:''}</div>
+      ${e.title?`<div class="fn-echo-title">${e.title}</div>`:''}
+      <div class="fn-echo-body">${e.body}</div>
+      ${(e.threads||[]).length?`<div class="fn-echo-threads">${(e.threads||[]).map(t=>`<span class="fn-echo-thread" onclick="setTheme('${t}')">${t}</span>`).join('')}</div>`:''}
+    </div>`).join('');
+}
+
 async function unpublishEntry(id,el){
   if(!confirm('Remove from public site?'))return;
   await db.from('entries').update({public:false,bloom_ready:false}).eq('id',id);
@@ -767,7 +809,7 @@ window.toggleMoon=toggleMoon;window.toggleMoonDeep=toggleMoonDeep;
 window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
-window.unpublishEntry=unpublishEntry;
+window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;
 window.setTheme=setTheme;window.clearTheme=clearTheme;
 </script>
 </body>
