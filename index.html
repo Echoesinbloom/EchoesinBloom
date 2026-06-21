@@ -250,6 +250,17 @@
     .fn-echo-thread:hover{color:var(--amber)}
     .fn-echo-thread::before{content:'#'}
 
+
+    /* PUBLIC ECHOES SECTION */
+    .ech-items{display:flex;flex-direction:column;gap:1.5rem;margin-top:1.5rem}
+    .ech-item{border-left:1px solid rgba(138,154,170,.2);padding-left:1.25rem}
+    .ech-item-pattern{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--fog-dim);font-weight:500;margin-bottom:.5rem}
+    .ech-item-count{color:var(--moss);margin-left:.5rem}
+    .ech-item-responses{display:flex;flex-direction:column;gap:.75rem}
+    .ech-item-response{font-family:var(--s);font-size:17px;font-style:italic;color:var(--on-dark);line-height:1.65}
+    .ech-item-date{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark-soft);margin-top:.3rem}
+    .ech-empty{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-soft);line-height:1.65}
+
     @media(max-width:640px){
       .gh-inner{grid-template-columns:1fr;gap:2rem}
       .about{grid-template-columns:1fr}
@@ -333,7 +344,7 @@
     <div>
       <div class="gh-marker">The Greenhouse</div>
       <h2 class="gh-heading">Currently<br>incubating</h2>
-      <p class="gh-note">Seeds that arrived this season. Not yet ready to bloom. That's the point.</p>
+      <p class="gh-note">What is arriving. What is being noticed. What isn't ready to be named yet.</p>
     </div>
     <div>
       <div class="gh-seeds" id="gh-seeds">
@@ -402,13 +413,8 @@
 
 <section class="ech" id="echoes">
   <div class="ech-lbl"><span>Echoes &middot; What recurs</span><span class="ech-rule"></span></div>
-  <div class="ech-quote" id="ech-quote">&ldquo;The butterfly appeared three times that summer. I stopped calling it coincidence around the second time.&rdquo;</div>
-  <div class="sym-row" id="sym-row">
-    <div class="sym">butterfly</div><div class="sym">frog</div>
-    <div class="sym">feather</div><div class="sym">dew</div>
-    <div class="sym">moth</div><div class="sym">seed head</div>
-    <div class="sym">moonlight</div><div class="sym">spiral</div>
-  </div>
+  <div class="sym-row" id="sym-row" style="margin-bottom:1.5rem"></div>
+  <div class="ech-items" id="ech-items"><div class="ech-empty">Echoes will surface as the archive grows.</div></div>
 </section>
 
 <div class="about">
@@ -559,10 +565,16 @@ let activeTheme = null;
 let allEntries = [];
 
 async function loadThemes(){
-  const{data}=await db.from('entries').select('threads').eq('public',true);
-  if(!data||!data.length)return;
+  // Pull threads from both entries AND note_echoes
+  const[{data:entries},{data:echoes}]=await Promise.all([
+    db.from('entries').select('threads').eq('public',true),
+    db.from('note_echoes').select('threads').eq('public',true)
+  ]);
+  
   const counts={};
-  data.forEach(e=>(e.threads||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
+  (entries||[]).forEach(e=>(e.threads||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
+  (echoes||[]).forEach(e=>(e.threads||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
+  
   const themes=Object.entries(counts)
     .filter(([,c])=>c>0)
     .sort((a,b)=>b[1]-a[1])
@@ -615,11 +627,11 @@ async function filterByTheme(theme){
   }
 
   // Filter bloom
-  const written=data.filter(e=>e.type!=='photo');
+  // written already built above including echoes
   const bloomEl=document.getElementById('bloom-entries');
   if(bloomEl){
-    if(written.length){
-      bloomEl.innerHTML=written.map(e=>buildBloomCard(e)).join('');
+    if(allWritten.length){
+      bloomEl.innerHTML=allWritten.map(e=>buildBloomCard(e)).join('');
     } else {
       bloomEl.innerHTML=`<div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:1rem 0">No bloom entries carrying this thread yet.</div>`;
     }
@@ -676,22 +688,100 @@ async function loadDynamicContent(){
     if(bot.length)html+=`<div class="pg pg-${bot.length}" style="margin-top:2px">${bot.join('')}</div>`;
     document.getElementById('fn-grid').innerHTML=html;
   }
+  // What Arrived Today from Greenhouse — pulls latest saved thought
+  const{data:thoughtData}=await db.from('current_thought').select('*').order('updated_at',{ascending:false}).limit(1);
+  if(thoughtData&&thoughtData.length&&thoughtData[0].thought){
+    const ghNote=document.querySelector('.gh-note');
+    if(ghNote)ghNote.textContent=thoughtData[0].thought;
+  }
+
+  // Greenhouse Seeds — pull public Seed entries from Supabase
+  const{data:seeds}=await db.from('entries').select('*').eq('public',true).eq('type','seed').order('created_at',{ascending:false}).limit(4);
+  if(seeds&&seeds.length){
+    const seedsEl=document.getElementById('gh-seeds');
+    if(seedsEl)seedsEl.innerHTML=seeds.map(s=>`<div class="gh-seed">${s.title}${s.body?'<span style="display:block;font-size:14px;opacity:.7;margin-top:.2rem">'+s.body+'</span>':''}</div>`).join('');
+  }
+
   // Bloom from Supabase
   const{data:bloom}=await db.from('entries').select('*').eq('public',true).neq('type','photo').order('created_at',{ascending:false}).limit(6);
   if(bloom&&bloom.length){
     document.getElementById('bloom-entries').innerHTML=bloom.map(e=>`<div class="bi"><div class="bi-k">${(e.branches||[]).join(' &middot; ')}${e.date_label?' &middot; '+e.date_label:''}</div><div class="bi-t">${e.title}</div>${e.body?`<div class="bi-e">${e.body}</div>`:''}<button class="bi-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.bi'))">Remove</button></div>`).join('');
   }
-  // Echoes symbols
-  const{data:entries}=await db.from('entries').select('threads').eq('public',true);
-  if(entries&&entries.length){
-    const counts={};entries.forEach(e=>(e.threads||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
-    const top=Object.entries(counts).filter(([,c])=>c>1).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([t])=>t);
-    if(top.length)document.getElementById('sym-row').innerHTML=top.map(t=>`<div class="sym">${t}</div>`).join('');
-  }
+  // Echoes — patterns + responses
+  await loadPublicEchoResponses();
   // Load saved local edits
   loadLocalEdits();
 }
 
+
+
+async function loadPublicEchoResponses(){
+  // Get all public entries and their threads
+  const{data:entries}=await db.from('entries').select('threads').eq('public',true);
+  if(!entries||!entries.length) return;
+
+  // Count thread appearances
+  const counts={};
+  entries.forEach(e=>(e.threads||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
+
+  // Get patterns that appear more than once
+  const patterns=Object.entries(counts)
+    .filter(([,c])=>c>1)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,12);
+
+  // Show as symbol tags
+  const symRow=document.getElementById('sym-row');
+  if(symRow)symRow.innerHTML=patterns.map(([t])=>`<div class="sym" onclick="setTheme('${t}')">${t}</div>`).join('');
+
+  // Get echo responses for these patterns
+  const patternNames=patterns.map(([t])=>t);
+  if(!patternNames.length) return;
+
+  const{data:responses}=await db.from('echo_responses').select('*').order('created_at',{ascending:false});
+  if(!responses||!responses.length){
+    document.getElementById('ech-items').innerHTML=`<div class="ech-empty">Echoes will surface as the archive grows. The patterns are already here — the responses are forming.</div>`;
+    return;
+  }
+
+  // Group responses by echo_text (pattern)
+  const grouped={};
+  responses.forEach(r=>{
+    if(!grouped[r.echo_text])grouped[r.echo_text]=[];
+    grouped[r.echo_text].push(r);
+  });
+
+  // Build display — show patterns that have responses
+  const items=Object.entries(grouped)
+    .filter(([pattern])=>patternNames.some(p=>pattern.toLowerCase().includes(p)||p.toLowerCase().includes(p)))
+    .slice(0,5);
+
+  if(!items.length){
+    document.getElementById('ech-items').innerHTML=`<div class="ech-empty">Patterns are forming. Responses will appear here as the conversation deepens.</div>`;
+    return;
+  }
+
+  const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('ech-items').innerHTML=items.map(([pattern,resps])=>{
+    // Extract thread name from pattern string like '"aliveness" has appeared in 3 entries.'
+    const match=pattern.match(/"([^"]+)"/);
+    const threadName=match?match[1]:pattern;
+    const entryCount=counts[threadName]||0;
+    return`<div class="ech-item">
+      <div class="ech-item-pattern">
+        ${threadName}
+        ${entryCount?`<span class="ech-item-count">&mdash; ${entryCount} entr${entryCount===1?'y':'ies'}</span>`:''}
+      </div>
+      <div class="ech-item-responses">
+        ${resps.slice(0,3).map(r=>`
+          <div>
+            <div class="ech-item-response">&ldquo;${r.response}&rdquo;</div>
+            <div class="ech-item-date">${new Date(r.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
 
 async function loadPublicEchoes(entryId){
   const{data}=await db.from('note_echoes').select('*').eq('parent_entry_id',entryId).eq('public',true).order('created_at',{ascending:true});
@@ -809,7 +899,7 @@ window.toggleMoon=toggleMoon;window.toggleMoonDeep=toggleMoonDeep;
 window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
-window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;
+window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
 window.setTheme=setTheme;window.clearTheme=clearTheme;
 </script>
 </body>
