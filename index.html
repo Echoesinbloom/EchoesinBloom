@@ -123,7 +123,7 @@
     .pcc-note{font-family:var(--s);font-size:14px;font-style:italic;color:rgba(255,255,255,.92);line-height:1.4;margin-bottom:.2rem}
     .pcc-meta{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.42)}
     .pc-admin-del{display:none;position:absolute;top:.5rem;right:.5rem;background:rgba(160,50,50,.85);color:white;border:none;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;cursor:pointer;font-family:var(--n);z-index:5}
-    body.admin-mode .pc-admin-del{display:block}
+    body.admin-mode .pc-admin-del{display:block!important}
 
     /* BLOOM */
     .bloom{background:var(--amber-w);border-top:1px solid rgba(200,112,48,.12);padding:4.5rem 2rem}
@@ -242,7 +242,7 @@
 
     /* PUBLIC ECHO THREADS */
     .fn-note{background:white;border:1px solid var(--rule-m);margin-bottom:2px}
-    .fn-note-top{display:grid;grid-template-columns:200px 1fr;min-height:200px}
+    .fn-note-top{display:grid;grid-template-columns:200px 1fr;min-height:160px}
     .fn-note-img{background:var(--parch);overflow:hidden;position:relative}
     .fn-note-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
     .fn-note-content{padding:1.25rem}
@@ -736,12 +736,31 @@ function buildBloomCard(e){
 async function loadDynamicContent(){
   // Field notes from Supabase
   const{data:photos}=await db.from('entries').select('*').eq('public',true).eq('type','photo').order('created_at',{ascending:false}).limit(5);
+  const fnGrid=document.getElementById('fn-grid');
   if(photos&&photos.length){
-    const cards=photos.map((e,i)=>`<div class="pc" style="min-height:${i===0?'320px':'220px'};position:relative"><div class="scene" style="min-height:inherit">${e.photo_url?`<img src="${e.photo_url}" class="pc-img" alt="">`:`<div style="width:100%;height:100%;background:#a0b088;min-height:inherit"></div>`}</div><div class="pcc"><div class="pcc-note">${e.title}</div><div class="pcc-meta">${e.tags||e.date_label||''}</div></div><button class="pc-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.pc'))">Remove</button></div>`);
-    const top=cards.slice(0,2);const bot=cards.slice(2);
-    let html=`<div class="pg pg-2" style="margin-bottom:2px">${top.join('')}</div>`;
-    if(bot.length)html+=`<div class="pg pg-${bot.length}" style="margin-top:2px">${bot.join('')}</div>`;
-    document.getElementById('fn-grid').innerHTML=html;
+    fnGrid.innerHTML=photos.map(e=>`
+      <div class="fn-note" id="fn-note-${e.id}">
+        <div class="fn-note-top" style="${e.photo_url?'':'grid-template-columns:1fr'}">
+          ${e.photo_url?`<div class="fn-note-img"><img src="${e.photo_url}" alt="${e.title}" loading="lazy"></div>`:''}
+          <div class="fn-note-content">
+            <div class="fn-note-date">${e.date_label||''}${e.moon_phase?' &middot; '+e.moon_phase:''}</div>
+            <div class="fn-note-title">${e.title}</div>
+            ${e.body?`<div class="fn-note-body">${e.body}</div>`:''}
+            ${(e.threads||[]).length?`<div class="fn-note-threads">${(e.threads||[]).map(t=>`<span class="fn-note-thread" onclick="setTheme('${t}')">${t}</span>`).join('')}</div>`:''}
+            ${(e.branches||[]).length?`<div style="margin-top:.4rem;display:flex;gap:.3rem;flex-wrap:wrap">${(e.branches||[]).map(b=>`<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">${b}</span>`).join('<span style="color:var(--rule-m)">&middot;</span>')}</div>`:''}
+          </div>
+        </div>
+        <div class="fn-echoes" id="fn-echoes-${e.id}" style="display:none"></div>
+        <div class="fn-mycelium" id="fn-myc-${e.id}" style="display:none">
+          <div class="fn-myc-lbl">Mycelium</div>
+          <div id="fn-myc-links-${e.id}"></div>
+        </div>
+        <button class="pc-admin-del" style="display:none;position:relative;top:auto;right:auto;width:100%;padding:.4rem;font-size:9px" onclick="unpublishEntry('${e.id}',document.getElementById('fn-note-${e.id}'))">Remove from site</button>
+      </div>`).join('');
+    // Load echoes and mycelium for each
+    photos.forEach(e=>{loadPublicEchoes(e.id);loadPublicMycelium(e.id);});
+  } else {
+    fnGrid.innerHTML=`<div style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-faint);padding:3rem 2rem">Plant your first Field Note in the Greenhouse and mark it public — it will appear here.</div>`;
   }
   // What Arrived Today from Greenhouse — pulls latest saved thought
   const{data:thoughtData}=await db.from('current_thought').select('*').order('updated_at',{ascending:false}).limit(1);
