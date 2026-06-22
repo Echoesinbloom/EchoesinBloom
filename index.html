@@ -284,7 +284,7 @@
 
 
     /* EMAIL SIGNUP */
-    .signup{padding:4.5rem 2rem;border-top:1px solid var(--rule);max-width:520px}
+    .signup{padding:4.5rem 2rem;border-top:1px solid var(--rule);max-width:100%;width:100%}
     .signup-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--ink-faint);margin-bottom:1.5rem}
     .signup-heading{font-family:var(--s);font-size:32px;font-weight:300;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:.85rem}
     .signup-body{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.75;margin-bottom:2rem}
@@ -309,7 +309,7 @@
 
 
     /* LEAVE A NOTE */
-    .leave-note{padding:4.5rem 2rem;background:var(--deep);background-image:radial-gradient(ellipse at 60% 100%, rgba(200,112,48,.06) 0%, transparent 60%)}
+    .leave-note{padding:4.5rem 2rem;background:var(--deep);background-image:radial-gradient(ellipse at 60% 100%, rgba(200,112,48,.06) 0%, transparent 60%);width:100%;display:block;clear:both}
     .ln-inner{max-width:520px}
     .ln-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--fog-dim);margin-bottom:1.5rem}
     .ln-heading{font-family:var(--s);font-size:32px;font-weight:300;font-style:italic;color:var(--on-dark);line-height:1.1;margin-bottom:.85rem}
@@ -522,18 +522,16 @@
   <div class="ech-items" id="ech-items"><div class="ech-empty">Echoes will surface as the archive grows.</div></div>
 </section>
 
-<div class="about">
-  <div>
-    <img src="photos/hannah.jpg" alt="Hannah" class="a-img" onerror="this.style.background='var(--linen-s)'">
-  </div>
+<div class="about" style="grid-template-columns:1fr;max-width:620px">
   <div>
     <div class="a-name">A Living Inquiry</div>
     <div class="a-body" id="a-body">For a long time I thought what I was studying was healing. What I eventually discovered was that I was becoming interested in something much bigger: How we reconnect with life once we begin to feel safe enough to engage with it.<br><br>Echoes in Bloom is where I collect the observations, symbols, curiosities, stories, and experiences that shape that exploration. I approach life through the lens of a designer. I pay attention to patterns. I notice what repeats.<br><br>I'm fascinated by the relationship between attention and meaning, intuition and understanding, the body and memory, people and place, and the way Community shapes what becomes possible.<br><br>Over time, this project has expanded beyond healing and into <strong>Aliveness, Wonder, participation, and connection.</strong> Not only how we relate to ourselves, but how we relate to one another, to our environments, and to the communities that help us become who we are.<br><br>Most of all, I am just curious about what becomes possible when we choose to participate in our lives more fully.<br><br>Part field journal, part greenhouse, part living archive of Becoming. Thanks for being here.</div>
     <button class="a-edit-btn" onclick="editAbout()">Edit about me</button>
+  </div>
 </div>
 
 
-<div class="signup">
+<div class="signup" style="width:100%"><div style="max-width:520px">
   <div class="signup-lbl">Stay connected</div>
   <div class="signup-heading">Receive occasional field notes.</div>
   <div class="signup-body">Observations, things worth noticing, and what arrives along the way.<br>No schedule. No noise. Just what feels worth sharing.</div>
@@ -541,7 +539,7 @@
     <input class="signup-input" type="email" id="signup-email" placeholder="Your email address" onkeydown="if(event.key==='Enter')submitSignup()">
     <button class="signup-btn" id="signup-btn" onclick="submitSignup()">Subscribe</button>
   </div>
-  <div class="signup-success" id="signup-success">You&rsquo;re on the list. I&rsquo;ll write when there&rsquo;s something worth sharing.</div>
+  </div><div class="signup-success" id="signup-success">You&rsquo;re on the list. I&rsquo;ll write when there&rsquo;s something worth sharing.</div>
   <div class="signup-err" id="signup-err"></div>
 </div>
 
