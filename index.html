@@ -502,7 +502,19 @@
     <div id="edit-cur-fields"></div>
     <div class="edit-section-lbl">Bloom Entries</div>
     <div id="edit-bloom-fields"></div>
+    <div class="edit-section-lbl">Profile Photo</div>
+    <div id="profile-photo-preview" style="margin-bottom:.75rem"></div>
+    <div style="display:flex;align-items:center;gap:.75rem">
+      <label style="background:var(--linen-s);border:1px dashed var(--rule-m);padding:.6rem 1.25rem;cursor:pointer;font-family:var(--n);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);transition:all .2s;display:inline-block" onmouseover="this.style.borderColor='var(--moss)'" onmouseout="this.style.borderColor='var(--rule-m)'">
+        Choose photo
+        <input type="file" accept="image/*" style="display:none" onchange="uploadProfilePhoto(event)">
+      </label>
+      <span id="photo-upload-status" style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint)"></span>
+    </div>
     <div class="edit-section-lbl">About Me</div>
+    <span class="edit-sub-lbl">Your name</span>
+    <input class="edit-input" id="edit-name" type="text" placeholder="Hannah">
+    <span class="edit-sub-lbl">About text</span>
     <textarea class="edit-field" id="edit-about" style="min-height:120px;font-size:16px"></textarea>
     <div style="display:flex;gap:.75rem;margin-top:1.25rem">
       <button onclick="saveAllEdits()" style="background:var(--moss);color:white;border:none;padding:.75rem 1.5rem;font-family:var(--n);font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;font-weight:500">Save All</button>
@@ -937,6 +949,53 @@ async function unpublishEntry(id,el){
   toast('Removed');
 }
 
+
+// PROFILE PHOTO UPLOAD
+async function uploadProfilePhoto(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const status = document.getElementById('photo-upload-status');
+  status.textContent = 'Uploading...';
+
+  // Convert to base64 for storage if Supabase Storage not set up
+  // Try Supabase Storage first, fall back to base64 localStorage
+  try {
+    const fileName = 'hannah-profile.' + file.name.split('.').pop();
+    const{data, error} = await db.storage.from('garden-images').upload(fileName, file, {upsert:true});
+    
+    if(error) throw error;
+    
+    const{data:urlData} = db.storage.from('garden-images').getPublicUrl(fileName);
+    const url = urlData.publicUrl;
+    
+    // Update the image on page
+    const img = document.querySelector('.a-img');
+    if(img) img.src = url;
+    localStorage.setItem('eib-photo', url);
+    
+    // Update preview
+    const preview = document.getElementById('profile-photo-preview');
+    if(preview) preview.innerHTML = `<img src="${url}" style="width:80px;height:110px;object-fit:cover;border:1px solid var(--rule-m)">`;
+    
+    status.textContent = 'Photo saved';
+    status.style.color = 'var(--moss)';
+  } catch(err) {
+    // Fall back to base64 localStorage
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const url = ev.target.result;
+      const img = document.querySelector('.a-img');
+      if(img) img.src = url;
+      localStorage.setItem('eib-photo', url);
+      const preview = document.getElementById('profile-photo-preview');
+      if(preview) preview.innerHTML = `<img src="${url}" style="width:80px;height:110px;object-fit:cover;border:1px solid var(--rule-m)">`;
+      status.textContent = 'Photo saved locally';
+      status.style.color = 'var(--moss)';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
 // LOCAL EDITS
 function loadLocalEdits(){
   const seeds=localStorage.getItem('eib-seeds');
@@ -945,6 +1004,10 @@ function loadLocalEdits(){
   if(curs){const data=JSON.parse(curs);document.querySelectorAll('.ci-t').forEach((el,i)=>{if(data[i])el.textContent=data[i];});}
   const bloom=localStorage.getItem('eib-bloom-local');
   if(bloom){const data=JSON.parse(bloom);document.querySelectorAll('.bi').forEach((el,i)=>{if(!data[i])return;const t=el.querySelector('.bi-t');const e=el.querySelector('.bi-e');const k=el.querySelector('.bi-k');if(t&&data[i].title)t.textContent=data[i].title;if(e&&data[i].excerpt)e.textContent=data[i].excerpt;if(k&&data[i].kicker)k.textContent=data[i].kicker;});}
+  const savedPhoto=localStorage.getItem('eib-photo');
+  if(savedPhoto){const el=document.querySelector('.a-img');if(el)el.src=savedPhoto;}
+  const savedName=localStorage.getItem('eib-name');
+  if(savedName){const el=document.querySelector('.a-name');if(el)el.textContent=savedName;}
   const titleData=localStorage.getItem('eib-title');
   if(titleData){const{t1,t2}=JSON.parse(titleData);const el=document.querySelector('.hero-title');if(el)el.innerHTML=t1+'<br>'+t2;}
   const season=localStorage.getItem('eib-season');
@@ -973,6 +1036,13 @@ function openEditOverlay(){
   const seeds=Array.from(document.querySelectorAll('.gh-seed')).map(s=>s.textContent.trim());
   const curs=Array.from(document.querySelectorAll('.ci-t')).map(c=>c.textContent.trim());
   const blooms=Array.from(document.querySelectorAll('.bi')).map(b=>({kicker:b.querySelector('.bi-k')?.textContent.trim()||'',title:b.querySelector('.bi-t')?.textContent.trim()||'',excerpt:b.querySelector('.bi-e')?.textContent.trim()||''}));
+  document.getElementById('edit-name').value=document.querySelector('.a-name')?.textContent?.trim()||'Hannah';
+  // Show current profile photo
+  const currentPhoto=document.querySelector('.a-img');
+  const preview=document.getElementById('profile-photo-preview');
+  if(preview&&currentPhoto&&currentPhoto.src&&!currentPhoto.src.includes('undefined')){
+    preview.innerHTML=`<img src="${currentPhoto.src}" style="width:80px;height:110px;object-fit:cover;border:1px solid var(--rule-m)">`;
+  }
   document.getElementById('eh-title1').value=document.querySelector('.hero-title')?.childNodes[0]?.textContent?.trim()||'What happens';
   document.getElementById('eh-title2').value=document.querySelector('.hero-title')?.childNodes[2]?.textContent?.trim()||'after survival.';
   document.getElementById('eh-season').value=document.querySelector('.hero-season span:last-child')?.textContent||'Summer 2025';
@@ -997,6 +1067,12 @@ function saveAllEdits(){
   const newBlooms=[];for(let i=0;i<blooms;i++){newBlooms.push({kicker:document.getElementById('ebk-'+i)?.value.trim()||'',title:document.getElementById('ebt-'+i)?.value.trim()||'',excerpt:document.getElementById('ebe-'+i)?.value.trim()||''});}
   localStorage.setItem('eib-bloom-local',JSON.stringify(newBlooms));
   document.querySelectorAll('.bi').forEach((el,i)=>{if(!newBlooms[i])return;const t=el.querySelector('.bi-t');const e=el.querySelector('.bi-e');const k=el.querySelector('.bi-k');if(t)t.textContent=newBlooms[i].title;if(e)e.textContent=newBlooms[i].excerpt;if(k)k.textContent=newBlooms[i].kicker;});
+  // Save name
+  const nameVal=document.getElementById('edit-name')?.value.trim();
+  if(nameVal){
+    localStorage.setItem('eib-name',nameVal);
+    document.querySelector('.a-name').textContent=nameVal;
+  }
   const about=document.getElementById('edit-about')?.value.trim();
   if(about){localStorage.setItem('eib-about',about);const el=document.getElementById('a-body');if(el)el.innerHTML=about;}
   // Save hero title
@@ -1032,7 +1108,7 @@ window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
-window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
+window.uploadProfilePhoto=uploadProfilePhoto;window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
 window.setTheme=setTheme;window.clearTheme=clearTheme;
 </script>
 </body>
