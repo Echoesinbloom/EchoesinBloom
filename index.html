@@ -226,6 +226,12 @@
 
 
 
+
+    /* WORTH NOTICING on public site */
+    .fn-subject{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--monarch);font-weight:500;margin-bottom:.3rem}
+    .worth-noticing-pill{background:rgba(139,94,60,.1);border-color:rgba(139,94,60,.25);color:var(--monarch)}
+    .worth-noticing-pill.active{background:var(--monarch);color:white;border-color:var(--monarch)}
+
     /* BRANCH BAR */
     .branch-bar{background:var(--deep);padding:.55rem 2rem;overflow-x:auto;scrollbar-width:none;display:flex;align-items:center;gap:.5rem;flex-wrap:nowrap;border-bottom:1px solid rgba(255,255,255,.05)}
     .branch-bar::-webkit-scrollbar{display:none}
@@ -352,6 +358,7 @@
 
 <div class="theme-bar" id="theme-bar">
   <div class="theme-bar-lbl">Wander by theme</div>
+  <div class="theme-pill worth-noticing-pill" data-theme="__worth_noticing__" onclick="setWorthNoticing(this)" style="font-weight:500">Worth Noticing</div>
   <div id="theme-pills"></div>
 </div>
 <div class="theme-banner" id="theme-banner">
@@ -588,6 +595,57 @@ function toggleCi(el){
 
 
 
+
+// WORTH NOTICING FILTER
+async function setWorthNoticing(el){
+  // Clear other active states
+  document.querySelectorAll('.theme-pill,.worth-noticing-pill').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.branch-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  activeTheme = '__worth_noticing__';
+
+  // Show banner
+  const banner=document.getElementById('theme-banner');
+  const name=document.getElementById('theme-banner-name');
+  if(banner)banner.classList.add('show');
+  if(name)name.textContent='Worth Noticing';
+
+  // Pull entries with a subject tag
+  const{data}=await db.from('entries').select('*').eq('public',true).not('subject','is',null).order('created_at',{ascending:false});
+  const fnGrid=document.getElementById('fn-grid');
+  if(!data||!data.length){
+    if(fnGrid)fnGrid.innerHTML=`<div style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-faint);padding:3rem 2rem">Nothing tagged Worth Noticing yet — this collection builds as you notice things.</div>`;
+    document.getElementById('bloom-entries').innerHTML='';
+    return;
+  }
+  const photos=data.filter(e=>e.type==='photo'||e.photo_url);
+  const written=data.filter(e=>e.type!=='photo'&&!e.photo_url);
+
+  if(fnGrid){
+    fnGrid.innerHTML=photos.map(e=>`
+      <div class="fn-note" id="fn-note-${e.id}">
+        <div class="fn-note-top" style="${e.photo_url?'':'grid-template-columns:1fr'}">
+          ${e.photo_url?`<div class="fn-note-img"><img src="${e.photo_url}" alt="${e.title}" loading="lazy"></div>`:''}
+          <div class="fn-note-content">
+            ${e.subject?`<div class="fn-subject">Worth Noticing &middot; ${e.subject}</div>`:''}
+            <div class="fn-note-date">${e.date_label||''}${e.moon_phase?' &middot; '+e.moon_phase:''}</div>
+            <div class="fn-note-title">${e.title}</div>
+            ${e.body?`<div class="fn-note-body">${e.body}</div>`:''}
+            ${(e.threads||[]).length?`<div class="fn-note-threads">${(e.threads||[]).map(t=>`<span class="fn-note-thread" onclick="setTheme('${t}')">${t}</span>`).join('')}</div>`:''}
+          </div>
+        </div>
+        <div class="fn-echoes" id="fn-echoes-${e.id}" style="display:none"></div>
+        <div class="fn-mycelium" id="fn-myc-${e.id}" style="display:none"><div class="fn-myc-lbl">Mycelium</div><div id="fn-myc-links-${e.id}"></div></div>
+      </div>`).join('');
+    photos.forEach(e=>{loadPublicEchoes(e.id);loadPublicMycelium(e.id);});
+  }
+
+  const bloomEl=document.getElementById('bloom-entries');
+  if(bloomEl&&written.length){
+    bloomEl.innerHTML=written.map(e=>buildBloomCard(e)).join('');
+  }
+}
+
 // BRANCH FILTER
 let activeBranch = 'all';
 
@@ -655,7 +713,7 @@ function setTheme(theme){
 
 function clearTheme(){
   activeTheme=null;
-  document.querySelectorAll('.theme-pill').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.theme-pill,.worth-noticing-pill').forEach(p=>p.classList.remove('active'));
   const banner=document.getElementById('theme-banner');
   if(banner)banner.classList.remove('show');
   // Show all content
@@ -974,7 +1032,7 @@ window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
-window.setBranchFilter=setBranchFilter;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
+window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
 window.setTheme=setTheme;window.clearTheme=clearTheme;
 </script>
 </body>
