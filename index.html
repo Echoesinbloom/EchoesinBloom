@@ -537,13 +537,9 @@
   </div>
 </div>
 
-<footer class="foot" style="flex-wrap:wrap;gap:1rem">
+<footer class="foot">
   <div class="foot-l">Come walk with me.</div>
-  <div class="foot-signup">
-    <input class="foot-signup-in" type="email" id="foot-email" placeholder="Stay connected..." onkeydown="if(event.key==='Enter')submitFooterSignup()">
-    <button class="foot-signup-btn" onclick="submitFooterSignup()">Subscribe</button>
-    <div class="foot-signup-confirm" id="foot-confirm">You&rsquo;re on the list.</div>
-  </div>
+  <div class="foot-r" id="foot-season">Echoes in Bloom</div>
   <div class="foot-admin" onclick="openAdminModal()">admin</div>
 </footer>
 
@@ -685,6 +681,16 @@ function toggleCi(el){
 
 
 
+
+
+function getCurrentSeason(){
+  const month = new Date().getMonth() + 1;
+  const year = new Date().getFullYear();
+  if(month >= 3 && month <= 5) return `Spring ${year}`;
+  if(month >= 6 && month <= 8) return `Summer ${year}`;
+  if(month >= 9 && month <= 11) return `Autumn ${year}`;
+  return `Winter ${year}`;
+}
 
 // WORTH NOTICING FILTER
 async function checkWorthNoticing(){
@@ -1057,6 +1063,15 @@ async function submitNote(){
     read: false
   });
   
+  // Also save email to signups list if provided
+  if(email && !error){
+    await db.from('email_signups').upsert({
+      email,
+      source: 'leave-a-note',
+      signed_up_at: new Date().toISOString()
+    }, {onConflict: 'email', ignoreDuplicates: true});
+  }
+  
   if(error){
     err.textContent = 'Something went wrong — please try again.';
     err.style.display = 'block';
@@ -1186,7 +1201,14 @@ function loadLocalEdits(){
   if(titleData){const{t1,t2}=JSON.parse(titleData);const el=document.querySelector('.hero-title');if(el)el.innerHTML=t1+'<br>'+t2;}
   // Only apply saved season if it exists and differs from default
   const season=localStorage.getItem('eib-season');
-  if(season&&season!=='Summer 2025'){const el=document.getElementById('hero-season-text');if(el)el.textContent=season;}
+  const seasonEl=document.getElementById('hero-season-text');
+  if(season&&season!=='Summer 2025'){
+    if(seasonEl)seasonEl.textContent=season;
+  } else {
+    // Auto-set to current season
+    const autoSeason=getCurrentSeason();
+    if(seasonEl)seasonEl.textContent=autoSeason;
+  }
   const heroBody=localStorage.getItem('eib-body');
   if(heroBody){const el=document.querySelector('.hero-body');if(el)el.textContent=heroBody;}
   const heroCta=localStorage.getItem('eib-cta');
@@ -1273,6 +1295,9 @@ function editAbout(){openEditOverlay()}
 function toast(msg){let t=document.getElementById('site-toast');if(!t){t=document.createElement('div');t.id='site-toast';t.style.cssText='position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(12px);background:var(--deep);color:var(--on-dark);padding:.55rem 1.1rem;font-family:var(--s);font-size:14px;font-style:italic;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap;border-left:2px solid var(--amber)';document.body.appendChild(t)}t.textContent=msg;t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(12px)'},2200);}
 
 document.addEventListener('DOMContentLoaded',()=>{
+  // Update footer with current season
+  const footSeason=document.getElementById('foot-season');
+  if(footSeason)footSeason.textContent=getCurrentSeason()+' · Echoes in Bloom';
   // Clear old broken season value if it exists
   const oldSeason=localStorage.getItem('eib-season');
   if(oldSeason==='Spring\n2026'||oldSeason==='Spring 2026'){localStorage.removeItem('eib-season');}
