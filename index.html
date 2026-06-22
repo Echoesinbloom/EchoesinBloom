@@ -358,7 +358,7 @@
 
 <div class="theme-bar" id="theme-bar">
   <div class="theme-bar-lbl">Wander by theme</div>
-  <div class="theme-pill worth-noticing-pill" data-theme="__worth_noticing__" onclick="setWorthNoticing(this)" style="font-weight:500">Worth Noticing</div>
+  <div class="theme-pill worth-noticing-pill" id="worth-noticing-pill" data-theme="__worth_noticing__" onclick="setWorthNoticing(this)" style="font-weight:500;display:none">Worth Noticing</div>
   <div id="theme-pills"></div>
 </div>
 <div class="theme-banner" id="theme-banner">
@@ -609,6 +609,12 @@ function toggleCi(el){
 
 
 // WORTH NOTICING FILTER
+async function checkWorthNoticing(){
+  const{data}=await db.from('entries').select('id').eq('public',true).not('subject','is',null).limit(1);
+  const pill=document.getElementById('worth-noticing-pill');
+  if(pill) pill.style.display=(data&&data.length)?'':'none';
+}
+
 async function setWorthNoticing(el){
   // Clear other active states
   document.querySelectorAll('.theme-pill,.worth-noticing-pill').forEach(p=>p.classList.remove('active'));
@@ -1010,8 +1016,9 @@ function loadLocalEdits(){
   if(savedName){const el=document.querySelector('.a-name');if(el)el.textContent=savedName;}
   const titleData=localStorage.getItem('eib-title');
   if(titleData){const{t1,t2}=JSON.parse(titleData);const el=document.querySelector('.hero-title');if(el)el.innerHTML=t1+'<br>'+t2;}
+  // Only apply saved season if it exists and differs from default
   const season=localStorage.getItem('eib-season');
-  if(season){const el=document.querySelector('.hero-season span:last-child');if(el)el.textContent=season;}
+  if(season&&season!=='Summer 2025'){const el=document.querySelector('.hero-season span:last-child');if(el)el.textContent=season;}
   const heroBody=localStorage.getItem('eib-body');
   if(heroBody){const el=document.querySelector('.hero-body');if(el)el.textContent=heroBody;}
   const heroCta=localStorage.getItem('eib-cta');
@@ -1045,7 +1052,7 @@ function openEditOverlay(){
   }
   document.getElementById('eh-title1').value=document.querySelector('.hero-title')?.childNodes[0]?.textContent?.trim()||'What happens';
   document.getElementById('eh-title2').value=document.querySelector('.hero-title')?.childNodes[2]?.textContent?.trim()||'after survival.';
-  document.getElementById('eh-season').value=document.querySelector('.hero-season span:last-child')?.textContent||'Summer 2025';
+  document.getElementById('eh-season').value=document.querySelector('.hero-season span:last-child')?.textContent?.trim()||'Summer 2025';
   document.getElementById('eh-body').value=document.querySelector('.hero-body')?.textContent||'';
   document.getElementById('eh-cta').value=document.querySelector('.hero-cta')?.textContent?.replace('Come see','Come see').trim().replace(/[→\s]+$/,'')||'Come see';
   document.getElementById('edit-seeds-fields').innerHTML=seeds.map((s,i)=>`<textarea class="edit-field" id="es-${i}">${s}</textarea>`).join('');
@@ -1101,6 +1108,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   initMoon();
   loadDynamicContent();
   loadThemes();
+  checkWorthNoticing();
 });
 
 window.toggleMoon=toggleMoon;window.toggleMoonDeep=toggleMoonDeep;
@@ -1108,7 +1116,7 @@ window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
-window.uploadProfilePhoto=uploadProfilePhoto;window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
+window.uploadProfilePhoto=uploadProfilePhoto;window.checkWorthNoticing=checkWorthNoticing;window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
 window.setTheme=setTheme;window.clearTheme=clearTheme;
 </script>
 </body>
