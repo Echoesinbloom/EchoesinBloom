@@ -282,6 +282,50 @@
     .ech-item-date{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark-soft);margin-top:.3rem}
     .ech-empty{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-soft);line-height:1.65}
 
+
+    /* EMAIL SIGNUP */
+    .signup{padding:4.5rem 2rem;border-top:1px solid var(--rule);max-width:520px}
+    .signup-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--ink-faint);margin-bottom:1.5rem}
+    .signup-heading{font-family:var(--s);font-size:32px;font-weight:300;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:.85rem}
+    .signup-body{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.75;margin-bottom:2rem}
+    .signup-form{display:flex;gap:.5rem;align-items:stretch}
+    .signup-input{flex:1;border:none;border-bottom:1px solid var(--rule-m);padding:.6rem 0;font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);background:none;outline:none;transition:border-color .2s}
+    .signup-input:focus{border-bottom-color:var(--ink)}
+    .signup-input::placeholder{color:var(--ink-faint)}
+    .signup-btn{background:var(--ink);color:var(--linen);border:none;padding:.6rem 1.5rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:all .25s;white-space:nowrap}
+    .signup-btn:hover{background:var(--ink-mid)}
+    .signup-btn:disabled{background:var(--ink-faint);cursor:not-allowed}
+    .signup-success{display:none;font-family:var(--s);font-size:16px;font-style:italic;color:var(--moss);line-height:1.65;padding:.5rem 0;border-bottom:1px solid rgba(106,138,88,.2)}
+    .signup-err{display:none;font-family:var(--s);font-size:13px;font-style:italic;color:var(--amber);margin-top:.5rem}
+
+    /* FOOTER EMAIL */
+    .foot-signup{display:flex;align-items:center;gap:.75rem;flex:1}
+    .foot-signup-in{background:none;border:none;border-bottom:1px solid rgba(255,255,255,.12);padding:.35rem 0;font-family:var(--s);font-size:13px;font-style:italic;color:var(--on-dark);outline:none;width:180px;transition:border-color .2s}
+    .foot-signup-in:focus{border-bottom-color:rgba(255,255,255,.35)}
+    .foot-signup-in::placeholder{color:var(--on-dark-soft)}
+    .foot-signup-btn{background:none;border:1px solid rgba(255,255,255,.15);color:var(--on-dark-soft);padding:.3rem .85rem;font-family:var(--n);font-size:9px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
+    .foot-signup-btn:hover{border-color:rgba(255,255,255,.3);color:var(--on-dark)}
+    .foot-signup-confirm{font-family:var(--s);font-size:12px;font-style:italic;color:var(--moss);display:none}
+
+
+    /* LEAVE A NOTE */
+    .leave-note{padding:4.5rem 2rem;background:var(--deep);background-image:radial-gradient(ellipse at 60% 100%, rgba(200,112,48,.06) 0%, transparent 60%)}
+    .ln-inner{max-width:520px}
+    .ln-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--fog-dim);margin-bottom:1.5rem}
+    .ln-heading{font-family:var(--s);font-size:32px;font-weight:300;font-style:italic;color:var(--on-dark);line-height:1.1;margin-bottom:.85rem}
+    .ln-body{font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark-mid);line-height:1.75;margin-bottom:2rem}
+    .ln-field{width:100%;border:none;border-bottom:1px solid rgba(255,255,255,.1);padding:.6rem 0;font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark);background:none;outline:none;transition:border-color .2s;margin-bottom:.85rem}
+    .ln-field:focus{border-bottom-color:rgba(255,255,255,.3)}
+    .ln-field::placeholder{color:var(--on-dark-soft)}
+    .ln-area{width:100%;border:none;border-bottom:1px solid rgba(255,255,255,.1);padding:.6rem 0;font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark);background:none;outline:none;resize:none;min-height:100px;line-height:1.7;margin-bottom:1.25rem;transition:border-color .2s}
+    .ln-area:focus{border-bottom-color:rgba(255,255,255,.3)}
+    .ln-area::placeholder{color:var(--on-dark-soft)}
+    .ln-btn{background:none;border:1px solid rgba(255,255,255,.2);color:var(--on-dark);padding:.65rem 1.75rem;font-family:var(--n);font-size:10px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:all .25s}
+    .ln-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.35)}
+    .ln-btn:disabled{opacity:.4;cursor:not-allowed}
+    .ln-success{display:none;font-family:var(--s);font-size:17px;font-style:italic;color:var(--on-dark-mid);line-height:1.7;padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .ln-err{display:none;font-family:var(--s);font-size:13px;font-style:italic;color:var(--amber);margin-top:.5rem}
+
     @media(max-width:640px){
       .gh-inner{grid-template-columns:1fr;gap:2rem}
       .about{grid-template-columns:1fr}
@@ -367,7 +411,7 @@
 </div>
 
 <div class="hero">
-  <div class="hero-season"><span class="hero-line"></span>Summer 2025</div>
+  <div class="hero-season"><span class="hero-line"></span><span id="hero-season-text">Summer 2025</span></div>
   <h1 class="hero-title">What happens<br>after survival.</h1>
   <p class="hero-body">Not a healing website. The question of what comes after — what joy actually feels like in the body, how we learn wonder again, what we do with this one life once we've stopped merely recovering from it.</p>
   <a href="#field-notes" class="hero-cta">Come see <span class="cta-rule"></span></a>
@@ -463,9 +507,43 @@
   </div>
 </div>
 
-<footer class="foot">
+
+<div class="signup">
+  <div class="signup-lbl">Stay connected</div>
+  <div class="signup-heading">Receive occasional field notes.</div>
+  <div class="signup-body">Observations, things worth noticing, and what arrives along the way.<br>No schedule. No noise. Just what feels worth sharing.</div>
+  <div class="signup-form" id="signup-form">
+    <input class="signup-input" type="email" id="signup-email" placeholder="Your email address" onkeydown="if(event.key==='Enter')submitSignup()">
+    <button class="signup-btn" id="signup-btn" onclick="submitSignup()">Subscribe</button>
+  </div>
+  <div class="signup-success" id="signup-success">You&rsquo;re on the list. I&rsquo;ll write when there&rsquo;s something worth sharing.</div>
+  <div class="signup-err" id="signup-err"></div>
+</div>
+
+
+<div class="leave-note">
+  <div class="ln-inner">
+    <div class="ln-lbl">Leave a note</div>
+    <div class="ln-heading">Something worth sharing?</div>
+    <div class="ln-body">Know a person, place, project, or experience worth noticing? Have a question, observation, or simply want to say hello?<br><br>I&rsquo;d love to hear from you.</div>
+    <div id="ln-form">
+      <input class="ln-field" type="text" id="ln-name" placeholder="Your name">
+      <input class="ln-field" type="email" id="ln-email" placeholder="Your email">
+      <textarea class="ln-area" id="ln-message" placeholder="Your note..."></textarea>
+      <button class="ln-btn" id="ln-btn" onclick="submitNote()">Send note</button>
+      <div class="ln-err" id="ln-err"></div>
+    </div>
+    <div class="ln-success" id="ln-success">Your note arrived. Thank you for taking the time to reach out &mdash; I&rsquo;ll write back when I can.</div>
+  </div>
+</div>
+
+<footer class="foot" style="flex-wrap:wrap;gap:1rem">
   <div class="foot-l">Come walk with me.</div>
-  <div class="foot-r">Summer 2025 &middot; Echoes in Bloom</div>
+  <div class="foot-signup">
+    <input class="foot-signup-in" type="email" id="foot-email" placeholder="Stay connected..." onkeydown="if(event.key==='Enter')submitFooterSignup()">
+    <button class="foot-signup-btn" onclick="submitFooterSignup()">Subscribe</button>
+    <div class="foot-signup-confirm" id="foot-confirm">You&rsquo;re on the list.</div>
+  </div>
   <div class="foot-admin" onclick="openAdminModal()">admin</div>
 </footer>
 
@@ -956,6 +1034,96 @@ async function unpublishEntry(id,el){
 }
 
 
+
+
+// LEAVE A NOTE
+async function submitNote(){
+  const name = document.getElementById('ln-name').value.trim();
+  const email = document.getElementById('ln-email').value.trim();
+  const message = document.getElementById('ln-message').value.trim();
+  const err = document.getElementById('ln-err');
+  
+  if(!message){ err.textContent='Please write something first.'; err.style.display='block'; return; }
+  if(email && !email.includes('@')){ err.textContent='Please enter a valid email address.'; err.style.display='block'; return; }
+  
+  const btn = document.getElementById('ln-btn');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  
+  const{error} = await db.from('notes_inbox').insert({
+    name: name||null,
+    email: email||null,
+    message,
+    sent_at: new Date().toISOString(),
+    read: false
+  });
+  
+  if(error){
+    err.textContent = 'Something went wrong — please try again.';
+    err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Send note';
+    return;
+  }
+  
+  document.getElementById('ln-form').style.display = 'none';
+  document.getElementById('ln-success').style.display = 'block';
+}
+
+// EMAIL SIGNUP
+async function submitSignup(){
+  const email = document.getElementById('signup-email').value.trim();
+  if(!email||!email.includes('@')){
+    const err = document.getElementById('signup-err');
+    err.textContent = 'Please enter a valid email address.';
+    err.style.display = 'block';
+    return;
+  }
+  const btn = document.getElementById('signup-btn');
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  
+  const{error} = await db.from('email_signups').insert({
+    email,
+    source: 'homepage',
+    signed_up_at: new Date().toISOString()
+  });
+  
+  if(error && error.code === '23505'){
+    // Already signed up
+    document.getElementById('signup-form').style.display = 'none';
+    document.getElementById('signup-success').style.display = 'block';
+    document.getElementById('signup-success').textContent = 'You\'re already on the list.';
+    return;
+  }
+  
+  if(error){
+    const err = document.getElementById('signup-err');
+    err.textContent = 'Something went wrong — please try again.';
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Subscribe';
+    return;
+  }
+  
+  document.getElementById('signup-form').style.display = 'none';
+  document.getElementById('signup-err').style.display = 'none';
+  document.getElementById('signup-success').style.display = 'block';
+}
+
+async function submitFooterSignup(){
+  const email = document.getElementById('foot-email').value.trim();
+  if(!email||!email.includes('@')) return;
+  
+  await db.from('email_signups').insert({
+    email,
+    source: 'footer',
+    signed_up_at: new Date().toISOString()
+  });
+  
+  document.getElementById('foot-email').style.display = 'none';
+  document.querySelector('.foot-signup-btn').style.display = 'none';
+  document.getElementById('foot-confirm').style.display = 'block';
+}
+
 // PROFILE PHOTO UPLOAD
 async function uploadProfilePhoto(event){
   const file = event.target.files[0];
@@ -1018,7 +1186,7 @@ function loadLocalEdits(){
   if(titleData){const{t1,t2}=JSON.parse(titleData);const el=document.querySelector('.hero-title');if(el)el.innerHTML=t1+'<br>'+t2;}
   // Only apply saved season if it exists and differs from default
   const season=localStorage.getItem('eib-season');
-  if(season&&season!=='Summer 2025'){const el=document.querySelector('.hero-season span:last-child');if(el)el.textContent=season;}
+  if(season&&season!=='Summer 2025'){const el=document.getElementById('hero-season-text');if(el)el.textContent=season;}
   const heroBody=localStorage.getItem('eib-body');
   if(heroBody){const el=document.querySelector('.hero-body');if(el)el.textContent=heroBody;}
   const heroCta=localStorage.getItem('eib-cta');
@@ -1052,7 +1220,7 @@ function openEditOverlay(){
   }
   document.getElementById('eh-title1').value=document.querySelector('.hero-title')?.childNodes[0]?.textContent?.trim()||'What happens';
   document.getElementById('eh-title2').value=document.querySelector('.hero-title')?.childNodes[2]?.textContent?.trim()||'after survival.';
-  document.getElementById('eh-season').value=document.querySelector('.hero-season span:last-child')?.textContent?.trim()||'Summer 2025';
+  document.getElementById('eh-season').value=document.getElementById('hero-season-text')?.textContent?.trim()||'Summer 2025';
   document.getElementById('eh-body').value=document.querySelector('.hero-body')?.textContent||'';
   document.getElementById('eh-cta').value=document.querySelector('.hero-cta')?.textContent?.replace('Come see','Come see').trim().replace(/[→\s]+$/,'')||'Come see';
   document.getElementById('edit-seeds-fields').innerHTML=seeds.map((s,i)=>`<textarea class="edit-field" id="es-${i}">${s}</textarea>`).join('');
@@ -1094,7 +1262,7 @@ function saveAllEdits(){
   const season=document.getElementById('eh-season')?.value.trim();
   const body=document.getElementById('eh-body')?.value.trim();
   const cta=document.getElementById('eh-cta')?.value.trim();
-  if(season){localStorage.setItem('eib-season',season);const el=document.querySelector('.hero-season span:last-child');if(el)el.textContent=season;}
+  if(season){localStorage.setItem('eib-season',season);const el=document.getElementById('hero-season-text');if(el)el.textContent=season;}
   if(body){localStorage.setItem('eib-body',body);const el=document.querySelector('.hero-body');if(el)el.textContent=body;}
   if(cta){localStorage.setItem('eib-cta',cta);const el=document.querySelector('.hero-cta');if(el)el.innerHTML=cta+' <span class="cta-rule"></span>';}
   closeEditOverlay();toast('Saved');
@@ -1105,6 +1273,9 @@ function editAbout(){openEditOverlay()}
 function toast(msg){let t=document.getElementById('site-toast');if(!t){t=document.createElement('div');t.id='site-toast';t.style.cssText='position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(12px);background:var(--deep);color:var(--on-dark);padding:.55rem 1.1rem;font-family:var(--s);font-size:14px;font-style:italic;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap;border-left:2px solid var(--amber)';document.body.appendChild(t)}t.textContent=msg;t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(12px)'},2200);}
 
 document.addEventListener('DOMContentLoaded',()=>{
+  // Clear old broken season value if it exists
+  const oldSeason=localStorage.getItem('eib-season');
+  if(oldSeason==='Spring\n2026'||oldSeason==='Spring 2026'){localStorage.removeItem('eib-season');}
   initMoon();
   loadDynamicContent();
   loadThemes();
@@ -1116,7 +1287,7 @@ window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
-window.uploadProfilePhoto=uploadProfilePhoto;window.checkWorthNoticing=checkWorthNoticing;window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
+window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
 window.setTheme=setTheme;window.clearTheme=clearTheme;
 </script>
 </body>
