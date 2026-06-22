@@ -920,7 +920,7 @@ async function loadDynamicContent(){
     // Load echoes and mycelium for each
     photos.forEach(e=>{loadPublicEchoes(e.id);loadPublicMycelium(e.id);});
   } else {
-    fnGrid.innerHTML=`<div style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-faint);padding:3rem 2rem">Plant your first Field Note in the Greenhouse and mark it public — it will appear here.</div>`;
+    fnGrid.innerHTML='';
   }
   // What Arrived Today from Greenhouse — pulls latest saved thought
   const{data:thoughtData}=await db.from('current_thought').select('*').order('updated_at',{ascending:false}).limit(1);
