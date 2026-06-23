@@ -432,7 +432,7 @@
 <div class="theme-bar" id="theme-bar">
   <div class="theme-bar-lbl">Wander by theme</div>
   <div class="theme-pill worth-noticing-pill" id="worth-noticing-pill" data-theme="__worth_noticing__" onclick="setWorthNoticing(this)" style="font-weight:500;display:none">Worth Noticing</div>
-  <div id="theme-pills"></div>
+  <div id="theme-pills" style="display:contents"></div>
 </div>
 <div class="theme-banner" id="theme-banner">
   <div class="theme-banner-text">Showing everything connected to <span id="theme-banner-name"></span></div>
@@ -1291,8 +1291,8 @@ function loadLocalEdits(){
   if(seeds){const el=document.getElementById('gh-seeds');if(el)el.innerHTML=JSON.parse(seeds).map(s=>`<div class="gh-seed">${s}</div>`).join('');}
   const curs=localStorage.getItem('eib-curs');
   if(curs){const data=JSON.parse(curs);document.querySelectorAll('.ci-t').forEach((el,i)=>{if(data[i])el.textContent=data[i];});}
-  const bloom=localStorage.getItem('eib-bloom-local');
-  if(bloom){const data=JSON.parse(bloom);document.querySelectorAll('.bi').forEach((el,i)=>{if(!data[i])return;const t=el.querySelector('.bi-t');const e=el.querySelector('.bi-e');const k=el.querySelector('.bi-k');if(t&&data[i].title)t.textContent=data[i].title;if(e&&data[i].excerpt)e.textContent=data[i].excerpt;if(k&&data[i].kicker)k.textContent=data[i].kicker;});}
+  const bloom=null; // entries now come from Supabase only
+  if(false){
   const savedPhoto=localStorage.getItem('eib-photo');
   if(savedPhoto){const el=document.querySelector('.a-img');if(el)el.src=savedPhoto;}
   const savedName=localStorage.getItem('eib-name');
@@ -1361,9 +1361,9 @@ function saveAllEdits(){
   const newCurs=[];for(let i=0;i<curs;i++){const v=document.getElementById('ec-'+i)?.value.trim();if(v)newCurs.push(v);}
   localStorage.setItem('eib-curs',JSON.stringify(newCurs));
   document.querySelectorAll('.ci-t').forEach((el,i)=>{if(newCurs[i])el.textContent=newCurs[i];});
-  const newBlooms=[];for(let i=0;i<blooms;i++){newBlooms.push({kicker:document.getElementById('ebk-'+i)?.value.trim()||'',title:document.getElementById('ebt-'+i)?.value.trim()||'',excerpt:document.getElementById('ebe-'+i)?.value.trim()||''});}
-  localStorage.setItem('eib-bloom-local',JSON.stringify(newBlooms));
-  document.querySelectorAll('.bi').forEach((el,i)=>{if(!newBlooms[i])return;const t=el.querySelector('.bi-t');const e=el.querySelector('.bi-e');const k=el.querySelector('.bi-k');if(t)t.textContent=newBlooms[i].title;if(e)e.textContent=newBlooms[i].excerpt;if(k)k.textContent=newBlooms[i].kicker;});
+  // Bloom entries now come from Supabase — no longer saved locally
+  // localStorage.setItem('eib-bloom-local') removed
+  // .bi elements populated by Supabase, not local edits
   // Save name
   const nameVal=document.getElementById('edit-name')?.value.trim();
   if(nameVal){
@@ -1401,6 +1401,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Clear old broken season value if it exists
   const oldSeason=localStorage.getItem('eib-season');
   if(oldSeason==='Spring\n2026'||oldSeason==='Spring 2026'){localStorage.removeItem('eib-season');}
+  // Clear stale bloom entries — these now come from Supabase only
+  localStorage.removeItem('eib-bloom-local');
   initMoon();
   loadDynamicContent();
   loadThemes();
