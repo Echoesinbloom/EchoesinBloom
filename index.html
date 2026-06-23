@@ -1314,21 +1314,18 @@ function loadLocalEdits(){
   if(seeds){const el=document.getElementById('gh-seeds');if(el)el.innerHTML=JSON.parse(seeds).map(s=>`<div class="gh-seed">${s}</div>`).join('');}
   const curs=localStorage.getItem('eib-curs');
   if(curs){const data=JSON.parse(curs);document.querySelectorAll('.ci-t').forEach((el,i)=>{if(data[i])el.textContent=data[i];});}
-  const bloom=null; // entries now come from Supabase only
-  if(false){
+  // bloom entries come from Supabase only — no localStorage override
   const savedPhoto=localStorage.getItem('eib-photo');
   if(savedPhoto){const el=document.querySelector('.a-img');if(el)el.src=savedPhoto;}
   const savedName=localStorage.getItem('eib-name');
   if(savedName){const el=document.querySelector('.a-name');if(el)el.textContent=savedName;}
   const titleData=localStorage.getItem('eib-title');
   if(titleData){const{t1,t2}=JSON.parse(titleData);const el=document.getElementById('hero-title');if(el)el.innerHTML=t1+'<br>'+t2;}
-  // Only apply saved season if it exists and differs from default
   const season=localStorage.getItem('eib-season');
   const seasonEl=document.getElementById('hero-season-text');
   if(season&&season!=='Summer 2025'){
     if(seasonEl)seasonEl.textContent=season;
   } else {
-    // Auto-set to current season
     const autoSeason=getCurrentSeason();
     if(seasonEl)seasonEl.textContent=autoSeason;
   }
