@@ -952,17 +952,7 @@ async function filterByTheme(theme){
     }
   }
 
-  // Bloom — entries with this theme that also have echoes
-  const bloomEl=document.getElementById('bloom-entries');
-  if(bloomEl){
-    const withEchoes=data.filter(e=>e.echo_count>0);
-    const toShow=withEchoes.length?withEchoes:data;
-    if(toShow.length){
-      bloomEl.innerHTML=toShow.map(e=>`<div class="bi"><div class="bi-k">${(e.branches||[]).join(' &middot; ')}${e.date_label?' &middot; '+e.date_label:''}</div><div class="bi-t">${e.title}</div>${e.body?`<div class="bi-e">${e.body}</div>`:''}<button class="bi-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.bi'))">Remove</button></div>`).join('');
-    } else {
-      bloomEl.innerHTML=`<div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:1rem 0">No bloom entries carrying this thread yet.</div>`;
-    }
-  }
+  // From the Bloom stays as hardcoded text — not filtered
 
   document.querySelectorAll('.sym').forEach(el=>{
     el.style.borderColor=el.textContent.trim()===theme?'var(--fog-pale)':'';
@@ -1049,22 +1039,8 @@ async function loadDynamicContent(){
     if(seedsEl)seedsEl.innerHTML=seeds.map(s=>`<div class="gh-seed">${s.title}${s.body?'<span style="display:block;font-size:14px;opacity:.7;margin-top:.2rem">'+s.body+'</span>':''}</div>`).join('');
   }
 
-  // From the Bloom — entries that have echoes on them
-  const{data:echoParents}=await db.from('note_echoes').select('parent_entry_id').eq('public',true);
-  const echoedIds=[...new Set((echoParents||[]).map(e=>e.parent_entry_id))];
-  const bloomEl=document.getElementById('bloom-entries');
-  if(echoedIds.length){
-    const{data:bloom}=await db.from('entries').select('*').eq('public',true).in('id',echoedIds).order('created_at',{ascending:false}).limit(6);
-    if(bloom&&bloom.length){
-      bloomEl.innerHTML=bloom.map(e=>`<div class="bi"><div class="bi-k">${(e.branches||[]).join(' &middot; ')}${e.date_label?' &middot; '+e.date_label:''}</div><div class="bi-t">${e.title}</div>${e.body?`<div class="bi-e">${e.body}</div>`:''}<button class="bi-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.bi'))">Remove</button></div>`).join('');
-    }
-  } else {
-    // No echoes yet — show most recent public entries as a fallback
-    const{data:bloom}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).limit(6);
-    if(bloom&&bloom.length){
-      bloomEl.innerHTML=bloom.map(e=>`<div class="bi"><div class="bi-k">${(e.branches||[]).join(' &middot; ')}${e.date_label?' &middot; '+e.date_label:''}</div><div class="bi-t">${e.title}</div>${e.body?`<div class="bi-e">${e.body}</div>`:''}<button class="bi-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.bi'))">Remove</button></div>`).join('');
-    }
-  }
+  // From the Bloom — hardcoded philosophical text, not overwritten by Supabase
+  // This section will evolve once entries have echoes and depth
 
   await loadPublicEchoResponses();
   loadLocalEdits();
