@@ -930,34 +930,46 @@ async function filterByTheme(theme){
   const{data}=await db.from('entries').select('*').eq('public',true).contains('threads',[theme]).order('created_at',{ascending:false});
   if(!data)return;
   
-  // Filter field notes
-  const photos=data.filter(e=>e.type==='photo');
+  // Field notes — all entries matching this theme
   const fnGrid=document.getElementById('fn-grid');
   if(fnGrid){
-    if(photos.length){
-      fnGrid.innerHTML=buildPhotoGrid(photos);
+    if(data.length){
+      fnGrid.innerHTML=data.map(e=>`
+        <div class="fn-note" id="fn-note-${e.id}">
+          <div class="fn-note-top" style="${e.photo_url?'':'grid-template-columns:1fr'}">
+            ${e.photo_url?`<div class="fn-note-img"><img src="${e.photo_url}" alt="${e.title}" loading="lazy"></div>`:''}
+            <div class="fn-note-content">
+              <div class="fn-note-date">${e.date_label||''}${e.moon_phase?' &middot; '+e.moon_phase:''}</div>
+              <div class="fn-note-title">${e.title}</div>
+              ${e.body?`<div class="fn-note-body">${e.body}</div>`:''}
+              ${(e.threads||[]).length?`<div class="fn-note-threads">${(e.threads||[]).map(t=>`<span class="fn-note-thread" onclick="setTheme('${t}')">${t}</span>`).join('')}</div>`:''}
+            </div>
+          </div>
+          <button class="pc-admin-del" style="display:none;position:relative;top:auto;right:auto;width:100%;padding:.4rem;font-size:9px" onclick="unpublishEntry('${e.id}',document.getElementById('fn-note-${e.id}'))">Remove from site</button>
+        </div>`).join('');
     } else {
       fnGrid.innerHTML=`<div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:2rem 0">No field notes carrying this thread yet.</div>`;
     }
   }
 
-  // Filter bloom
-  // written already built above including echoes
+  // Bloom — entries with this theme that also have echoes
   const bloomEl=document.getElementById('bloom-entries');
   if(bloomEl){
-    if(allWritten.length){
-      bloomEl.innerHTML=allWritten.map(e=>buildBloomCard(e)).join('');
+    const withEchoes=data.filter(e=>e.echo_count>0);
+    const toShow=withEchoes.length?withEchoes:data;
+    if(toShow.length){
+      bloomEl.innerHTML=toShow.map(e=>`<div class="bi"><div class="bi-k">${(e.branches||[]).join(' &middot; ')}${e.date_label?' &middot; '+e.date_label:''}</div><div class="bi-t">${e.title}</div>${e.body?`<div class="bi-e">${e.body}</div>`:''}<button class="bi-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.bi'))">Remove</button></div>`).join('');
     } else {
       bloomEl.innerHTML=`<div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:1rem 0">No bloom entries carrying this thread yet.</div>`;
     }
   }
 
-  // Update echoes symbols to highlight active theme
   document.querySelectorAll('.sym').forEach(el=>{
     el.style.borderColor=el.textContent.trim()===theme?'var(--fog-pale)':'';
     el.style.background=el.textContent.trim()===theme?'rgba(255,255,255,.1)':'';
   });
 }
+
 
 function buildPhotoGrid(photos){
   if(!photos.length)return'';
@@ -994,11 +1006,12 @@ function buildBloomCard(e){
 
 // LOAD SUPABASE CONTENT
 async function loadDynamicContent(){
-  // Field notes from Supabase
-  const{data:photos}=await db.from('entries').select('*').eq('public',true).eq('type','photo').order('created_at',{ascending:false}).limit(5);
   const fnGrid=document.getElementById('fn-grid');
-  if(photos&&photos.length){
-    fnGrid.innerHTML=photos.map(e=>`
+
+  // Field Notes — all public text entries
+  const{data:notes}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).limit(8);
+  if(notes&&notes.length){
+    fnGrid.innerHTML=notes.map(e=>`
       <div class="fn-note" id="fn-note-${e.id}">
         <div class="fn-note-top" style="${e.photo_url?'':'grid-template-columns:1fr'}">
           ${e.photo_url?`<div class="fn-note-img"><img src="${e.photo_url}" alt="${e.title}" loading="lazy"></div>`:''}
@@ -1017,33 +1030,43 @@ async function loadDynamicContent(){
         </div>
         <button class="pc-admin-del" style="display:none;position:relative;top:auto;right:auto;width:100%;padding:.4rem;font-size:9px" onclick="unpublishEntry('${e.id}',document.getElementById('fn-note-${e.id}'))">Remove from site</button>
       </div>`).join('');
-    // Load echoes and mycelium for each
-    photos.forEach(e=>{loadPublicEchoes(e.id);loadPublicMycelium(e.id);});
+    notes.forEach(e=>{loadPublicEchoes(e.id);loadPublicMycelium(e.id);});
   } else {
     fnGrid.innerHTML='';
   }
-  // What Arrived Today from Greenhouse — pulls latest saved thought
+
+  // What Arrived Today from Greenhouse
   const{data:thoughtData}=await db.from('current_thought').select('*').order('updated_at',{ascending:false}).limit(1);
   if(thoughtData&&thoughtData.length&&thoughtData[0].thought){
     const ghNote=document.querySelector('.gh-note');
     if(ghNote)ghNote.textContent=thoughtData[0].thought;
   }
 
-  // Greenhouse Seeds — pull public Seed entries from Supabase
+  // Greenhouse Seeds
   const{data:seeds}=await db.from('entries').select('*').eq('public',true).eq('type','seed').order('created_at',{ascending:false}).limit(4);
   if(seeds&&seeds.length){
     const seedsEl=document.getElementById('gh-seeds');
     if(seedsEl)seedsEl.innerHTML=seeds.map(s=>`<div class="gh-seed">${s.title}${s.body?'<span style="display:block;font-size:14px;opacity:.7;margin-top:.2rem">'+s.body+'</span>':''}</div>`).join('');
   }
 
-  // Bloom from Supabase
-  const{data:bloom}=await db.from('entries').select('*').eq('public',true).neq('type','photo').order('created_at',{ascending:false}).limit(6);
-  if(bloom&&bloom.length){
-    document.getElementById('bloom-entries').innerHTML=bloom.map(e=>`<div class="bi"><div class="bi-k">${(e.branches||[]).join(' &middot; ')}${e.date_label?' &middot; '+e.date_label:''}</div><div class="bi-t">${e.title}</div>${e.body?`<div class="bi-e">${e.body}</div>`:''}<button class="bi-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.bi'))">Remove</button></div>`).join('');
+  // From the Bloom — entries that have echoes on them
+  const{data:echoParents}=await db.from('note_echoes').select('parent_entry_id').eq('public',true);
+  const echoedIds=[...new Set((echoParents||[]).map(e=>e.parent_entry_id))];
+  const bloomEl=document.getElementById('bloom-entries');
+  if(echoedIds.length){
+    const{data:bloom}=await db.from('entries').select('*').eq('public',true).in('id',echoedIds).order('created_at',{ascending:false}).limit(6);
+    if(bloom&&bloom.length){
+      bloomEl.innerHTML=bloom.map(e=>`<div class="bi"><div class="bi-k">${(e.branches||[]).join(' &middot; ')}${e.date_label?' &middot; '+e.date_label:''}</div><div class="bi-t">${e.title}</div>${e.body?`<div class="bi-e">${e.body}</div>`:''}<button class="bi-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.bi'))">Remove</button></div>`).join('');
+    }
+  } else {
+    // No echoes yet — show most recent public entries as a fallback
+    const{data:bloom}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).limit(6);
+    if(bloom&&bloom.length){
+      bloomEl.innerHTML=bloom.map(e=>`<div class="bi"><div class="bi-k">${(e.branches||[]).join(' &middot; ')}${e.date_label?' &middot; '+e.date_label:''}</div><div class="bi-t">${e.title}</div>${e.body?`<div class="bi-e">${e.body}</div>`:''}<button class="bi-admin-del" onclick="unpublishEntry('${e.id}',this.closest('.bi'))">Remove</button></div>`).join('');
+    }
   }
-  // Echoes — patterns + responses
+
   await loadPublicEchoResponses();
-  // Load saved local edits
   loadLocalEdits();
 }
 
