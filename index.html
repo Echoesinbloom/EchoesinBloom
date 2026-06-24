@@ -111,7 +111,7 @@
     .fn{padding:2.5rem 0 0}
     .fn-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 2rem;margin-bottom:1.25rem}
     .fn-wander{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);background:none;border:none;cursor:pointer}
-    .fn-grid-wrap{padding:0 2rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:2px}
+    .fn-grid-wrap{padding:0 2rem 3rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px}
     .fn-card{background:white;padding:1.5rem;cursor:pointer;border:1px solid var(--rule-m);transition:border-color .2s}
     .fn-card:hover{border-color:rgba(200,112,48,.4)}
     .fn-card-thumb{width:100%;height:130px;object-fit:cover;margin-bottom:.75rem;display:block}
@@ -132,7 +132,8 @@
     .fn-card-img{width:100%;max-height:280px;object-fit:cover;margin-bottom:.75rem}
     .fn-card-full{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.85;margin-bottom:.85rem}
     .fn-echoes-wrap{margin-top:.85rem}
-    @media(max-width:600px){.fn-grid-wrap{grid-template-columns:1fr}}
+    @media(max-width:800px){.fn-grid-wrap{grid-template-columns:1fr 1fr}}
+    @media(max-width:500px){.fn-grid-wrap{grid-template-columns:1fr}}
     /* Worth Noticing block */
     .wn-block{background:var(--deep);padding:3.5rem 2rem;border-top:1px solid rgba(200,112,48,.12)}
     .wn-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.85rem}
@@ -519,6 +520,9 @@
     <div class="sec-lbl">Field Notes &middot; What I witnessed</div>
   </div>
   <div class="fn-grid-wrap" id="fn-grid"></div>
+  <div id="fn-load-more" style="display:none;text-align:center;padding:0 2rem 3rem">
+    <button onclick="loadMoreNotes()" style="background:none;border:1px solid var(--rule-m);padding:.65rem 2rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft);transition:all .2s">Load more notes</button>
+  </div>
 </section>
 
 <section class="bloom" id="bloom">
@@ -1041,7 +1045,7 @@ async function loadDynamicContent(){
   const fnGrid=document.getElementById('fn-grid');
 
   // Field Notes — all public text entries
-  const{data:notes}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).limit(8);
+  const{data:notes}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).limit(12);
   if(notes&&notes.length){
     fnGrid.innerHTML=notes.map(e=>`
       <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
@@ -1063,6 +1067,7 @@ async function loadDynamicContent(){
         </div>
       </div>`).join('');
     notes.forEach(e=>{loadPublicEchoes(e.id);});
+    if(notes.length===12) document.getElementById('fn-load-more').style.display='block';
   } else {
     fnGrid.innerHTML='';
   }
@@ -1156,6 +1161,35 @@ async function loadPublicEchoResponses(){
       </div>
     </div>`;
   }).join('');
+}
+
+let fnOffset=12;
+async function loadMoreNotes(){
+  const btn=document.querySelector('#fn-load-more button');
+  if(btn)btn.textContent='Loading...';
+  const{data}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).range(fnOffset,fnOffset+11);
+  if(!data||!data.length){document.getElementById('fn-load-more').style.display='none';return;}
+  const fnGrid=document.getElementById('fn-grid');
+  fnGrid.innerHTML+=data.map(e=>`
+    <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
+      ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-thumb" alt="">` : ''}
+      <div class="fn-card-meta">${e.date_label||''}${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}</div>
+      <div class="fn-card-title">${e.title}</div>
+      ${e.body?`<div class="fn-card-excerpt">${e.body}</div>`:''}
+      <div class="fn-card-footer">
+        <div class="fn-card-threads">${(e.threads||[]).map(t=>`<span class="fn-card-thread" onclick="event.stopPropagation();setTheme('${t}')">${t}</span>`).join('')}</div>
+        <span class="fn-card-read">&rarr;</span>
+      </div>
+      <div class="fn-card-body" id="fn-body-${e.id}">
+        ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-img" alt="">` : ''}
+        <div class="fn-card-full">${e.body||''}</div>
+        <div class="fn-echoes-wrap" id="fn-echoes-${e.id}"></div>
+      </div>
+    </div>`).join('');
+  data.forEach(e=>loadPublicEchoes(e.id));
+  fnOffset+=12;
+  if(data.length<12)document.getElementById('fn-load-more').style.display='none';
+  else if(btn)btn.textContent='Load more notes';
 }
 
 async function loadPublicEchoes(entryId){
@@ -1455,7 +1489,7 @@ window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;wind
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
 window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.loadCyclesPublic=loadCyclesPublic;window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
-window.setTheme=setTheme;window.clearTheme=clearTheme;window.toggleFnCard=toggleFnCard;
+window.setTheme=setTheme;window.clearTheme=clearTheme;window.toggleFnCard=toggleFnCard;window.loadMoreNotes=loadMoreNotes;
 </script>
 </body>
 </html>
