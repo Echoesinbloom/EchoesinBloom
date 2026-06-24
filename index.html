@@ -16,7 +16,7 @@
       --linen:#f2ece0;--linen-s:#e8e0d0;--parch:#ede4d4;
       --deep:#16120c;--deep-mid:#1e1a10;--deep-surf:#16120c;
       --amber:#c87030;--amber-d:#a05020;--amber-w:#f5e8d8;
-      --monarch:#8b5e3c;--rust:#a0522d;
+      --monarch:#8b5e3c;--rust:#a0522d;a
       --moss:#6a8a58;--moss-d:#4a6038;
       --fog:#8a9aaa;--fog-pale:#c8d0d8;--fog-dim:#607888;
       --on-dark:#f0e4cc;--on-dark-mid:#b09878;--on-dark-soft:#886858;
@@ -117,7 +117,7 @@
     .fn-card-thumb{width:100%;height:130px;object-fit:cover;margin-bottom:.75rem;display:block}
     .fn-card-meta{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
     .fn-card-moon{color:var(--fog-dim)}
-    .fn-card-title{font-family:var(--s);font-size:20px;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:.45rem;transition:color .2s}
+    .fn-card-title{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:.45rem;transition:color .2s}
     .fn-card:hover .fn-card-title{color:var(--amber)}
     .fn-card-excerpt{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.6;margin-bottom:.7rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
     .fn-card-footer{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
@@ -126,12 +126,15 @@
     .fn-card-thread:hover{color:var(--amber)}
     .fn-card-thread::before{content:'#'}
     .fn-card-read{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500;flex-shrink:0}
-    /* Expanded state */
-    .fn-card-body{display:none;padding-top:.85rem;border-top:1px solid var(--rule);margin-top:.85rem}
+    /* Expanded state — floats above grid, doesn't push siblings */
+    .fn-card-wrap{position:relative}
+    .fn-card-body{display:none;position:absolute;top:0;left:0;right:0;z-index:20;background:white;border:1px solid rgba(200,112,48,.25);padding:1.25rem;box-shadow:0 8px 32px rgba(26,23,16,.1)}
     .fn-card-body.open{display:block}
-    .fn-card-img{width:100%;max-height:280px;object-fit:cover;margin-bottom:.75rem}
-    .fn-card-full{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.85;margin-bottom:.85rem}
-    .fn-echoes-wrap{margin-top:.85rem}
+    .fn-card-body-close{float:right;background:none;border:none;cursor:pointer;font-size:16px;color:var(--ink-faint);line-height:1;padding:0 0 .5rem .5rem;margin:-0.2rem -0.2rem 0 0}
+    .fn-card-body-close:hover{color:var(--ink)}
+    .fn-card-img{width:100%;max-height:220px;object-fit:cover;margin-bottom:.75rem}
+    .fn-card-full{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-mid);line-height:1.85;margin-bottom:.75rem}
+    .fn-echoes-wrap{margin-top:.75rem}
     @media(max-width:800px){.fn-grid-wrap{grid-template-columns:1fr 1fr}}
     @media(max-width:500px){.fn-grid-wrap{grid-template-columns:1fr}}
     /* Worth Noticing block */
@@ -903,8 +906,41 @@ function toggleFnCard(id){
   const body=document.getElementById('fn-body-'+id);
   if(!body)return;
   const isOpen=body.classList.contains('open');
+  // Close all others first
   document.querySelectorAll('.fn-card-body.open').forEach(b=>b.classList.remove('open'));
   if(!isOpen)body.classList.add('open');
+}
+function closeFnCard(id,event){
+  event.stopPropagation();
+  const body=document.getElementById('fn-body-'+id);
+  if(body)body.classList.remove('open');
+}
+
+function buildCard(e){
+  return`<div class="fn-card-wrap">
+    <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
+      ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-thumb" alt="">` : ''}
+      <div class="fn-card-meta">
+        ${e.date_label||''}
+        ${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
+        ${e.subject?`<span style="color:var(--monarch);font-weight:500">&middot; ${e.subject}</span>`:''}
+      </div>
+      <div class="fn-card-title">${e.title}</div>
+      ${e.body?`<div class="fn-card-excerpt">${e.body}</div>`:''}
+      <div class="fn-card-footer">
+        <div class="fn-card-threads">${(e.threads||[]).map(t=>`<span class="fn-card-thread" onclick="event.stopPropagation();setTheme('${t}')">${t}</span>`).join('')}</div>
+        <span class="fn-card-read">&rarr;</span>
+      </div>
+    </div>
+    <div class="fn-card-body" id="fn-body-${e.id}">
+      <button class="fn-card-body-close" onclick="closeFnCard('${e.id}',event)">&#x00D7;</button>
+      ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-img" alt="">` : ''}
+      <div class="fn-card-meta" style="margin-bottom:.5rem">${e.date_label||''}${e.moon_phase?` &middot; ${e.moon_phase}`:''}</div>
+      <div style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);margin-bottom:.6rem">${e.title}</div>
+      <div class="fn-card-full">${e.body||''}</div>
+      <div class="fn-echoes-wrap" id="fn-echoes-${e.id}"></div>
+    </div>
+  </div>`;
 }
 
 function scrollToNote(entryId){
@@ -972,26 +1008,7 @@ async function filterByTheme(theme){
   const fnGrid=document.getElementById('fn-grid');
   if(fnGrid){
     if(data.length){
-      fnGrid.innerHTML=data.map(e=>`
-        <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
-          ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-thumb" alt="">` : ''}
-          <div class="fn-card-meta">
-            ${e.date_label||''}
-            ${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
-            ${e.subject?`<span style="color:var(--monarch);font-weight:500">&middot; Worth Noticing &middot; ${e.subject}</span>`:''}
-          </div>
-          <div class="fn-card-title">${e.title}</div>
-          ${e.body?`<div class="fn-card-excerpt">${e.body}</div>`:''}
-          <div class="fn-card-footer">
-            <div class="fn-card-threads">${(e.threads||[]).map(t=>`<span class="fn-card-thread" onclick="event.stopPropagation();setTheme('${t}')">${t}</span>`).join('')}</div>
-            <span class="fn-card-read">Read note &rarr;</span>
-          </div>
-          <div class="fn-card-body" id="fn-body-${e.id}">
-            ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-img" alt="">` : ''}
-            <div class="fn-card-full">${e.body||''}</div>
-            <div class="fn-echoes-wrap" id="fn-echoes-${e.id}"></div>
-          </div>
-        </div>`).join('');
+      fnGrid.innerHTML=data.map(e=>buildCard(e)).join('');
       data.forEach(e=>loadPublicEchoes(e.id));
     } else {
       fnGrid.innerHTML=`<div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:2rem 0">No field notes carrying this thread yet.</div>`;
@@ -1047,25 +1064,7 @@ async function loadDynamicContent(){
   // Field Notes — all public text entries
   const{data:notes}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).limit(12);
   if(notes&&notes.length){
-    fnGrid.innerHTML=notes.map(e=>`
-      <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
-        <div class="fn-card-meta">
-          ${e.date_label||''}
-          ${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
-          ${e.subject?`<span style="color:var(--monarch);font-weight:500">&middot; Worth Noticing &middot; ${e.subject}</span>`:''}
-        </div>
-        <div class="fn-card-title">${e.title}</div>
-        ${e.body?`<div class="fn-card-excerpt">${e.body}</div>`:''}
-        <div class="fn-card-footer">
-          <div class="fn-card-threads">${(e.threads||[]).map(t=>`<span class="fn-card-thread" onclick="event.stopPropagation();setTheme('${t}')">${t}</span>`).join('')}</div>
-          <span class="fn-card-read">Read note &rarr;</span>
-        </div>
-        <div class="fn-card-body" id="fn-body-${e.id}">
-          ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-img" alt="">` : ''}
-          <div class="fn-card-full">${e.body||''}</div>
-          <div class="fn-echoes-wrap" id="fn-echoes-${e.id}"></div>
-        </div>
-      </div>`).join('');
+    fnGrid.innerHTML=notes.map(e=>buildCard(e)).join('');
     notes.forEach(e=>{loadPublicEchoes(e.id);});
     if(notes.length===12) document.getElementById('fn-load-more').style.display='block';
   } else {
@@ -1170,22 +1169,7 @@ async function loadMoreNotes(){
   const{data}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).range(fnOffset,fnOffset+11);
   if(!data||!data.length){document.getElementById('fn-load-more').style.display='none';return;}
   const fnGrid=document.getElementById('fn-grid');
-  fnGrid.innerHTML+=data.map(e=>`
-    <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
-      ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-thumb" alt="">` : ''}
-      <div class="fn-card-meta">${e.date_label||''}${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}</div>
-      <div class="fn-card-title">${e.title}</div>
-      ${e.body?`<div class="fn-card-excerpt">${e.body}</div>`:''}
-      <div class="fn-card-footer">
-        <div class="fn-card-threads">${(e.threads||[]).map(t=>`<span class="fn-card-thread" onclick="event.stopPropagation();setTheme('${t}')">${t}</span>`).join('')}</div>
-        <span class="fn-card-read">&rarr;</span>
-      </div>
-      <div class="fn-card-body" id="fn-body-${e.id}">
-        ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-img" alt="">` : ''}
-        <div class="fn-card-full">${e.body||''}</div>
-        <div class="fn-echoes-wrap" id="fn-echoes-${e.id}"></div>
-      </div>
-    </div>`).join('');
+  fnGrid.innerHTML+=data.map(e=>buildCard(e)).join('');
   data.forEach(e=>loadPublicEchoes(e.id));
   fnOffset+=12;
   if(data.length<12)document.getElementById('fn-load-more').style.display='none';
@@ -1489,7 +1473,7 @@ window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;wind
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
 window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.loadCyclesPublic=loadCyclesPublic;window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
-window.setTheme=setTheme;window.clearTheme=clearTheme;window.toggleFnCard=toggleFnCard;window.loadMoreNotes=loadMoreNotes;
+window.setTheme=setTheme;window.clearTheme=clearTheme;window.toggleFnCard=toggleFnCard;window.closeFnCard=closeFnCard;window.loadMoreNotes=loadMoreNotes;
 </script>
 </body>
 </html>
