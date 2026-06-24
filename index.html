@@ -109,15 +109,36 @@
 
     /* FIELD NOTES */
     .fn{padding:3.5rem 0 0}
-    .fn-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 2rem;margin-bottom:1.75rem}
+    .fn-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 2rem;margin-bottom:.5rem}
     .fn-wander{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);background:none;border:none;cursor:pointer}
-    .pg{display:grid;gap:2px;background:var(--rule)}
-    .pg-2{grid-template-columns:2fr 1fr}
-    .pg-3{grid-template-columns:1fr 1fr 1fr}
-    .pc{position:relative;overflow:hidden;cursor:pointer;background:var(--parch);min-height:200px}
-    .scene{width:100%;height:100%;position:relative;overflow:hidden;transition:transform .55s;min-height:inherit}
-    .pc:hover .scene{transform:scale(1.025)}
-    .pc-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+    .fn-grid-wrap{padding:0 2rem;display:flex;flex-direction:column;gap:0}
+    .fn-card{border-bottom:1px solid var(--rule);padding:1.5rem 0;cursor:pointer;transition:background .2s}
+    .fn-card:first-of-type{border-top:1px solid var(--rule)}
+    .fn-card-meta{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem}
+    .fn-card-moon{color:var(--fog-dim)}
+    .fn-card-title{font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink);line-height:1.25;margin-bottom:.4rem;transition:color .2s}
+    .fn-card:hover .fn-card-title{color:var(--amber)}
+    .fn-card-excerpt{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);line-height:1.65;margin-bottom:.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .fn-card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+    .fn-card-threads{display:flex;gap:.4rem;flex-wrap:wrap}
+    .fn-card-thread{font-family:var(--s);font-size:11px;font-style:italic;color:var(--ink-faint);cursor:pointer;transition:color .2s}
+    .fn-card-thread:hover{color:var(--amber)}
+    .fn-card-thread::before{content:'#'}
+    .fn-card-read{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:500;transition:opacity .2s;flex-shrink:0}
+    .fn-card:hover .fn-card-read{opacity:.7}
+    /* Expanded state */
+    .fn-card-body{display:none;padding-top:.85rem}
+    .fn-card-body.open{display:block}
+    .fn-card-img{width:100%;max-height:280px;object-fit:cover;margin-bottom:.85rem}
+    .fn-card-full{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:.85rem}
+    .fn-echoes-wrap{margin-top:.85rem}
+    /* Worth Noticing block */
+    .wn-block{background:var(--deep);padding:3.5rem 2rem;border-top:1px solid rgba(200,112,48,.12)}
+    .wn-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.85rem}
+    .wn-title{font-family:var(--s);font-size:clamp(28px,5vw,40px);font-style:italic;color:var(--on-dark);line-height:1.2;margin-bottom:1rem}
+    .wn-body{font-family:var(--s);font-size:17px;font-style:italic;color:var(--on-dark-mid);line-height:1.8;margin-bottom:.75rem}
+    .wn-sub{font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-soft);line-height:1.7;margin-bottom:1.5rem}
+    .wn-soon{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--on-dark-soft);font-weight:500}
     .pcc{position:absolute;bottom:0;left:0;right:0;padding:1rem 1.25rem;background:linear-gradient(transparent,rgba(16,12,6,.65));opacity:0;transform:translateY(4px);transition:all .3s}
     .pc:hover .pcc{opacity:1;transform:translateY(0)}
     .pcc-note{font-family:var(--s);font-size:14px;font-style:italic;color:rgba(255,255,255,.92);line-height:1.4;margin-bottom:.2rem}
@@ -442,7 +463,12 @@
 <div class="hero">
   <div class="hero-season"><span class="hero-line"></span><span id="hero-season-text">Summer 2025</span></div>
   <h1 class="hero-title" id="hero-title">What becomes possible<br>when we begin to notice?</h1>
-  <p class="hero-body">Observation + Inquiry = Bloom. A living exploration of what becomes visible when we learn how to pay attention.</p>
+  <p class="hero-body">A place for curious people learning to pay attention.</p>
+</div>
+
+<div style="padding:2rem 2rem 3rem;max-width:580px;border-bottom:1px solid var(--rule)">
+  <p style="font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:1rem">Echoes in Bloom is a living exploration of attention, participation, and becoming. Through observations, stories, conversations, and experiences, I document what I'm noticing — and explore what happens when we engage more fully with ourselves, our communities, and the world around us.</p>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.7">Part field journal. Part greenhouse. Part living inquiry.</p>
 </div>
 
 <section class="gh" id="greenhouse">
@@ -450,7 +476,7 @@
     <div>
       <div class="gh-marker">The Greenhouse</div>
       <h2 class="gh-heading">Currently<br>incubating</h2>
-      <p class="gh-note">What is arriving. What is being noticed. What isn't ready to be named yet.</p>
+      <p class="gh-note">The Greenhouse is where ideas, observations, and questions are cultivated before they bloom. Some begin as curiosities. Some become experiments. Some grow into projects, experiences, and connections. This is where I keep track of what I'm actively tending.</p>
     </div>
     <div>
       <div class="gh-seeds" id="gh-seeds">
@@ -466,6 +492,7 @@
 
 <div class="cur" id="spiral-up">
   <div class="sec-head"><div class="sec-lbl">Current curiosity</div><div class="sec-rule"></div></div>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.7;margin-bottom:1.25rem">These are the questions currently shaping my attention. Not answers. Not conclusions. Just threads I'm following to see where they lead.</p>
   <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">How does meaning evolve over time?</span><span class="ci-badge b-alive">Alive</span></div>
   <div class="cx"><div class="cx-in">Not the concept. The sensation. Where does it land? How long does it stay before the nervous system decides it's safe to keep?</div></div>
   <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">Nature as Teacher</span><span class="ci-badge b-alive">Alive</span></div>
@@ -478,11 +505,20 @@
   <div class="cx"><div class="cx-in">The fascia holds things the mind has already moved on from. Learning to listen there first.</div></div>
 </div>
 
+<div class="wn-block">
+  <div class="wn-label">Worth Noticing</div>
+  <div class="wn-title">People, places, and experiences<br>that invite you in.</div>
+  <div class="wn-body">Makers, gathering spaces, community builders, and everyday discoveries helping shape the world around me.</div>
+  <div class="wn-sub">A collection of outer participation — the places and people creating conditions for aliveness.</div>
+  <div class="wn-soon">Coming soon</div>
+</div>
+
 <section class="fn" id="field-notes">
   <div class="fn-head">
     <div class="sec-lbl">Field Notes &middot; What I witnessed</div>
   </div>
-  <div id="fn-grid">
+  <div class="fn-grid-wrap" id="fn-grid"></div>
+</section>
     <div class="pg pg-2" style="margin-bottom:2px">
       <div class="pc" style="min-height:320px"><div class="scene" style="min-height:320px;background:#a0b088"><img src="photos/field-note-1.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">The frog on the window &mdash; third morning in a row.</div><div class="pcc-meta">Autumn &middot; Wonder &middot; Synchronicity</div></div></div>
       <div class="pc" style="min-height:320px"><div class="scene" style="min-height:320px;background:#98a4a8"><img src="photos/field-note-2.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">Dew on grass at 6am. I didn&rsquo;t have words for it.</div><div class="pcc-meta">Summer &middot; Awe &middot; Morning</div></div></div>
@@ -525,7 +561,7 @@
 <div class="about" style="grid-template-columns:1fr;max-width:620px">
   <div>
     <div class="a-name">A Living Inquiry</div>
-    <div class="a-body" id="a-body">For a long time I thought what I was studying was healing. What I eventually discovered was that I was becoming interested in something much bigger: How we reconnect with life once we begin to feel safe enough to engage with it.<br><br>Echoes in Bloom is where I collect the observations, symbols, curiosities, stories, and experiences that shape that exploration. I approach life through the lens of a designer. I pay attention to patterns. I notice what repeats.<br><br>I'm fascinated by the relationship between attention and meaning, intuition and understanding, the body and memory, people and place, and the way Community shapes what becomes possible.<br><br>Over time, this project has expanded beyond healing and into <strong>Aliveness, Wonder, participation, and connection.</strong> Not only how we relate to ourselves, but how we relate to one another, to our environments, and to the communities that help us become who we are.<br><br>Most of all, I am just curious about what becomes possible when we choose to participate in our lives more fully.<br><br>Part field journal, part greenhouse, part living archive of Becoming. Thanks for being here.</div>
+    <div class="a-body" id="a-body">For a long time I thought what I was studying was healing. What I eventually discovered was that I was becoming interested in something much bigger: how we reconnect with life once we begin to feel safe enough to engage with it.<br><br>I pay attention to patterns. I notice what repeats. I'm fascinated by the relationship between attention and meaning, people and place, intuition and understanding, and the way community shapes what becomes possible.<br><br>Over time, this project has expanded beyond healing and into <strong>aliveness, wonder, participation, and connection.</strong> Not only how we relate to ourselves, but how we relate to one another, to our environments, and to the communities that help us become who we are.<br><br><strong>Why Echoes exists</strong><br><br>Echoes in Bloom began as a personal practice of paying attention. Over time, it became something larger — a place to document observations, explore questions, share experiences, and highlight the people, places, and ideas helping us participate more fully in life.<br><br>I don't have answers. I'm interested in what becomes visible when we slow down enough to notice, and brave enough to engage with what we find. Echoes is simply a place to document that exploration.<br><br>I often describe this as experimenting with myself. You're welcome to wander alongside.</div>
     <button class="a-edit-btn" onclick="editAbout()">Edit about me</button>
   </div>
 </div>
@@ -869,6 +905,14 @@ async function loadPublicMycelium(entryId){
   links.innerHTML=data.map(c=>`<span class="fn-myc-link" onclick="scrollToNote('${c.connected_id}')">${c.connected_title||'Connected note'}</span>`).join('');
 }
 
+function toggleFnCard(id){
+  const body=document.getElementById('fn-body-'+id);
+  if(!body)return;
+  const isOpen=body.classList.contains('open');
+  document.querySelectorAll('.fn-card-body.open').forEach(b=>b.classList.remove('open'));
+  if(!isOpen)body.classList.add('open');
+}
+
 function scrollToNote(entryId){
   const el=document.getElementById('fn-note-'+entryId);
   if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
@@ -935,18 +979,25 @@ async function filterByTheme(theme){
   if(fnGrid){
     if(data.length){
       fnGrid.innerHTML=data.map(e=>`
-        <div class="fn-note" id="fn-note-${e.id}">
-          <div class="fn-note-top" style="${e.photo_url?'':'grid-template-columns:1fr'}">
-            ${e.photo_url?`<div class="fn-note-img"><img src="${e.photo_url}" alt="${e.title}" loading="lazy"></div>`:''}
-            <div class="fn-note-content">
-              <div class="fn-note-date">${e.date_label||''}${e.moon_phase?' &middot; '+e.moon_phase:''}</div>
-              <div class="fn-note-title">${e.title}</div>
-              ${e.body?`<div class="fn-note-body">${e.body}</div>`:''}
-              ${(e.threads||[]).length?`<div class="fn-note-threads">${(e.threads||[]).map(t=>`<span class="fn-note-thread" onclick="setTheme('${t}')">${t}</span>`).join('')}</div>`:''}
-            </div>
+        <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
+          <div class="fn-card-meta">
+            ${e.date_label||''}
+            ${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
+            ${e.subject?`<span style="color:var(--monarch);font-weight:500">&middot; Worth Noticing &middot; ${e.subject}</span>`:''}
           </div>
-          <button class="pc-admin-del" style="display:none;position:relative;top:auto;right:auto;width:100%;padding:.4rem;font-size:9px" onclick="unpublishEntry('${e.id}',document.getElementById('fn-note-${e.id}'))">Remove from site</button>
+          <div class="fn-card-title">${e.title}</div>
+          ${e.body?`<div class="fn-card-excerpt">${e.body}</div>`:''}
+          <div class="fn-card-footer">
+            <div class="fn-card-threads">${(e.threads||[]).map(t=>`<span class="fn-card-thread" onclick="event.stopPropagation();setTheme('${t}')">${t}</span>`).join('')}</div>
+            <span class="fn-card-read">Read note &rarr;</span>
+          </div>
+          <div class="fn-card-body" id="fn-body-${e.id}">
+            ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-img" alt="">` : ''}
+            <div class="fn-card-full">${e.body||''}</div>
+            <div class="fn-echoes-wrap" id="fn-echoes-${e.id}"></div>
+          </div>
         </div>`).join('');
+      data.forEach(e=>loadPublicEchoes(e.id));
     } else {
       fnGrid.innerHTML=`<div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:2rem 0">No field notes carrying this thread yet.</div>`;
     }
@@ -1002,25 +1053,25 @@ async function loadDynamicContent(){
   const{data:notes}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).limit(8);
   if(notes&&notes.length){
     fnGrid.innerHTML=notes.map(e=>`
-      <div class="fn-note" id="fn-note-${e.id}">
-        <div class="fn-note-top" style="${e.photo_url?'':'grid-template-columns:1fr'}">
-          ${e.photo_url?`<div class="fn-note-img"><img src="${e.photo_url}" alt="${e.title}" loading="lazy"></div>`:''}
-          <div class="fn-note-content">
-            <div class="fn-note-date">${e.date_label||''}${e.moon_phase?' &middot; '+e.moon_phase:''}</div>
-            <div class="fn-note-title">${e.title}</div>
-            ${e.body?`<div class="fn-note-body">${e.body}</div>`:''}
-            ${(e.threads||[]).length?`<div class="fn-note-threads">${(e.threads||[]).map(t=>`<span class="fn-note-thread" onclick="setTheme('${t}')">${t}</span>`).join('')}</div>`:''}
-            ${(e.branches||[]).length?`<div style="margin-top:.4rem;display:flex;gap:.3rem;flex-wrap:wrap">${(e.branches||[]).map(b=>`<span style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">${b}</span>`).join('<span style="color:var(--rule-m)">&middot;</span>')}</div>`:''}
-          </div>
+      <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
+        <div class="fn-card-meta">
+          ${e.date_label||''}
+          ${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
+          ${e.subject?`<span style="color:var(--monarch);font-weight:500">&middot; Worth Noticing &middot; ${e.subject}</span>`:''}
         </div>
-        <div class="fn-echoes" id="fn-echoes-${e.id}" style="display:none"></div>
-        <div class="fn-mycelium" id="fn-myc-${e.id}" style="display:none">
-          <div class="fn-myc-lbl">Mycelium</div>
-          <div id="fn-myc-links-${e.id}"></div>
+        <div class="fn-card-title">${e.title}</div>
+        ${e.body?`<div class="fn-card-excerpt">${e.body}</div>`:''}
+        <div class="fn-card-footer">
+          <div class="fn-card-threads">${(e.threads||[]).map(t=>`<span class="fn-card-thread" onclick="event.stopPropagation();setTheme('${t}')">${t}</span>`).join('')}</div>
+          <span class="fn-card-read">Read note &rarr;</span>
         </div>
-        <button class="pc-admin-del" style="display:none;position:relative;top:auto;right:auto;width:100%;padding:.4rem;font-size:9px" onclick="unpublishEntry('${e.id}',document.getElementById('fn-note-${e.id}'))">Remove from site</button>
+        <div class="fn-card-body" id="fn-body-${e.id}">
+          ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-img" alt="">` : ''}
+          <div class="fn-card-full">${e.body||''}</div>
+          <div class="fn-echoes-wrap" id="fn-echoes-${e.id}"></div>
+        </div>
       </div>`).join('');
-    notes.forEach(e=>{loadPublicEchoes(e.id);loadPublicMycelium(e.id);});
+    notes.forEach(e=>{loadPublicEchoes(e.id);});
   } else {
     fnGrid.innerHTML='';
   }
@@ -1121,9 +1172,9 @@ async function loadPublicEchoes(entryId){
   if(!data||!data.length) return;
   const el=document.getElementById('fn-echoes-'+entryId);
   if(!el) return;
-  el.style.display='block';
-  el.innerHTML=`<div class="fn-echoes-lbl">Echoes &mdash; the conversation continues</div>`+
+  el.innerHTML=`<div class="fn-echoes-lbl" style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--fog-dim);font-weight:500;margin-bottom:.75rem;padding-top:.85rem;border-top:1px solid var(--rule)">Echoes &mdash; the conversation continues</div>`+
     data.map(e=>`<div class="fn-echo-item">
+      ${e.photo_url?`<img src="${e.photo_url}" style="width:100%;max-height:260px;object-fit:cover;margin-bottom:.5rem" alt="">` : ''}
       <div class="fn-echo-date">${e.date_label||''} ${e.moon_phase?'&middot; '+e.moon_phase:''}</div>
       ${e.title?`<div class="fn-echo-title">${e.title}</div>`:''}
       <div class="fn-echo-body">${e.body}</div>
@@ -1412,7 +1463,7 @@ window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;wind
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
 window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.loadCyclesPublic=loadCyclesPublic;window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
-window.setTheme=setTheme;window.clearTheme=clearTheme;
+window.setTheme=setTheme;window.clearTheme=clearTheme;window.toggleFnCard=toggleFnCard;
 </script>
 </body>
 </html>
