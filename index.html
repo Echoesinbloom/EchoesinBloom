@@ -67,7 +67,7 @@
     .gh-pip{width:5px;height:5px;border-radius:50%;background:var(--moss);flex-shrink:0}
 
     /* HERO */
-    .hero{padding:5.5rem 2rem 5rem;max-width:580px}
+    .hero{padding:3.5rem 2rem 3rem;max-width:580px}
     .hero-season{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:2.5rem;display:flex;align-items:center;gap:.75rem}
     .hero-line{width:18px;height:1px;background:var(--ink-faint);display:inline-block}
     .hero-title{font-family:var(--s);font-size:clamp(42px,7vw,60px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.04;margin-bottom:1.75rem;letter-spacing:-.01em}
@@ -111,34 +111,28 @@
     .fn{padding:2.5rem 0 0}
     .fn-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 2rem;margin-bottom:1.25rem}
     .fn-wander{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);background:none;border:none;cursor:pointer}
-    .fn-grid-wrap{padding:0 2rem;display:flex;flex-direction:column;gap:0}
-    .fn-card{border-bottom:1px solid var(--rule);padding:1.75rem 0;cursor:pointer}
-    .fn-card:first-of-type{border-top:1px solid var(--rule)}
-    /* Featured first card — larger */
-    .fn-card:first-of-type .fn-card-title{font-size:clamp(28px,4vw,38px);line-height:1.15;margin-bottom:.6rem}
-    .fn-card:first-of-type .fn-card-excerpt{-webkit-line-clamp:3;font-size:15px}
-    /* Every third card gets a left accent */
-    .fn-card:nth-child(3n) .fn-card-title{color:var(--monarch)}
-    .fn-card:nth-child(3n):hover .fn-card-title{color:var(--amber)}
-    /* Photo cards — show thumbnail inline */
-    .fn-card-thumb{width:72px;height:72px;object-fit:cover;float:right;margin:0 0 .5rem .85rem;flex-shrink:0}
-    .fn-card-meta{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem}
+    .fn-grid-wrap{padding:0 2rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:2px}
+    .fn-card{background:white;padding:1.5rem;cursor:pointer;border:1px solid var(--rule-m);transition:border-color .2s}
+    .fn-card:hover{border-color:rgba(200,112,48,.4)}
+    .fn-card-thumb{width:100%;height:130px;object-fit:cover;margin-bottom:.75rem;display:block}
+    .fn-card-meta{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
     .fn-card-moon{color:var(--fog-dim)}
-    .fn-card-title{font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink);line-height:1.25;margin-bottom:.4rem;transition:color .2s}
+    .fn-card-title{font-family:var(--s);font-size:20px;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:.45rem;transition:color .2s}
     .fn-card:hover .fn-card-title{color:var(--amber)}
-    .fn-card-excerpt{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);line-height:1.65;margin-bottom:.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .fn-card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;clear:both}
-    .fn-card-threads{display:flex;gap:.4rem;flex-wrap:wrap}
-    .fn-card-thread{font-family:var(--s);font-size:11px;font-style:italic;color:var(--ink-faint);cursor:pointer;transition:color .2s}
+    .fn-card-excerpt{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.6;margin-bottom:.7rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .fn-card-footer{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+    .fn-card-threads{display:flex;gap:.3rem;flex-wrap:wrap}
+    .fn-card-thread{font-family:var(--s);font-size:10px;font-style:italic;color:var(--ink-faint);cursor:pointer;transition:color .2s}
     .fn-card-thread:hover{color:var(--amber)}
     .fn-card-thread::before{content:'#'}
-    .fn-card-read{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:500;flex-shrink:0}
+    .fn-card-read{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500;flex-shrink:0}
     /* Expanded state */
-    .fn-card-body{display:none;padding-top:.85rem;clear:both}
+    .fn-card-body{display:none;padding-top:.85rem;border-top:1px solid var(--rule);margin-top:.85rem}
     .fn-card-body.open{display:block}
-    .fn-card-img{width:100%;max-height:320px;object-fit:cover;margin-bottom:.85rem}
-    .fn-card-full{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.85;margin-bottom:.85rem}
+    .fn-card-img{width:100%;max-height:280px;object-fit:cover;margin-bottom:.75rem}
+    .fn-card-full{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.85;margin-bottom:.85rem}
     .fn-echoes-wrap{margin-top:.85rem}
+    @media(max-width:600px){.fn-grid-wrap{grid-template-columns:1fr}}
     /* Worth Noticing block */
     .wn-block{background:var(--deep);padding:3.5rem 2rem;border-top:1px solid rgba(200,112,48,.12)}
     .wn-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.85rem}
@@ -473,7 +467,7 @@
   <p class="hero-body">A place for curious people learning to pay attention.</p>
 </div>
 
-<div style="padding:2rem 2rem 3rem;max-width:580px;border-bottom:1px solid var(--rule)">
+<div style="padding:0 2rem 2.5rem;max-width:580px;border-bottom:1px solid var(--rule)">
   <p style="font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:1rem">Echoes in Bloom is a living exploration of attention, participation, and becoming. Through observations, stories, conversations, and experiences, I document what I'm noticing — and explore what happens when we engage more fully with ourselves, our communities, and the world around us.</p>
   <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.7">Part field journal. Part greenhouse. Part living inquiry.</p>
 </div>
@@ -557,7 +551,7 @@
 <div class="about" style="grid-template-columns:1fr;max-width:620px">
   <div>
     <div class="a-name">A Living Inquiry</div>
-    <div class="a-body" id="a-body">For a long time I thought what I was studying was healing. What I eventually discovered was that I was becoming interested in something much bigger: how we reconnect with life once we begin to feel safe enough to engage with it.<br><br>I pay attention to patterns. I notice what repeats. I'm fascinated by the relationship between attention and meaning, people and place, intuition and understanding, and the way community shapes what becomes possible.<br><br>Over time, this project has expanded beyond healing and into <strong>aliveness, wonder, participation, and connection.</strong> Not only how we relate to ourselves, but how we relate to one another, to our environments, and to the communities that help us become who we are.<br><br><strong>Why Echoes exists</strong><br><br>Echoes in Bloom began as a personal practice of paying attention. Over time, it became something larger — a place to document observations, explore questions, share experiences, and highlight the people, places, and ideas helping us participate more fully in life.<br><br>I don't have answers. I'm interested in what becomes visible when we slow down enough to notice, and brave enough to engage with what we find. Echoes is simply a place to document that exploration.<br><br>I often describe this as experimenting with myself. You're welcome to wander alongside.</div>
+    <div class="a-body" id="a-body">For a long time, I thought what I was studying was healing. What I eventually discovered was that I was becoming interested in something much bigger: how we reconnect with life once we begin to feel safe enough to engage with it.<br><br>Echoes in Bloom began as a personal practice of paying attention. Over time, it became something larger — a place to document observations, explore questions, share experiences, and highlight the people, places, and ideas helping us participate more fully in life.<br><br>I'm fascinated by the relationship between attention and meaning, people and place, intuition and understanding, and the way community shapes what becomes possible.<br><br>Through field notes, conversations, experiences, and community stories, I document what I'm noticing and the meaning that emerges when I stay curious long enough to follow it.<br><br>I don't have answers. I'm interested in what becomes visible when we slow down enough to notice, and brave enough to participate in what we find.<br><br>I often describe this as experimenting with myself.<br><br>You're welcome to wander alongside.</div>
     <button class="a-edit-btn" onclick="editAbout()">Edit about me</button>
   </div>
 </div>
@@ -1447,6 +1441,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(oldSeason==='Spring\n2026'||oldSeason==='Spring 2026'){localStorage.removeItem('eib-season');}
   // Clear stale bloom entries — these now come from Supabase only
   localStorage.removeItem('eib-bloom-local');
+  localStorage.removeItem('eib-body'); // hero body now lives in HTML, not localStorage
   initMoon();
   loadDynamicContent();
   loadThemes();
