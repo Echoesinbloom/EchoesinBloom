@@ -112,25 +112,32 @@
     .fn-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 2rem;margin-bottom:.5rem}
     .fn-wander{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);background:none;border:none;cursor:pointer}
     .fn-grid-wrap{padding:0 2rem;display:flex;flex-direction:column;gap:0}
-    .fn-card{border-bottom:1px solid var(--rule);padding:1.5rem 0;cursor:pointer;transition:background .2s}
+    .fn-card{border-bottom:1px solid var(--rule);padding:1.75rem 0;cursor:pointer}
     .fn-card:first-of-type{border-top:1px solid var(--rule)}
+    /* Featured first card — larger */
+    .fn-card:first-of-type .fn-card-title{font-size:clamp(28px,4vw,38px);line-height:1.15;margin-bottom:.6rem}
+    .fn-card:first-of-type .fn-card-excerpt{-webkit-line-clamp:3;font-size:15px}
+    /* Every third card gets a left accent */
+    .fn-card:nth-child(3n) .fn-card-title{color:var(--monarch)}
+    .fn-card:nth-child(3n):hover .fn-card-title{color:var(--amber)}
+    /* Photo cards — show thumbnail inline */
+    .fn-card-thumb{width:72px;height:72px;object-fit:cover;float:right;margin:0 0 .5rem .85rem;flex-shrink:0}
     .fn-card-meta{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem}
     .fn-card-moon{color:var(--fog-dim)}
     .fn-card-title{font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink);line-height:1.25;margin-bottom:.4rem;transition:color .2s}
     .fn-card:hover .fn-card-title{color:var(--amber)}
     .fn-card-excerpt{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);line-height:1.65;margin-bottom:.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .fn-card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+    .fn-card-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;clear:both}
     .fn-card-threads{display:flex;gap:.4rem;flex-wrap:wrap}
     .fn-card-thread{font-family:var(--s);font-size:11px;font-style:italic;color:var(--ink-faint);cursor:pointer;transition:color .2s}
     .fn-card-thread:hover{color:var(--amber)}
     .fn-card-thread::before{content:'#'}
-    .fn-card-read{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:500;transition:opacity .2s;flex-shrink:0}
-    .fn-card:hover .fn-card-read{opacity:.7}
+    .fn-card-read{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:500;flex-shrink:0}
     /* Expanded state */
-    .fn-card-body{display:none;padding-top:.85rem}
+    .fn-card-body{display:none;padding-top:.85rem;clear:both}
     .fn-card-body.open{display:block}
-    .fn-card-img{width:100%;max-height:280px;object-fit:cover;margin-bottom:.85rem}
-    .fn-card-full{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:.85rem}
+    .fn-card-img{width:100%;max-height:320px;object-fit:cover;margin-bottom:.85rem}
+    .fn-card-full{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.85;margin-bottom:.85rem}
     .fn-echoes-wrap{margin-top:.85rem}
     /* Worth Noticing block */
     .wn-block{background:var(--deep);padding:3.5rem 2rem;border-top:1px solid rgba(200,112,48,.12)}
@@ -518,17 +525,6 @@
     <div class="sec-lbl">Field Notes &middot; What I witnessed</div>
   </div>
   <div class="fn-grid-wrap" id="fn-grid"></div>
-</section>
-    <div class="pg pg-2" style="margin-bottom:2px">
-      <div class="pc" style="min-height:320px"><div class="scene" style="min-height:320px;background:#a0b088"><img src="photos/field-note-1.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">The frog on the window &mdash; third morning in a row.</div><div class="pcc-meta">Autumn &middot; Wonder &middot; Synchronicity</div></div></div>
-      <div class="pc" style="min-height:320px"><div class="scene" style="min-height:320px;background:#98a4a8"><img src="photos/field-note-2.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">Dew on grass at 6am. I didn&rsquo;t have words for it.</div><div class="pcc-meta">Summer &middot; Awe &middot; Morning</div></div></div>
-    </div>
-    <div class="pg pg-3" style="margin-top:2px">
-      <div class="pc" style="min-height:220px"><div class="scene" style="min-height:220px;background:#b09840"><img src="photos/field-note-3.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">She said: so do you, Mama.</div><div class="pcc-meta">Motherhood &middot; Love</div></div></div>
-      <div class="pc" style="min-height:220px"><div class="scene" style="min-height:220px;background:#807090"><img src="photos/field-note-4.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">She landed on my arm while I was crying. Four minutes.</div><div class="pcc-meta">Summer &middot; Awe &middot; Butterfly</div></div></div>
-      <div class="pc" style="min-height:220px"><div class="scene" style="min-height:220px;background:#b0a898"><img src="photos/field-note-5.jpg" alt="" class="pc-img" onerror="this.style.display='none'"></div><div class="pcc"><div class="pcc-note">A feather on the porch. I kept it anyway.</div><div class="pcc-meta">Spring &middot; Grief &middot; Feather</div></div></div>
-    </div>
-  </div>
 </section>
 
 <section class="bloom" id="bloom">
@@ -980,6 +976,7 @@ async function filterByTheme(theme){
     if(data.length){
       fnGrid.innerHTML=data.map(e=>`
         <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
+          ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-thumb" alt="">` : ''}
           <div class="fn-card-meta">
             ${e.date_label||''}
             ${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
