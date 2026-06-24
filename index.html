@@ -108,8 +108,8 @@
     .cx-in{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.65;padding:.5rem 0 .75rem 1.5rem}
 
     /* FIELD NOTES */
-    .fn{padding:3.5rem 0 0}
-    .fn-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 2rem;margin-bottom:.5rem}
+    .fn{padding:2.5rem 0 0}
+    .fn-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 2rem;margin-bottom:1.25rem}
     .fn-wander{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);background:none;border:none;cursor:pointer}
     .fn-grid-wrap{padding:0 2rem;display:flex;flex-direction:column;gap:0}
     .fn-card{border-bottom:1px solid var(--rule);padding:1.75rem 0;cursor:pointer}
@@ -175,7 +175,7 @@
     .sym:hover{background:rgba(255,255,255,.07);border-color:var(--fog)}
 
     /* ABOUT */
-    .about{padding:4.5rem 2rem;border-top:1px solid var(--rule);display:grid;grid-template-columns:160px 1fr;gap:3.5rem;align-items:start;max-width:700px}
+    .about{padding:3.5rem 2rem;border-top:1px solid var(--rule);display:grid;grid-template-columns:160px 1fr;gap:3.5rem;align-items:start;max-width:700px}
     .a-img{width:160px;height:220px;object-fit:cover;background:var(--linen-s);border:1px solid var(--rule);display:block}
     .a-cap{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:.5rem}
     .a-name{font-family:var(--s);font-size:34px;font-weight:300;font-style:italic;color:var(--ink);margin-bottom:1.25rem;line-height:1.05}
@@ -312,17 +312,17 @@
 
 
     /* EMAIL SIGNUP */
-    .signup{padding:4.5rem 2rem;border-top:1px solid var(--rule);max-width:100%;width:100%}
-    .signup-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--ink-faint);margin-bottom:1.5rem}
-    .signup-heading{font-family:var(--s);font-size:32px;font-weight:300;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:.85rem}
-    .signup-body{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.75;margin-bottom:2rem}
+    .signup{padding:4rem 2rem;border-top:1px solid var(--rule);background:var(--deep);max-width:100%;width:100%}
+    .signup-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--amber);margin-bottom:1.5rem}
+    .signup-heading{font-family:var(--s);font-size:32px;font-weight:300;font-style:italic;color:var(--on-dark);line-height:1.1;margin-bottom:.85rem}
+    .signup-body{font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark-mid);line-height:1.75;margin-bottom:2rem}
     .signup-form{display:flex;gap:.5rem;align-items:stretch}
-    .signup-input{flex:1;border:none;border-bottom:1px solid var(--rule-m);padding:.6rem 0;font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);background:none;outline:none;transition:border-color .2s}
-    .signup-input:focus{border-bottom-color:var(--ink)}
-    .signup-input::placeholder{color:var(--ink-faint)}
-    .signup-btn{background:var(--ink);color:var(--linen);border:none;padding:.6rem 1.5rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:all .25s;white-space:nowrap}
-    .signup-btn:hover{background:var(--ink-mid)}
-    .signup-btn:disabled{background:var(--ink-faint);cursor:not-allowed}
+    .signup-input{flex:1;border:none;border-bottom:1px solid rgba(200,112,48,.3);padding:.6rem 0;font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark);background:none;outline:none;transition:border-color .2s}
+    .signup-input:focus{border-bottom-color:var(--amber)}
+    .signup-input::placeholder{color:var(--on-dark-soft)}
+    .signup-btn{background:var(--amber);color:white;border:none;padding:.6rem 1.5rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;font-weight:500;transition:all .25s;white-space:nowrap}
+    .signup-btn:hover{background:var(--amber-d)}
+    .signup-btn:disabled{background:var(--on-dark-soft);cursor:not-allowed}
     .signup-success{display:none;font-family:var(--s);font-size:16px;font-style:italic;color:var(--moss);line-height:1.65;padding:.5rem 0;border-bottom:1px solid rgba(106,138,88,.2)}
     .signup-err{display:none;font-family:var(--s);font-size:13px;font-style:italic;color:var(--amber);margin-top:.5rem}
 
