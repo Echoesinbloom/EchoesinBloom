@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Community — Echoes in Bloom</title>
+  <title>Worth Noticing — Echoes in Bloom</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
       --linen:#f2ece0;--linen-s:#e8e0d0;--parch:#ede4d4;
-      --deep:#16120c;--deep-mid:#1e1a10;
+      --deep:#16120c;
       --amber:#c87030;--amber-d:#a05020;--amber-w:#f5e8d8;
       --monarch:#8b5e3c;--moss:#6a8a58;--moss-d:#4a6038;
       --fog-dim:#607888;
@@ -20,125 +20,106 @@
       --ink:#1a1710;--ink-mid:#3a3428;--ink-soft:#6a6258;--ink-faint:#a89e90;
       --rule:rgba(40,30,15,.09);--rule-m:rgba(40,30,15,.14);
       --s:'Cormorant Garamond',serif;--n:'Jost',sans-serif;
+      --c-maker:#4a6038;--c-place:#506878;--c-experience:#c87030;--c-product:#7a5868;
     }
     body{font-family:var(--n);background:var(--linen);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
 
     /* NAV */
     .nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--rule);background:var(--linen);position:sticky;top:0;z-index:100}
-    .nav-home{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);text-decoration:none}
+    .nav-home{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);text-decoration:none;transition:color .2s}
     .nav-home:hover{color:var(--amber)}
     .nav-links{display:flex;align-items:center;gap:1.75rem}
-    .nav-link{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;transition:color .2s;font-weight:400}
-    .nav-link:hover,.nav-link.active{color:var(--ink)}
+    .nl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;transition:color .2s;font-weight:400}
+    .nl:hover,.nl.active{color:var(--ink)}
 
-    /* HERO */
-    .hero{background:var(--deep);padding:5rem 2rem 4rem;background-image:radial-gradient(ellipse at 70% 40%, rgba(200,112,48,.07) 0%, transparent 60%)}
-    .hero-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1.25rem}
-    .hero-title{font-family:var(--s);font-size:clamp(36px,6vw,56px);font-weight:300;font-style:italic;color:var(--on-dark);line-height:1.1;margin-bottom:1.25rem}
-    .hero-body{font-family:var(--s);font-size:18px;font-style:italic;color:var(--on-dark-mid);line-height:1.75;max-width:540px;margin-bottom:3rem}
-    .hero-tags{display:flex;gap:.5rem;flex-wrap:wrap}
-    .hero-tag{font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:.4rem .9rem;border:1px solid rgba(200,112,48,.25);color:var(--on-dark-soft);cursor:pointer;transition:all .2s;font-weight:400}
-    .hero-tag:hover,.hero-tag.active{border-color:var(--amber);color:var(--amber);background:rgba(200,112,48,.08)}
+    /* HERO — short, intimate */
+    .hero{padding:3.5rem 2rem 2.5rem;max-width:600px}
+    .hero-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1rem}
+    .hero-title{font-family:var(--s);font-size:clamp(32px,5vw,46px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:1rem}
+    .hero-body{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-soft);line-height:1.75}
 
-    /* FILTER BAR */
-    .filter-bar{padding:1.25rem 2rem;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:var(--linen)}
-    .filter-lbl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;white-space:nowrap}
-    .f-chips{display:flex;gap:.4rem;flex-wrap:wrap}
-    .f-chip{font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .75rem;border:1px solid var(--rule-m);cursor:pointer;color:var(--ink-soft);transition:all .18s;font-family:var(--n);font-weight:400;background:white}
+    /* BROWSE STRIP */
+    .browse-strip{padding:.85rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;background:white}
+    .browse-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-right:.25rem;white-space:nowrap}
+    .f-chip{font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .7rem;border:1px solid var(--rule-m);cursor:pointer;color:var(--ink-soft);transition:all .18s;font-family:var(--n);font-weight:400}
     .f-chip:hover{border-color:var(--ink-soft);color:var(--ink)}
     .f-chip.on{background:var(--ink);color:white;border-color:var(--ink)}
-    .f-chip[data-type="maker"].on{background:#4a6038;border-color:#4a6038}
-    .f-chip[data-type="place"].on{background:#506878;border-color:#506878}
-    .f-chip[data-type="experience"].on{background:#c87030;border-color:#c87030}
-    .f-chip[data-type="product"].on{background:#7a5868;border-color:#7a5868}
-    .filter-count{font-size:11px;color:var(--ink-faint);font-family:var(--s);font-style:italic;margin-left:auto}
+    .f-chip[data-t="maker"].on{background:var(--c-maker);border-color:var(--c-maker)}
+    .f-chip[data-t="place"].on{background:var(--c-place);border-color:var(--c-place)}
+    .f-chip[data-t="experience"].on{background:var(--c-experience);border-color:var(--c-experience)}
+    .f-chip[data-t="product"].on{background:var(--c-product);border-color:var(--c-product)}
 
-    /* INTRO BLOCKS */
-    .type-intros{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;border-bottom:1px solid var(--rule)}
-    .type-intro{padding:1.5rem;background:white;cursor:pointer;transition:background .2s;border-right:1px solid var(--rule)}
-    .type-intro:last-child{border-right:none}
-    .type-intro:hover{background:var(--linen)}
-    .type-intro.active{background:var(--parch)}
-    .ti-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:.4rem}
-    .ti-label.maker{color:#4a6038}.ti-label.place{color:#506878}.ti-label.experience{color:#c87030}.ti-label.product{color:#7a5868}
-    .ti-title{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink);margin-bottom:.3rem;line-height:1.2}
-    .ti-body{font-family:var(--s);font-size:12px;font-style:italic;color:var(--ink-faint);line-height:1.55}
-    @media(max-width:700px){.type-intros{grid-template-columns:1fr 1fr}}
+    /* CARD GRID — mirrors Field Notes */
+    .wn-grid{padding:2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    @media(max-width:860px){.wn-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:500px){.wn-grid{grid-template-columns:1fr;padding:1.25rem}}
 
-    /* GRID */
-    .community-grid{padding:2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-    @media(max-width:900px){.community-grid{grid-template-columns:1fr 1fr}}
-    @media(max-width:500px){.community-grid{grid-template-columns:1fr}}
+    /* OBSERVATION CARD */
+    .wn-card{background:white;border:1px solid var(--rule-m);cursor:pointer;transition:border-color .2s;overflow:hidden}
+    .wn-card:hover{border-color:rgba(200,112,48,.4)}
+    .wn-card-img{width:100%;height:180px;object-fit:cover;display:block}
+    .wn-card-body{padding:1.25rem}
+    .wn-card-type{font-size:9px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;margin-bottom:.35rem}
+    .wn-card-type.maker{color:var(--c-maker)}.wn-card-type.place{color:var(--c-place)}
+    .wn-card-type.experience{color:var(--c-experience)}.wn-card-type.product{color:var(--c-product)}
+    .wn-card-name{font-family:var(--s);font-size:20px;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:.25rem;transition:color .2s}
+    .wn-card:hover .wn-card-name{color:var(--amber)}
+    .wn-card-loc{font-size:10px;letter-spacing:.06em;color:var(--ink-faint);margin-bottom:.65rem}
+    .wn-card-wn{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:.75rem}
+    .wn-card-footer{display:flex;align-items:center;justify-content:space-between}
+    .wn-card-themes{display:flex;gap:.3rem;flex-wrap:wrap}
+    .wn-card-theme{font-family:var(--s);font-size:10px;font-style:italic;color:var(--ink-faint)}
+    .wn-card-theme::before{content:'#'}
+    .wn-card-read{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500}
 
-    /* PROFILE CARD */
-    .pc-wrap{position:relative}
-    .p-card{background:white;border:1px solid var(--rule-m);cursor:pointer;transition:border-color .2s;overflow:hidden}
-    .p-card:hover{border-color:rgba(200,112,48,.4)}
-    .p-card-img{width:100%;height:180px;object-fit:cover;display:block}
-    .p-card-img-empty{width:100%;height:100px;background:var(--parch);display:flex;align-items:center;justify-content:center}
-    .p-card-img-empty-lbl{font-family:var(--s);font-size:12px;font-style:italic;color:var(--ink-faint)}
-    .p-card-body{padding:1.25rem}
-    .p-card-type{font-size:9px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;margin-bottom:.4rem}
-    .p-card-type.maker{color:#4a6038}.p-card-type.place{color:#506878}.p-card-type.experience{color:#c87030}.p-card-type.product{color:#7a5868}
-    .p-card-name{font-family:var(--s);font-size:20px;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:.3rem;transition:color .2s}
-    .p-card:hover .p-card-name{color:var(--amber)}
-    .p-card-loc{font-size:10px;letter-spacing:.08em;color:var(--ink-faint);margin-bottom:.7rem}
-    .p-card-wn-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.3rem}
-    .p-card-wn{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.6;margin-bottom:.85rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-    .p-card-footer{display:flex;align-items:center;justify-content:space-between}
-    .p-card-themes{display:flex;gap:.3rem;flex-wrap:wrap}
-    .p-card-theme{font-family:var(--s);font-size:10px;font-style:italic;color:var(--ink-faint)}
-    .p-card-theme::before{content:'#'}
-    .p-card-read{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500}
+    /* LOAD MORE */
+    #load-more-wrap{text-align:center;padding:0 2rem 3rem;display:none}
+    #load-more-wrap button{background:none;border:1px solid var(--rule-m);padding:.65rem 2rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+    #load-more-wrap button:hover{border-color:var(--ink-soft);color:var(--ink)}
+
+    /* EMPTY */
+    .empty-state{padding:5rem 2rem;text-align:center;grid-column:1/-1}
+    .empty-title{font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink-faint);margin-bottom:.65rem}
+    .empty-body{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);line-height:1.7}
 
     /* PROFILE OVERLAY */
-    .profile-overlay{display:none;position:fixed;inset:0;background:rgba(26,23,16,.5);z-index:200;align-items:flex-start;justify-content:center;padding:2rem;overflow-y:auto}
-    .profile-overlay.open{display:flex}
-    .profile-modal{background:var(--linen);width:100%;max-width:680px;margin:auto;position:relative}
-    .pm-close{position:sticky;top:0;display:flex;justify-content:flex-end;padding:.75rem 1rem;background:var(--linen);z-index:1;border-bottom:1px solid var(--rule)}
-    .pm-close-btn{background:none;border:none;cursor:pointer;font-size:18px;color:var(--ink-faint);font-family:var(--n);letter-spacing:.1em;font-size:10px;text-transform:uppercase;display:flex;align-items:center;gap:.4rem}
-    .pm-close-btn:hover{color:var(--ink)}
-    .pm-hero-img{width:100%;height:320px;object-fit:cover;display:block}
-    .pm-body{padding:2rem}
-    .pm-type{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:.5rem}
-    .pm-type.maker{color:#4a6038}.pm-type.place{color:#506878}.pm-type.experience{color:#c87030}.pm-type.product{color:#7a5868}
-    .pm-name{font-family:var(--s);font-size:clamp(28px,5vw,40px);font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:.4rem}
-    .pm-loc{font-size:11px;letter-spacing:.1em;color:var(--ink-faint);margin-bottom:.35rem}
-    .pm-links{display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap}
-    .pm-link{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;transition:opacity .2s}
-    .pm-link:hover{opacity:.7}
-    .pm-section{margin-bottom:1.75rem}
-    .pm-section-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-bottom:.65rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
-    .pm-wn{font-family:var(--s);font-size:19px;font-style:italic;color:var(--amber);line-height:1.65;padding:.75rem 1rem;border-left:2px solid var(--amber)}
-    .pm-text{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.85}
-    .pm-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:.5rem}
-    .pm-gallery-img{width:100%;height:110px;object-fit:cover;display:block}
-    .pm-themes{display:flex;gap:.4rem;flex-wrap:wrap}
-    .pm-theme{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);padding:.25rem .65rem;border:1px solid var(--rule-m)}
-    .pm-theme::before{content:'#'}
-    .pm-fn-card{padding:.75rem 0;border-bottom:1px solid var(--rule);cursor:pointer}
-    .pm-fn-card:last-child{border-bottom:none}
-    .pm-fn-date{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.25rem}
-    .pm-fn-title{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);transition:color .2s}
-    .pm-fn-card:hover .pm-fn-title{color:var(--amber)}
-    .pm-fn-excerpt{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.55;margin-top:.2rem}
+    .overlay{display:none;position:fixed;inset:0;background:rgba(26,23,16,.5);z-index:200;overflow-y:auto;padding:2rem}
+    .overlay.open{display:block}
+    .overlay-inner{background:var(--linen);max-width:660px;margin:0 auto;position:relative}
+    .overlay-close{position:sticky;top:0;display:flex;justify-content:flex-end;padding:.6rem 1rem;background:var(--linen);z-index:1;border-bottom:1px solid var(--rule)}
+    .overlay-close-btn{background:none;border:none;cursor:pointer;font-family:var(--n);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);display:flex;align-items:center;gap:.35rem}
+    .overlay-close-btn:hover{color:var(--ink)}
+    .ol-hero{width:100%;height:300px;object-fit:cover;display:block}
+    .ol-body{padding:2rem}
+    .ol-type{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:.4rem}
+    .ol-type.maker{color:var(--c-maker)}.ol-type.place{color:var(--c-place)}.ol-type.experience{color:var(--c-experience)}.ol-type.product{color:var(--c-product)}
+    .ol-name{font-family:var(--s);font-size:clamp(28px,5vw,40px);font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:.35rem}
+    .ol-loc{font-size:11px;letter-spacing:.1em;color:var(--ink-faint);margin-bottom:.4rem}
+    .ol-links{display:flex;gap:1.25rem;margin-bottom:2rem;flex-wrap:wrap}
+    .ol-link{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500}
+    .ol-link:hover{opacity:.7}
+    .ol-sec{margin-bottom:1.75rem}
+    .ol-sec-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
+    .ol-wn{font-family:var(--s);font-size:19px;font-style:italic;color:var(--amber);line-height:1.65;padding:.7rem 1rem;border-left:2px solid var(--amber)}
+    .ol-text{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.85}
+    .ol-fn{padding:.7rem 0;border-bottom:1px solid var(--rule);cursor:pointer}
+    .ol-fn:last-child{border-bottom:none}
+    .ol-fn-date{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.2rem}
+    .ol-fn-title{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);transition:color .2s}
+    .ol-fn:hover .ol-fn-title{color:var(--amber)}
+    .ol-fn-excerpt{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.55;margin-top:.2rem}
+    .ol-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+    .ol-gallery img{width:100%;height:110px;object-fit:cover;display:block}
+    .ol-themes{display:flex;gap:.4rem;flex-wrap:wrap}
+    .ol-theme{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);padding:.22rem .6rem;border:1px solid var(--rule-m)}
+    .ol-theme::before{content:'#'}
 
-    /* EMPTY STATE */
-    .empty-state{padding:5rem 2rem;text-align:center}
-    .empty-state-title{font-family:var(--s);font-size:24px;font-style:italic;color:var(--ink-faint);margin-bottom:.75rem}
-    .empty-state-body{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);line-height:1.7}
+    .loading{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:3rem;text-align:center;grid-column:1/-1}
 
-    /* LOADING */
-    .loading{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:3rem 2rem;text-align:center}
-
-    /* FOOTER */
     .footer{padding:2rem;border-top:1px solid var(--rule);text-align:center}
     .footer-text{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint)}
     .footer-link{color:var(--ink-soft);text-decoration:none}
     .footer-link:hover{color:var(--amber)}
-
-    .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(12px);background:var(--deep);color:var(--on-dark);padding:.55rem 1.1rem;font-family:var(--s);font-size:14px;font-style:italic;opacity:0;transition:all .3s;pointer-events:none;z-index:500;white-space:nowrap;border-left:2px solid var(--amber)}
-    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   </style>
 </head>
 <body>
@@ -146,71 +127,52 @@
 <nav class="nav">
   <a href="/" class="nav-home">Echoes in Bloom</a>
   <div class="nav-links">
-    <a href="/" class="nav-link">Field Notes</a>
-    <a href="/community" class="nav-link active">Community</a>
-    <a href="/#spiral-up" class="nav-link">Spiral Up</a>
+    <a href="/" class="nl">Field Notes</a>
+    <a href="/community" class="nl active">Worth Noticing</a>
+    <a href="/#spiral-up" class="nl">Spiral Up</a>
+    <a href="https://greenhouse.echoesinbloom.co" class="nl">Greenhouse</a>
   </div>
 </nav>
 
+<!-- HERO — short, observation-first -->
 <div class="hero">
-  <div class="hero-label">Community</div>
-  <h1 class="hero-title">People, places, and things<br>participating with intention.</h1>
-  <p class="hero-body">Not a directory. A living collection of makers, spaces, experiences, and objects that invite you to engage more fully with life.</p>
-  <div class="hero-tags">
-    <div class="hero-tag active" data-type="all" onclick="setFilter('all',this)">All</div>
-    <div class="hero-tag" data-type="maker" onclick="setFilter('maker',this)">Makers</div>
-    <div class="hero-tag" data-type="place" onclick="setFilter('place',this)">Places</div>
-    <div class="hero-tag" data-type="experience" onclick="setFilter('experience',this)">Experiences</div>
-    <div class="hero-tag" data-type="product" onclick="setFilter('product',this)">Products</div>
-  </div>
+  <div class="hero-label">Worth Noticing</div>
+  <h1 class="hero-title">Sometimes what changes us<br>isn't a grand revelation.</h1>
+  <p class="hero-body">It's a place. A conversation. Someone quietly making beautiful things.<br><br>A growing collection of the people, places, experiences, and objects that invite fuller participation in life.</p>
 </div>
 
-<div class="type-intros" id="type-intros">
-  <div class="type-intro active" data-type="maker" onclick="setFilter('maker',null)">
-    <div class="ti-label maker">Makers</div>
-    <div class="ti-title">People creating with intention.</div>
-    <div class="ti-body">Artists, farmers, builders, bakers — anyone participating in the world by making something.</div>
-  </div>
-  <div class="type-intro" data-type="place" onclick="setFilter('place',null)">
-    <div class="ti-label place">Places</div>
-    <div class="ti-title">Spaces that cultivate belonging.</div>
-    <div class="ti-body">Shops, studios, farms, cafés, parks — anywhere that creates conditions for connection.</div>
-  </div>
-  <div class="type-intro" data-type="experience" onclick="setFilter('experience',null)">
-    <div class="ti-label experience">Experiences</div>
-    <div class="ti-title">Things worth showing up for.</div>
-    <div class="ti-body">Classes, workshops, events, markets, trails — participation you can actually do.</div>
-  </div>
-  <div class="type-intro" data-type="product" onclick="setFilter('product',null)">
-    <div class="ti-label product">Products</div>
-    <div class="ti-title">Objects that carry a story.</div>
-    <div class="ti-body">Things made with care that bring a slower, more intentional rhythm into everyday life.</div>
-  </div>
+<!-- BROWSE STRIP -->
+<div class="browse-strip">
+  <span class="browse-lbl">Browse</span>
+  <div class="f-chip on" data-t="all" onclick="setFilter('all',this)">All</div>
+  <div class="f-chip" data-t="maker" onclick="setFilter('maker',this)">Makers</div>
+  <div class="f-chip" data-t="place" onclick="setFilter('place',this)">Places</div>
+  <div class="f-chip" data-t="experience" onclick="setFilter('experience',this)">Experiences</div>
+  <div class="f-chip" data-t="product" onclick="setFilter('product',this)">Products</div>
 </div>
 
-<div class="community-grid" id="community-grid">
-  <div class="loading" style="grid-column:1/-1">Loading...</div>
+<!-- OBSERVATION GRID -->
+<div class="wn-grid" id="wn-grid">
+  <div class="loading">Loading...</div>
 </div>
 
-<div id="load-more-wrap" style="display:none;text-align:center;padding:0 2rem 3rem">
-  <button onclick="loadMore()" style="background:none;border:1px solid var(--rule-m);padding:.65rem 2rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft);transition:all .2s">Load more</button>
+<div id="load-more-wrap">
+  <button onclick="loadMore()">Load more</button>
 </div>
 
-<!-- PROFILE MODAL -->
-<div class="profile-overlay" id="profile-overlay" onclick="handleOverlayClick(event)">
-  <div class="profile-modal" id="profile-modal">
-    <div class="pm-close">
-      <button class="pm-close-btn" onclick="closeProfile()">&#x00D7; Close</button>
+<!-- PROFILE OVERLAY -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="overlay-inner" id="overlay-inner">
+    <div class="overlay-close">
+      <button class="overlay-close-btn" onclick="closeProfile()">&#x00D7; Close</button>
     </div>
     <div id="profile-content"></div>
   </div>
 </div>
 
 <footer class="footer">
-  <p class="footer-text">Part of <a href="/" class="footer-link">Echoes in Bloom</a> &mdash; Let&rsquo;s meander.</p>
+  <p class="footer-text"><a href="/" class="footer-link">Echoes in Bloom</a> &mdash; Let&rsquo;s meander.</p>
 </footer>
-
-<div class="toast" id="toast"></div>
 
 <script>
 const SB_URL='https://polewlvnwokvvoajsdfy.supabase.co';
@@ -221,197 +183,116 @@ const db=createClient(SB_URL,SB_KEY);
 let activeFilter='all';
 let offset=0;
 const PAGE=12;
-let allProfiles=[];
-let relatedEntries={};
+let profiles=[];
 
 async function init(){
   await loadProfiles();
 }
 
 async function loadProfiles(){
-  const grid=document.getElementById('community-grid');
-  grid.innerHTML='<div class="loading" style="grid-column:1/-1">Loading...</div>';
+  const grid=document.getElementById('wn-grid');
+  grid.innerHTML='<div class="loading">Loading...</div>';
+  offset=0;
 
   let q=db.from('community_profiles').select('*').eq('public',true).order('created_at',{ascending:false}).limit(PAGE);
-  if(activeFilter!=='all') q=q.eq('type',activeFilter);
+  if(activeFilter!=='all')q=q.eq('type',activeFilter);
 
-  const{data,error}=await q;
-  if(error||!data){
-    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-title">Nothing here yet.</div><div class="empty-state-body">Community profiles are on their way.</div></div>';
+  const{data}=await q;
+  profiles=data||[];
+
+  if(!profiles.length){
+    const label=activeFilter==='all'?'observations':'observations in this category';
+    grid.innerHTML=`<div class="empty-state"><div class="empty-title">Nothing here yet.</div><div class="empty-body">This collection is just beginning. Check back soon.</div></div>`;
+    document.getElementById('load-more-wrap').style.display='none';
     return;
   }
 
-  allProfiles=data;
-  offset=data.length;
-
-  if(!data.length){
-    const typeLabel=activeFilter==='all'?'community profiles':`${activeFilter}s`;
-    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-title">No ${typeLabel} yet.</div><div class="empty-state-body">Check back soon — this collection is growing.</div></div>`;
-    return;
-  }
-
-  grid.innerHTML=data.map(p=>profileCard(p)).join('');
-  document.getElementById('load-more-wrap').style.display=data.length===PAGE?'block':'none';
-
-  // Highlight matching type intro
-  document.querySelectorAll('.type-intro').forEach(el=>{
-    el.classList.toggle('active', activeFilter==='all'||el.dataset.type===activeFilter);
-  });
+  grid.innerHTML=profiles.map(p=>buildCard(p)).join('');
+  offset=profiles.length;
+  document.getElementById('load-more-wrap').style.display=profiles.length===PAGE?'block':'none';
 }
 
 async function loadMore(){
   const btn=document.querySelector('#load-more-wrap button');
   if(btn)btn.textContent='Loading...';
-
   let q=db.from('community_profiles').select('*').eq('public',true).order('created_at',{ascending:false}).range(offset,offset+PAGE-1);
-  if(activeFilter!=='all') q=q.eq('type',activeFilter);
-
+  if(activeFilter!=='all')q=q.eq('type',activeFilter);
   const{data}=await q;
   if(!data||!data.length){document.getElementById('load-more-wrap').style.display='none';return;}
-  allProfiles=[...allProfiles,...data];
+  profiles=[...profiles,...data];
   offset+=data.length;
-  document.getElementById('community-grid').innerHTML+=data.map(p=>profileCard(p)).join('');
+  document.getElementById('wn-grid').innerHTML+=data.map(p=>buildCard(p)).join('');
   if(data.length<PAGE)document.getElementById('load-more-wrap').style.display='none';
   else if(btn)btn.textContent='Load more';
 }
 
-function setFilter(type, btn){
+function setFilter(type,btn){
   activeFilter=type;
-  // Update hero tags
-  document.querySelectorAll('.hero-tag').forEach(t=>t.classList.toggle('active',t.dataset.type===type||(type==='all'&&t.dataset.type==='all')));
-  // Update type intros
-  document.querySelectorAll('.type-intro').forEach(el=>el.classList.toggle('active',type==='all'||el.dataset.type===type));
-  offset=0;
+  document.querySelectorAll('.f-chip').forEach(c=>c.classList.toggle('on',c.dataset.t===type));
   loadProfiles();
 }
 
-function typeColor(type){
-  return{maker:'#4a6038',place:'#506878',experience:'#c87030',product:'#7a5868'}[type]||'var(--ink-faint)';
-}
-
-function profileCard(p){
-  return`<div class="pc-wrap">
-    <div class="p-card" onclick="openProfile('${p.id}')">
-      ${p.featured_image
-        ?`<img src="${p.featured_image}" class="p-card-img" alt="${p.name}">`
-        :`<div class="p-card-img-empty"><span class="p-card-img-empty-lbl">${p.name}</span></div>`}
-      <div class="p-card-body">
-        <div class="p-card-type ${p.type}">${p.type}</div>
-        <div class="p-card-name">${p.name}</div>
-        ${p.location?`<div class="p-card-loc">${p.location}</div>`:''}
-        ${p.worth_noticing?`
-          <div class="p-card-wn-lbl">Worth Noticing</div>
-          <div class="p-card-wn">${p.worth_noticing}</div>
-        `:''}
-        <div class="p-card-footer">
-          <div class="p-card-themes">${(p.related_themes||[]).slice(0,3).map(t=>`<span class="p-card-theme">${t}</span>`).join('')}</div>
-          <span class="p-card-read">&rarr;</span>
-        </div>
+function buildCard(p){
+  return`<div class="wn-card" onclick="openProfile('${p.id}')">
+    ${p.featured_image?`<img src="${p.featured_image}" class="wn-card-img" alt="${p.name}">`:''}
+    <div class="wn-card-body">
+      <div class="wn-card-type ${p.type}">${p.type}</div>
+      <div class="wn-card-name">${p.name}</div>
+      ${p.location?`<div class="wn-card-loc">${p.location}</div>`:''}
+      ${p.worth_noticing?`<div class="wn-card-wn">${p.worth_noticing}</div>`:''}
+      <div class="wn-card-footer">
+        <div class="wn-card-themes">${(p.related_themes||[]).slice(0,3).map(t=>`<span class="wn-card-theme">${t}</span>`).join('')}</div>
+        <span class="wn-card-read">&rarr;</span>
       </div>
     </div>
   </div>`;
 }
 
 async function openProfile(id){
-  const p=allProfiles.find(x=>x.id===id);
+  const p=profiles.find(x=>x.id===id);
   if(!p)return;
 
-  const content=document.getElementById('profile-content');
-
-  // Load related field notes if any
   let relatedNotes=[];
   if(p.related_entry_ids&&p.related_entry_ids.length){
     const{data}=await db.from('entries').select('id,title,body,date_label,moon_phase').in('id',p.related_entry_ids).eq('public',true);
     relatedNotes=data||[];
   }
 
-  content.innerHTML=`
-    ${p.featured_image?`<img src="${p.featured_image}" class="pm-hero-img" alt="${p.name}">`:''}
-    <div class="pm-body">
-      <div class="pm-type ${p.type}">${p.type}</div>
-      <div class="pm-name">${p.name}</div>
-      ${p.location?`<div class="pm-loc">${p.location}</div>`:''}
-      <div class="pm-links">
-        ${p.website?`<a href="${p.website}" target="_blank" rel="noopener" class="pm-link">Website &rarr;</a>`:''}
-        ${p.instagram?`<a href="https://instagram.com/${p.instagram.replace('@','')}" target="_blank" rel="noopener" class="pm-link">Instagram &rarr;</a>`:''}
+  document.getElementById('profile-content').innerHTML=`
+    ${p.featured_image?`<img src="${p.featured_image}" class="ol-hero" alt="${p.name}">`:''}
+    <div class="ol-body">
+      <div class="ol-type ${p.type}">${p.type}</div>
+      <div class="ol-name">${p.name}</div>
+      ${p.location?`<div class="ol-loc">${p.location}</div>`:''}
+      <div class="ol-links">
+        ${p.website?`<a href="${p.website}" target="_blank" rel="noopener" class="ol-link">Website &rarr;</a>`:''}
+        ${p.instagram?`<a href="https://instagram.com/${p.instagram.replace('@','')}" target="_blank" rel="noopener" class="ol-link">Instagram &rarr;</a>`:''}
       </div>
-
-      ${p.worth_noticing?`
-        <div class="pm-section">
-          <div class="pm-section-lbl">Worth Noticing</div>
-          <div class="pm-wn">${p.worth_noticing}</div>
-        </div>
-      `:''}
-
-      ${p.short_description?`
-        <div class="pm-section">
-          <div class="pm-section-lbl">About</div>
-          <div class="pm-text">${p.short_description}</div>
-        </div>
-      `:''}
-
-      ${p.story?`
-        <div class="pm-section">
-          <div class="pm-section-lbl">Why it matters</div>
-          <div class="pm-text">${p.story}</div>
-        </div>
-      `:''}
-
-      ${p.field_note?`
-        <div class="pm-section">
-          <div class="pm-section-lbl">A field note from my visit</div>
-          <div class="pm-text" style="border-left:1px solid var(--rule-m);padding-left:.85rem">${p.field_note}</div>
-        </div>
-      `:''}
-
-      ${p.gallery_images&&p.gallery_images.length?`
-        <div class="pm-section">
-          <div class="pm-section-lbl">Gallery</div>
-          <div class="pm-gallery">${p.gallery_images.map(img=>`<img src="${img}" class="pm-gallery-img" alt="">`).join('')}</div>
-        </div>
-      `:''}
-
-      ${p.related_themes&&p.related_themes.length?`
-        <div class="pm-section">
-          <div class="pm-section-lbl">Themes</div>
-          <div class="pm-themes">${p.related_themes.map(t=>`<span class="pm-theme">${t}</span>`).join('')}</div>
-        </div>
-      `:''}
-
-      ${relatedNotes.length?`
-        <div class="pm-section">
-          <div class="pm-section-lbl">From the field notes</div>
-          ${relatedNotes.map(e=>`
-            <div class="pm-fn-card" onclick="window.open('/','_self')">
-              <div class="pm-fn-date">${e.date_label||''}${e.moon_phase?' &middot; '+e.moon_phase:''}</div>
-              <div class="pm-fn-title">${e.title}</div>
-              ${e.body?`<div class="pm-fn-excerpt">${e.body.substring(0,120)}...</div>`:''}
-            </div>`).join('')}
-        </div>
-      `:''}
+      ${p.worth_noticing?`<div class="ol-sec"><div class="ol-sec-lbl">Worth Noticing</div><div class="ol-wn">${p.worth_noticing}</div></div>`:''}
+      ${p.short_description?`<div class="ol-sec"><div class="ol-sec-lbl">About</div><div class="ol-text">${p.short_description}</div></div>`:''}
+      ${p.story?`<div class="ol-sec"><div class="ol-sec-lbl">Why it matters</div><div class="ol-text">${p.story}</div></div>`:''}
+      ${p.field_note?`<div class="ol-sec"><div class="ol-sec-lbl">A field note from my visit</div><div class="ol-text" style="border-left:1px solid var(--rule-m);padding-left:.85rem">${p.field_note}</div></div>`:''}
+      ${p.gallery_images&&p.gallery_images.length?`<div class="ol-sec"><div class="ol-sec-lbl">Gallery</div><div class="ol-gallery">${p.gallery_images.map(i=>`<img src="${i}" alt="">`).join('')}</div></div>`:''}
+      ${p.related_themes&&p.related_themes.length?`<div class="ol-sec"><div class="ol-sec-lbl">Themes</div><div class="ol-themes">${p.related_themes.map(t=>`<span class="ol-theme">${t}</span>`).join('')}</div></div>`:''}
+      ${relatedNotes.length?`<div class="ol-sec"><div class="ol-sec-lbl">From the field notes</div>${relatedNotes.map(e=>`<div class="ol-fn"><div class="ol-fn-date">${e.date_label||''}</div><div class="ol-fn-title">${e.title}</div>${e.body?`<div class="ol-fn-excerpt">${e.body.substring(0,120)}...</div>`:''}</div>`).join('')}</div>`:''}
     </div>`;
 
-  document.getElementById('profile-overlay').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
   document.body.style.overflow='hidden';
+  document.getElementById('overlay').scrollTop=0;
 }
 
 function closeProfile(){
-  document.getElementById('profile-overlay').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
   document.body.style.overflow='';
 }
 
 function handleOverlayClick(e){
-  if(e.target===document.getElementById('profile-overlay'))closeProfile();
-}
-
-function toast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2200);
+  if(e.target===document.getElementById('overlay'))closeProfile();
 }
 
 document.addEventListener('DOMContentLoaded',init);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProfile();});
-
 window.setFilter=setFilter;window.openProfile=openProfile;window.closeProfile=closeProfile;window.handleOverlayClick=handleOverlayClick;window.loadMore=loadMore;
 </script>
 </body>
