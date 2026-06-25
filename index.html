@@ -262,6 +262,9 @@
     .branch-bar{background:var(--deep);padding:.55rem 2rem;overflow-x:auto;scrollbar-width:none;display:flex;align-items:center;gap:.5rem;flex-wrap:nowrap;border-bottom:1px solid rgba(255,255,255,.05)}
     .branch-bar::-webkit-scrollbar{display:none}
     .branch-bar-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--on-dark-soft);font-weight:500;white-space:nowrap;flex-shrink:0;margin-right:.25rem}
+    .branch-desc{background:var(--deep);padding:0 2rem;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;border-bottom:1px solid rgba(255,255,255,0)}
+    .branch-desc.open{max-height:60px;padding:.65rem 2rem;border-bottom:1px solid rgba(255,255,255,.05)}
+    .branch-desc-text{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-mid);line-height:1.6}
     .branch-pill{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark-soft);padding:.2rem .75rem;border:1px solid rgba(255,255,255,.08);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;background:none;font-family:var(--n);font-weight:400}
     .branch-pill:hover{border-color:rgba(255,255,255,.2);color:var(--on-dark)}
     .branch-pill.active{background:rgba(255,255,255,.1);color:var(--on-dark);border-color:rgba(255,255,255,.2)}
@@ -447,13 +450,16 @@
 
 <div class="branch-bar" id="branch-bar">
   <div class="branch-bar-lbl">Browse by space</div>
-  <div class="branch-pill active" data-branch="all" onclick="setBranchFilter('all',this)">All</div>
-  <div class="branch-pill" data-branch="Field Notes" onclick="setBranchFilter('Field Notes',this)">Field Notes</div>
-  <div class="branch-pill" data-branch="Spiral Up" onclick="setBranchFilter('Spiral Up',this)">Spiral Up</div>
-  <div class="branch-pill" data-branch="Velvet Butterfly" onclick="setBranchFilter('Velvet Butterfly',this)">Velvet Butterfly</div>
-  <div class="branch-pill" data-branch="Marigold Wings" onclick="setBranchFilter('Marigold Wings',this)">Marigold Wings</div>
-  <div class="branch-pill" data-branch="Petals & Echoes" onclick="setBranchFilter('Petals & Echoes',this)">Petals & Echoes</div>
-  <div class="branch-pill" data-branch="Future Echoes" onclick="setBranchFilter('Future Echoes',this)">Future Echoes</div>
+  <div class="branch-pill active" data-branch="all" onclick="setBranchFilter('all',this)" onmouseenter="peekDesc('all')" onmouseleave="unpeekDesc()">All</div>
+  <div class="branch-pill" data-branch="Field Notes" onclick="setBranchFilter('Field Notes',this)" onmouseenter="peekDesc('Field Notes')" onmouseleave="unpeekDesc()">Field Notes</div>
+  <div class="branch-pill" data-branch="Spiral Up" onclick="setBranchFilter('Spiral Up',this)" onmouseenter="peekDesc('Spiral Up')" onmouseleave="unpeekDesc()">Spiral Up</div>
+  <div class="branch-pill" data-branch="Velvet Butterfly" onclick="setBranchFilter('Velvet Butterfly',this)" onmouseenter="peekDesc('Velvet Butterfly')" onmouseleave="unpeekDesc()">Velvet Butterfly</div>
+  <div class="branch-pill" data-branch="Marigold Wings" onclick="setBranchFilter('Marigold Wings',this)" onmouseenter="peekDesc('Marigold Wings')" onmouseleave="unpeekDesc()">Marigold Wings</div>
+  <div class="branch-pill" data-branch="Petals & Echoes" onclick="setBranchFilter('Petals & Echoes',this)" onmouseenter="peekDesc('Petals & Echoes')" onmouseleave="unpeekDesc()">Petals & Echoes</div>
+  <div class="branch-pill" data-branch="Future Echoes" onclick="setBranchFilter('Future Echoes',this)" onmouseenter="peekDesc('Future Echoes')" onmouseleave="unpeekDesc()">Future Echoes</div>
+</div>
+<div class="branch-desc" id="branch-desc">
+  <div class="branch-desc-text" id="branch-desc-text"></div>
 </div>
 
 <div class="theme-bar" id="theme-bar">
@@ -883,12 +889,41 @@ async function setWorthNoticing(el){
 }
 
 // BRANCH FILTER
-let activeBranch = 'all';
+let activeBranch='all';
+let lockedBranch=null;
 
-function setBranchFilter(branch, el){
-  activeBranch = branch;
+const BRANCH_DESC={
+  'Field Notes':'Observation before interpretation. Raw moments captured before meaning is assigned.',
+  'Spiral Up':'Healing, growth, and returning to old places with new eyes.',
+  'Velvet Butterfly':'Mystery, symbolism, dreams, and the unseen. Moments that feel larger than logic.',
+  'Marigold Wings':'Wonder, joy, play, curiosity, and aliveness. Where healing becomes living.',
+  'Petals & Echoes':'Poetry, beauty, language, and meaning. Words that capture the texture of being alive.',
+  'Future Echoes':'Vision, becoming, and possibility. Seeds not yet grown.',
+};
+
+function peekDesc(branch){
+  const desc=document.getElementById('branch-desc');
+  const text=document.getElementById('branch-desc-text');
+  if(BRANCH_DESC[branch]){text.textContent=BRANCH_DESC[branch];desc.classList.add('open');}
+  else if(!lockedBranch){desc.classList.remove('open');}
+}
+
+function unpeekDesc(){
+  const desc=document.getElementById('branch-desc');
+  const text=document.getElementById('branch-desc-text');
+  if(lockedBranch&&BRANCH_DESC[lockedBranch]){text.textContent=BRANCH_DESC[lockedBranch];desc.classList.add('open');}
+  else{desc.classList.remove('open');}
+}
+
+function setBranchFilter(branch,el){
+  activeBranch=branch;
+  lockedBranch=branch==='all'?null:branch;
   document.querySelectorAll('.branch-pill').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');
+  const desc=document.getElementById('branch-desc');
+  const text=document.getElementById('branch-desc-text');
+  if(lockedBranch){text.textContent=BRANCH_DESC[lockedBranch]||'';desc.classList.add('open');}
+  else{desc.classList.remove('open');}
   loadDynamicContent();
 }
 
@@ -1474,7 +1509,7 @@ window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
-window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.loadCyclesPublic=loadCyclesPublic;window.setBranchFilter=setBranchFilter;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
+window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.loadCyclesPublic=loadCyclesPublic;window.setBranchFilter=setBranchFilter;window.peekDesc=peekDesc;window.unpeekDesc=unpeekDesc;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
 window.setTheme=setTheme;window.clearTheme=clearTheme;window.toggleFnCard=toggleFnCard;window.closeFnCard=closeFnCard;window.loadMoreNotes=loadMoreNotes;
 </script>
 </body>
