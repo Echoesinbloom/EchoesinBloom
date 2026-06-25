@@ -194,22 +194,39 @@ async function loadProfiles(){
   grid.innerHTML='<div class="loading">Loading...</div>';
   offset=0;
 
-  let q=db.from('community_profiles').select('*').eq('public',true).order('created_at',{ascending:false}).limit(PAGE);
-  if(activeFilter!=='all')q=q.eq('type',activeFilter);
+  // Pull both community profiles and tagged field notes in parallel
+  const subjectMap={maker:'Maker',place:'Place',experience:'Experience',product:'Product'};
+  const entrySubject=activeFilter==='all'?null:subjectMap[activeFilter];
 
-  const{data}=await q;
-  profiles=data||[];
+  const[{data:profileData},{data:entryData}]=await Promise.all([
+    (() => {
+      let q=db.from('community_profiles').select('*').eq('public',true).order('created_at',{ascending:false}).limit(PAGE);
+      if(activeFilter!=='all')q=q.eq('type',activeFilter);
+      return q;
+    })(),
+    (() => {
+      let q=db.from('entries').select('id,title,body,subject,date_label,photo_url,threads,moon_phase').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(PAGE);
+      if(entrySubject)q=q.eq('subject',entrySubject);
+      return q;
+    })()
+  ]);
 
-  if(!profiles.length){
-    const label=activeFilter==='all'?'observations':'observations in this category';
+  // Merge — profiles first, then field notes
+  const combined=[
+    ...(profileData||[]).map(p=>({...p,_kind:'profile'})),
+    ...(entryData||[]).map(e=>({...e,_kind:'entry',type:e.subject?.toLowerCase()||'note'}))
+  ];
+  profiles=combined;
+
+  if(!combined.length){
     grid.innerHTML=`<div class="empty-state"><div class="empty-title">Nothing here yet.</div><div class="empty-body">This collection is just beginning. Check back soon.</div></div>`;
     document.getElementById('load-more-wrap').style.display='none';
     return;
   }
 
-  grid.innerHTML=profiles.map(p=>buildCard(p)).join('');
-  offset=profiles.length;
-  document.getElementById('load-more-wrap').style.display=profiles.length===PAGE?'block':'none';
+  grid.innerHTML=combined.map(p=>buildCard(p)).join('');
+  offset=combined.length;
+  document.getElementById('load-more-wrap').style.display=combined.length===PAGE?'block':'none';
 }
 
 async function loadMore(){
@@ -233,6 +250,27 @@ function setFilter(type,btn){
 }
 
 function buildCard(p){
+  if(p._kind==='entry'){
+    // Field Note card — visually lighter, clearly labeled
+    return`<div class="wn-card" onclick="openEntryCard('${p.id}')" style="border-left:2px solid rgba(200,112,48,.25)">
+      ${p.photo_url?`<img src="${p.photo_url}" class="wn-card-img" alt="${p.title}">`:''}
+      <div class="wn-card-body">
+        <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.35rem">
+          <span style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-weight:500">Field Note</span>
+          <span style="color:var(--rule-m)">&middot;</span>
+          <span class="wn-card-type ${p.subject?.toLowerCase()||''}" style="margin-bottom:0">${p.subject||''}</span>
+        </div>
+        <div class="wn-card-name">${p.title}</div>
+        ${p.date_label?`<div class="wn-card-loc">${p.date_label}${p.moon_phase?' &middot; '+p.moon_phase:''}</div>`:''}
+        ${p.body?`<div class="wn-card-wn">${p.body}</div>`:''}
+        <div class="wn-card-footer">
+          <div class="wn-card-themes">${(p.threads||[]).slice(0,3).map(t=>`<span class="wn-card-theme">${t}</span>`).join('')}</div>
+          <span class="wn-card-read">&rarr;</span>
+        </div>
+      </div>
+    </div>`;
+  }
+  // Community profile card
   return`<div class="wn-card" onclick="openProfile('${p.id}')">
     ${p.featured_image?`<img src="${p.featured_image}" class="wn-card-img" alt="${p.name}">`:''}
     <div class="wn-card-body">
@@ -246,6 +284,31 @@ function buildCard(p){
       </div>
     </div>
   </div>`;
+}
+
+function openEntryCard(id){
+  const e=profiles.find(x=>x.id===id&&x._kind==='entry');
+  if(!e)return;
+  document.getElementById('profile-content').innerHTML=`
+    ${e.photo_url?`<img src="${e.photo_url}" class="ol-hero" alt="${e.title}">`:''}
+    <div class="ol-body">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
+        <span class="ol-type" style="position:static;margin:0;color:var(--ink-faint)">Field Note</span>
+        <span style="color:var(--rule-m)">&middot;</span>
+        <span class="ol-type ${e.subject?.toLowerCase()||''}" style="position:static;margin:0">${e.subject||''}</span>
+      </div>
+      <div class="ol-name">${e.title}</div>
+      <div class="ol-loc">${e.date_label||''}${e.moon_phase?' &middot; '+e.moon_phase:''}</div>
+      <div class="ol-links"></div>
+      ${e.body?`<div class="ol-sec"><div class="ol-sec-lbl">The observation</div><div class="ol-text">${e.body}</div></div>`:''}
+      ${(e.threads||[]).length?`<div class="ol-sec"><div class="ol-sec-lbl">Themes</div><div class="ol-themes">${(e.threads||[]).map(t=>`<span class="ol-theme">${t}</span>`).join('')}</div></div>`:''}
+      <div class="ol-sec" style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--rule)">
+        <a href="/" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500">Read in Field Notes &rarr;</a>
+      </div>
+    </div>`;
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('overlay').scrollTop=0;
 }
 
 async function openProfile(id){
@@ -293,7 +356,7 @@ function handleOverlayClick(e){
 
 document.addEventListener('DOMContentLoaded',init);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProfile();});
-window.setFilter=setFilter;window.openProfile=openProfile;window.closeProfile=closeProfile;window.handleOverlayClick=handleOverlayClick;window.loadMore=loadMore;
+window.setFilter=setFilter;window.openProfile=openProfile;window.openEntryCard=openEntryCard;window.closeProfile=closeProfile;window.handleOverlayClick=handleOverlayClick;window.loadMore=loadMore;
 </script>
 </body>
 </html>
