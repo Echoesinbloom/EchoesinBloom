@@ -1459,7 +1459,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(oldSeason==='Spring\n2026'||oldSeason==='Spring 2026'){localStorage.removeItem('eib-season');}
   // Clear stale bloom entries — these now come from Supabase only
   localStorage.removeItem('eib-bloom-local');
-  localStorage.removeItem('eib-body'); // hero body now lives in HTML, not localStorage
+  localStorage.removeItem('eib-body');
+  localStorage.removeItem('eib-about'); // about text now lives in HTML
   initMoon();
   loadDynamicContent();
   loadThemes();
