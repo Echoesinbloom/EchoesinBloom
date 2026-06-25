@@ -521,8 +521,10 @@
   <div class="wn-label">Worth Noticing</div>
   <div class="wn-title">People, places, and experiences<br>that invite you in.</div>
   <div class="wn-body">Makers, gathering spaces, community builders, and everyday discoveries helping shape the world around me.</div>
-  <div class="wn-sub">A collection of outer participation — the places and people creating conditions for aliveness.</div>
-  <div class="wn-soon">Coming soon &mdash; <a href="/community" style="color:var(--amber);text-decoration:none;letter-spacing:.1em">explore what's here so far &rarr;</a></div>
+  <div id="wn-preview" style="margin:1.5rem 0 0"></div>
+  <div style="margin-top:1.5rem">
+    <a href="/community" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;border-bottom:1px solid rgba(200,112,48,.3);padding-bottom:.15rem;transition:border-color .2s">Explore Worth Noticing &rarr;</a>
+  </div>
 </div>
 
 <section class="fn" id="field-notes">
@@ -1502,6 +1504,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   loadThemes();
   checkWorthNoticing();
   loadCyclesPublic();
+  loadWNPreview();
 });
 
 window.toggleMoon=toggleMoon;window.toggleMoonDeep=toggleMoonDeep;
@@ -1509,6 +1512,42 @@ window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
+async function loadWNPreview(){
+  const el=document.getElementById('wn-preview');
+  if(!el)return;
+
+  // Pull recent public entries with a subject tag + recent community profiles
+  const[{data:entries},{data:profiles}]=await Promise.all([
+    db.from('entries').select('id,title,body,subject,date_label,photo_url,threads').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(3),
+    db.from('community_profiles').select('id,name,type,worth_noticing,featured_image,location').eq('public',true).order('created_at',{ascending:false}).limit(3)
+  ]);
+
+  const items=[...(profiles||[]).map(p=>({...p,_kind:'profile'})),...(entries||[]).map(e=>({...e,_kind:'entry'}))];
+  if(!items.length){el.style.display='none';return;}
+
+  // Show up to 3, profiles first
+  const preview=items.slice(0,3);
+
+  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(${Math.min(preview.length,3)},1fr);gap:1px;margin-top:.5rem">${
+    preview.map(item=>{
+      if(item._kind==='profile'){
+        return`<div style="background:rgba(255,255,255,.06);padding:1rem;cursor:pointer" onclick="window.location='/community'">
+          ${item.featured_image?`<img src="${item.featured_image}" style="width:100%;height:90px;object-fit:cover;display:block;margin-bottom:.65rem" alt="">` :''}
+          <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.25rem">${item.type}</div>
+          <div style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark);margin-bottom:.3rem;line-height:1.2">${item.name}</div>
+          ${item.worth_noticing?`<div style="font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-mid);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${item.worth_noticing}</div>`:''}
+        </div>`;
+      } else {
+        return`<div style="background:rgba(255,255,255,.04);padding:1rem;cursor:pointer;border-left:1px solid rgba(200,112,48,.15)" onclick="window.location='/community'">
+          <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-soft);font-weight:500;margin-bottom:.25rem">Field Note &middot; ${item.subject}</div>
+          <div style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark);margin-bottom:.3rem;line-height:1.2">${item.title}</div>
+          ${item.body?`<div style="font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-mid);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${item.body}</div>`:''}
+        </div>`;
+      }
+    }).join('')
+  }</div>`;
+}
+
 window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.loadCyclesPublic=loadCyclesPublic;window.setBranchFilter=setBranchFilter;window.peekDesc=peekDesc;window.unpeekDesc=unpeekDesc;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
 window.setTheme=setTheme;window.clearTheme=clearTheme;window.toggleFnCard=toggleFnCard;window.closeFnCard=closeFnCard;window.loadMoreNotes=loadMoreNotes;
 </script>
