@@ -50,14 +50,15 @@
     .f-chip[data-t="product"].on{background:var(--c-product);border-color:var(--c-product)}
 
     /* CARD GRID — mirrors Field Notes */
-    .wn-grid{padding:2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-    @media(max-width:860px){.wn-grid{grid-template-columns:1fr 1fr}}
+    .wn-grid{padding:2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    @media(max-width:1100px){.wn-grid{grid-template-columns:1fr 1fr 1fr}}
+    @media(max-width:700px){.wn-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:500px){.wn-grid{grid-template-columns:1fr;padding:1.25rem}}
 
     /* OBSERVATION CARD */
     .wn-card{background:white;border:1px solid var(--rule-m);cursor:pointer;transition:border-color .2s;overflow:hidden}
     .wn-card:hover{border-color:rgba(200,112,48,.4)}
-    .wn-card-img{width:100%;height:180px;object-fit:cover;display:block}
+    .wn-card-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
     .wn-card-body{padding:1.25rem}
     .wn-card-type{font-size:9px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;margin-bottom:.35rem}
     .wn-card-type.maker{color:var(--c-maker)}.wn-card-type.place{color:var(--c-place)}
@@ -138,7 +139,14 @@
 <div class="hero">
   <div class="hero-label">Worth Noticing</div>
   <h1 class="hero-title">Sometimes what changes us<br>isn't a grand revelation.</h1>
-  <p class="hero-body">It's a place. A conversation. Someone quietly making beautiful things.<br><br>A growing collection of the people, places, experiences, and objects that invite fuller participation in life.</p>
+  <p class="hero-body">It's a place. A conversation. Someone quietly making beautiful things.</p>
+</div>
+
+<!-- PHILOSOPHY BRIDGE -->
+<div style="padding:0 2rem 2.5rem;max-width:620px;border-bottom:1px solid var(--rule)">
+  <p style="font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:1.25rem">Worth Noticing isn't about finding the best things. It's about finding the people and places that help us become more alive.</p>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.75;margin-bottom:1.25rem">These are the people who put heart into what they make and believe in. The places that don't just exist, but invite you in. The experiences that don't just happen, but ask something of you. The makers, growers, builders, and gatherers who are already participating fully in life — and in doing so, make it easier for the rest of us to do the same.</p>
+  <p style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint);line-height:1.7;padding-top:1rem;border-top:1px solid var(--rule)">This isn't a review site or a directory. It's a living collection of encounters — gathered by someone who believes that paying attention to people who participate with intention is one of the quiet ways we learn to do the same.</p>
 </div>
 
 <!-- BROWSE STRIP -->
@@ -149,6 +157,11 @@
   <div class="f-chip" data-t="place" onclick="setFilter('place',this)">Places</div>
   <div class="f-chip" data-t="experience" onclick="setFilter('experience',this)">Experiences</div>
   <div class="f-chip" data-t="product" onclick="setFilter('product',this)">Products</div>
+</div>
+
+<!-- FILTER QUESTIONS -->
+<div id="filter-question" style="padding:.6rem 2rem;background:var(--linen-s);border-bottom:1px solid var(--rule);display:none">
+  <p style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint)"></p>
 </div>
 
 <!-- OBSERVATION GRID -->
@@ -243,9 +256,23 @@ async function loadMore(){
   else if(btn)btn.textContent='Load more';
 }
 
+const FILTER_QUESTIONS={
+  maker:'Who is creating something worth supporting?',
+  place:'Where does life feel a little different?',
+  experience:'What is worth participating in?',
+  product:'What was made with care?',
+};
+
 function setFilter(type,btn){
   activeFilter=type;
   document.querySelectorAll('.f-chip').forEach(c=>c.classList.toggle('on',c.dataset.t===type));
+  const fq=document.getElementById('filter-question');
+  if(FILTER_QUESTIONS[type]){
+    fq.style.display='block';
+    fq.querySelector('p').textContent=FILTER_QUESTIONS[type];
+  } else {
+    fq.style.display='none';
+  }
   loadProfiles();
 }
 
@@ -274,7 +301,7 @@ function buildCard(p){
   return`<div class="wn-card" onclick="openProfile('${p.id}')">
     ${p.featured_image?`<img src="${p.featured_image}" class="wn-card-img" alt="${p.name}">`:''}
     <div class="wn-card-body">
-      <div class="wn-card-type ${p.type}">${p.type}</div>
+      <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.35rem">${(p.types&&p.types.length?p.types:[p.type]).map(t=>`<span class="wn-card-type ${t}" style="margin-bottom:0">${t}</span>`).join('')}</div>
       <div class="wn-card-name">${p.name}</div>
       ${p.location?`<div class="wn-card-loc">${p.location}</div>`:''}
       ${p.worth_noticing?`<div class="wn-card-wn">${p.worth_noticing}</div>`:''}
@@ -329,7 +356,12 @@ async function openProfile(id){
       ${p.location?`<div class="ol-loc">${p.location}</div>`:''}
       <div class="ol-links">
         ${p.website?`<a href="${p.website}" target="_blank" rel="noopener" class="ol-link">Website &rarr;</a>`:''}
-        ${p.instagram?`<a href="https://instagram.com/${p.instagram.replace('@','')}" target="_blank" rel="noopener" class="ol-link">Instagram &rarr;</a>`:''}
+        ${p.instagram?`<a href="https://instagram.com/${p.instagram.replace('@','')}" target="_blank" rel="noopener" class="ol-link">Instagram</a>`:''}
+        ${p.facebook?`<a href="https://facebook.com/${p.facebook.replace('@','')}" target="_blank" rel="noopener" class="ol-link">Facebook</a>`:''}
+        ${p.twitter?`<a href="https://x.com/${p.twitter.replace('@','')}" target="_blank" rel="noopener" class="ol-link">X</a>`:''}
+        ${p.etsy?`<a href="https://etsy.com/shop/${p.etsy}" target="_blank" rel="noopener" class="ol-link">Etsy</a>`:''}
+        ${p.tiktok?`<a href="https://tiktok.com/${p.tiktok.replace('@','')}" target="_blank" rel="noopener" class="ol-link">TikTok</a>`:''}
+        ${p.pinterest?`<a href="https://pinterest.com/${p.pinterest.replace('@','')}" target="_blank" rel="noopener" class="ol-link">Pinterest</a>`:''}
       </div>
       ${p.worth_noticing?`<div class="ol-sec"><div class="ol-sec-lbl">Worth Noticing</div><div class="ol-wn">${p.worth_noticing}</div></div>`:''}
       ${p.short_description?`<div class="ol-sec"><div class="ol-sec-lbl">About</div><div class="ol-text">${p.short_description}</div></div>`:''}
