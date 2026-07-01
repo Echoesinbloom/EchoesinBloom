@@ -13,7 +13,7 @@
     :root{
       --linen:#f2ece0;--linen-s:#e8e0d0;--parch:#ede4d4;
       --deep:#16120c;
-      --amber:#c87030;--amber-d:#a05020;--amber-w:#f5e8d8;
+      --amber:#c87030;--amber-d:#a05020;
       --monarch:#8b5e3c;--moss:#6a8a58;--moss-d:#4a6038;
       --fog-dim:#607888;
       --on-dark:#f0e4cc;--on-dark-mid:#b09878;--on-dark-soft:#886858;
@@ -23,22 +23,15 @@
       --c-maker:#4a6038;--c-place:#506878;--c-experience:#c87030;--c-product:#7a5868;
     }
     body{font-family:var(--n);background:var(--linen);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
-
-    /* NAV */
     .nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--rule);background:var(--linen);position:sticky;top:0;z-index:100}
     .nav-home{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);text-decoration:none;transition:color .2s}
     .nav-home:hover{color:var(--amber)}
     .nav-links{display:flex;align-items:center;gap:1.75rem}
     .nl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;transition:color .2s;font-weight:400}
     .nl:hover,.nl.active{color:var(--ink)}
-
-    /* HERO — short, intimate */
     .hero{padding:3.5rem 2rem 2.5rem;max-width:600px}
     .hero-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1rem}
     .hero-title{font-family:var(--s);font-size:clamp(32px,5vw,46px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:1rem}
-    .hero-body{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-soft);line-height:1.75}
-
-    /* BROWSE STRIP */
     .browse-strip{padding:.85rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;background:white}
     .browse-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-right:.25rem;white-space:nowrap}
     .f-chip{font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .7rem;border:1px solid var(--rule-m);cursor:pointer;color:var(--ink-soft);transition:all .18s;font-family:var(--n);font-weight:400}
@@ -48,49 +41,40 @@
     .f-chip[data-t="place"].on{background:var(--c-place);border-color:var(--c-place)}
     .f-chip[data-t="experience"].on{background:var(--c-experience);border-color:var(--c-experience)}
     .f-chip[data-t="product"].on{background:var(--c-product);border-color:var(--c-product)}
-
-    /* CARD GRID — mirrors Field Notes */
-    /* OBSERVATION GRID — 4 across, portrait cards */
+    #filter-question{padding:.6rem 2rem;background:var(--linen-s);border-bottom:1px solid var(--rule);display:none}
     .wn-grid{padding:2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
     @media(max-width:1000px){.wn-grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:680px){.wn-grid{grid-template-columns:repeat(2,1fr);padding:1rem;gap:10px}}
     @media(max-width:400px){.wn-grid{grid-template-columns:1fr}}
-
-    /* OBSERVATION CARD — portrait, editorial */
     .wn-card{background:white;border:1px solid var(--rule-m);cursor:pointer;transition:border-color .2s;overflow:hidden}
     .wn-card:hover{border-color:rgba(200,112,48,.35)}
     .wn-card.featured{grid-column:span 2}
     .wn-card-img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
     .wn-card.featured .wn-card-img{aspect-ratio:8/5}
+    .wn-card-img-empty{width:100%;aspect-ratio:4/5;background:var(--parch);display:flex;align-items:center;justify-content:center}
+    .wn-card.featured .wn-card-img-empty{aspect-ratio:8/5}
     .wn-card-body{padding:1rem}
     .wn-card-name{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:.2rem;transition:color .2s}
-    .wn-card.featured .wn-card-name{font-size:22px}
     .wn-card:hover .wn-card-name{color:var(--amber)}
+    .wn-card.featured .wn-card-name{font-size:22px}
     .wn-card-type-row{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.3rem}
     .wn-card-type{font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
     .wn-card-type.maker{color:var(--c-maker)}.wn-card-type.place{color:var(--c-place)}
     .wn-card-type.experience{color:var(--c-experience)}.wn-card-type.product{color:var(--c-product)}
-    .wn-card-type.community.builder{color:#3a5a68}.wn-card-type.person{color:#6a5838}
     .wn-card-loc{font-size:10px;letter-spacing:.06em;color:var(--ink-faint);margin-bottom:.5rem}
     .wn-card-wn{font-family:var(--s);font-size:12px;font-style:italic;color:var(--ink-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
     .wn-card.featured .wn-card-wn{font-size:14px;-webkit-line-clamp:4}
-
-    /* LOAD MORE */
     #load-more-wrap{text-align:center;padding:0 2rem 3rem;display:none}
-    #load-more-wrap button{background:none;border:1px solid var(--rule-m);padding:.65rem 2rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft);transition:all .2s}
+    #load-more-wrap button{background:none;border:1px solid var(--rule-m);padding:.65rem 2rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft)}
     #load-more-wrap button:hover{border-color:var(--ink-soft);color:var(--ink)}
-
-    /* EMPTY */
     .empty-state{padding:5rem 2rem;text-align:center;grid-column:1/-1}
     .empty-title{font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink-faint);margin-bottom:.65rem}
     .empty-body{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);line-height:1.7}
-
-    /* PROFILE OVERLAY */
     .overlay{display:none;position:fixed;inset:0;background:rgba(26,23,16,.5);z-index:200;overflow-y:auto;padding:2rem}
     .overlay.open{display:block}
     .overlay-inner{background:var(--linen);max-width:660px;margin:0 auto;position:relative}
     .overlay-close{position:sticky;top:0;display:flex;justify-content:flex-end;padding:.6rem 1rem;background:var(--linen);z-index:1;border-bottom:1px solid var(--rule)}
-    .overlay-close-btn{background:none;border:none;cursor:pointer;font-family:var(--n);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);display:flex;align-items:center;gap:.35rem}
+    .overlay-close-btn{background:none;border:none;cursor:pointer;font-family:var(--n);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
     .overlay-close-btn:hover{color:var(--ink)}
     .ol-hero{width:100%;height:300px;object-fit:cover;display:block}
     .ol-body{padding:2rem}
@@ -98,9 +82,10 @@
     .ol-type.maker{color:var(--c-maker)}.ol-type.place{color:var(--c-place)}.ol-type.experience{color:var(--c-experience)}.ol-type.product{color:var(--c-product)}
     .ol-name{font-family:var(--s);font-size:clamp(28px,5vw,40px);font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:.35rem}
     .ol-loc{font-size:11px;letter-spacing:.1em;color:var(--ink-faint);margin-bottom:.4rem}
-    .ol-links{display:flex;gap:1.25rem;margin-bottom:2rem;flex-wrap:wrap}
+    .ol-links{display:flex;gap:1.25rem;margin-bottom:.5rem;flex-wrap:wrap}
     .ol-link{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500}
     .ol-link:hover{opacity:.7}
+    .ol-handles{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);margin-bottom:1.5rem;line-height:1.8}
     .ol-sec{margin-bottom:1.75rem}
     .ol-sec-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
     .ol-wn{font-family:var(--s);font-size:19px;font-style:italic;color:var(--amber);line-height:1.65;padding:.7rem 1rem;border-left:2px solid var(--amber)}
@@ -116,9 +101,7 @@
     .ol-themes{display:flex;gap:.4rem;flex-wrap:wrap}
     .ol-theme{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);padding:.22rem .6rem;border:1px solid var(--rule-m)}
     .ol-theme::before{content:'#'}
-
     .loading{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:3rem;text-align:center;grid-column:1/-1}
-
     .footer{padding:2rem;border-top:1px solid var(--rule);text-align:center}
     .footer-text{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint)}
     .footer-link{color:var(--ink-soft);text-decoration:none}
@@ -137,21 +120,17 @@
   </div>
 </nav>
 
-<!-- HERO — short, observation-first -->
 <div class="hero">
   <div class="hero-label">Worth Noticing</div>
   <h1 class="hero-title">Sometimes what changes us<br>isn't a grand revelation.</h1>
-  <p class="hero-body">It's a place. A conversation. Someone quietly making beautiful things.</p>
 </div>
 
-<!-- PHILOSOPHY BRIDGE -->
 <div style="padding:0 2rem 2.5rem;max-width:620px;border-bottom:1px solid var(--rule)">
   <p style="font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:1.25rem">Worth Noticing isn't about finding the best things. It's about finding the people and places that help us become more alive.</p>
   <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.75;margin-bottom:1.25rem">These are the people who put heart into what they make and believe in. The places that don't just exist, but invite you in. The experiences that don't just happen, but ask something of you. The makers, growers, builders, and gatherers who are already participating fully in life — and in doing so, make it easier for the rest of us to do the same.</p>
   <p style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint);line-height:1.7;padding-top:1rem;border-top:1px solid var(--rule)">This isn't a review site or a directory. It's a living collection of encounters — gathered by someone who believes that paying attention to people who participate with intention is one of the quiet ways we learn to do the same.</p>
 </div>
 
-<!-- BROWSE STRIP -->
 <div class="browse-strip">
   <span class="browse-lbl">Browse</span>
   <div class="f-chip on" data-t="all" onclick="setFilter('all',this)">All</div>
@@ -161,12 +140,10 @@
   <div class="f-chip" data-t="product" onclick="setFilter('product',this)">Products</div>
 </div>
 
-<!-- FILTER QUESTIONS -->
-<div id="filter-question" style="padding:.6rem 2rem;background:var(--linen-s);border-bottom:1px solid var(--rule);display:none">
+<div id="filter-question">
   <p style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint)"></p>
 </div>
 
-<!-- OBSERVATION GRID -->
 <div class="wn-grid" id="wn-grid">
   <div class="loading">Loading...</div>
 </div>
@@ -175,7 +152,6 @@
   <button onclick="loadMore()">Load more</button>
 </div>
 
-<!-- PROFILE OVERLAY -->
 <div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
   <div class="overlay-inner" id="overlay-inner">
     <div class="overlay-close">
@@ -199,6 +175,14 @@ let activeFilter='all';
 let offset=0;
 const PAGE=12;
 let profiles=[];
+let cardCount=0;
+
+const FILTER_QUESTIONS={
+  maker:'Who is creating something worth supporting?',
+  place:'Where does life feel a little different?',
+  experience:'What is worth participating in?',
+  product:'What was made with care?',
+};
 
 async function init(){
   await loadProfiles();
@@ -210,24 +194,22 @@ async function loadProfiles(){
   offset=0;
   cardCount=0;
 
-  // Pull both community profiles and tagged field notes in parallel
   const subjectMap={maker:'Maker',place:'Place',experience:'Experience',product:'Product'};
   const entrySubject=activeFilter==='all'?null:subjectMap[activeFilter];
 
   const[{data:profileData},{data:entryData}]=await Promise.all([
-    (() => {
+    (()=>{
       let q=db.from('community_profiles').select('*').eq('public',true).order('created_at',{ascending:false}).limit(PAGE);
       if(activeFilter!=='all')q=q.eq('type',activeFilter);
       return q;
     })(),
-    (() => {
+    (()=>{
       let q=db.from('entries').select('id,title,body,subject,date_label,photo_url,threads,moon_phase').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(PAGE);
       if(entrySubject)q=q.eq('subject',entrySubject);
       return q;
     })()
   ]);
 
-  // Merge — profiles first, then field notes
   const combined=[
     ...(profileData||[]).map(p=>({...p,_kind:'profile'})),
     ...(entryData||[]).map(e=>({...e,_kind:'entry',type:e.subject?.toLowerCase()||'note'}))
@@ -235,7 +217,7 @@ async function loadProfiles(){
   profiles=combined;
 
   if(!combined.length){
-    grid.innerHTML=`<div class="empty-state"><div class="empty-title">Nothing here yet.</div><div class="empty-body">This collection is just beginning. Check back soon.</div></div>`;
+    grid.innerHTML='<div class="empty-state"><div class="empty-title">Nothing here yet.</div><div class="empty-body">This collection is just beginning. Check back soon.</div></div>';
     document.getElementById('load-more-wrap').style.display='none';
     return;
   }
@@ -248,23 +230,18 @@ async function loadProfiles(){
 async function loadMore(){
   const btn=document.querySelector('#load-more-wrap button');
   if(btn)btn.textContent='Loading...';
-  let q=db.from('community_profiles').select('*').eq('public',true).order('created_at',{ascending:false}).range(offset,offset+PAGE-1);
-  if(activeFilter!=='all')q=q.eq('type',activeFilter);
-  const{data}=await q;
-  if(!data||!data.length){document.getElementById('load-more-wrap').style.display='none';return;}
-  profiles=[...profiles,...data];
-  offset+=data.length;
-  document.getElementById('wn-grid').innerHTML+=data.map(p=>buildCard(p)).join('');
-  if(data.length<PAGE)document.getElementById('load-more-wrap').style.display='none';
+  const[{data:profileData},{data:entryData}]=await Promise.all([
+    db.from('community_profiles').select('*').eq('public',true).order('created_at',{ascending:false}).range(offset,offset+PAGE-1),
+    db.from('entries').select('id,title,body,subject,date_label,photo_url,threads').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).range(offset,offset+PAGE-1)
+  ]);
+  const combined=[...(profileData||[]).map(p=>({...p,_kind:'profile'})),...(entryData||[]).map(e=>({...e,_kind:'entry'}))];
+  if(!combined.length){document.getElementById('load-more-wrap').style.display='none';return;}
+  profiles=[...profiles,...combined];
+  offset+=combined.length;
+  document.getElementById('wn-grid').innerHTML+=combined.map(p=>buildCard(p)).join('');
+  if(combined.length<PAGE)document.getElementById('load-more-wrap').style.display='none';
   else if(btn)btn.textContent='Load more';
 }
-
-const FILTER_QUESTIONS={
-  maker:'Who is creating something worth supporting?',
-  place:'Where does life feel a little different?',
-  experience:'What is worth participating in?',
-  product:'What was made with care?',
-};
 
 function setFilter(type,btn){
   activeFilter=type;
@@ -279,66 +256,30 @@ function setFilter(type,btn){
   loadProfiles();
 }
 
-let cardCount=0;
 function buildCard(p){
   cardCount++;
-  // Every 9th card is featured (spans 2 columns) — creates editorial rhythm
-  const isFeatured = cardCount % 9 === 1 && (p.featured_image || p.photo_url);
-  const cls = `wn-card${isFeatured?' featured':''}`;
+  const isFeatured=cardCount%9===1&&(p.featured_image||p.photo_url);
+  const cls='wn-card'+(isFeatured?' featured':'');
+  const isProfile=p._kind==='profile';
+  const img=isProfile?p.featured_image:p.photo_url;
+  const name=isProfile?p.name:p.title;
+  const types=isProfile?(p.types&&p.types.length?p.types:[p.type].filter(Boolean)):[p.subject].filter(Boolean);
+  const obs=isProfile?p.worth_noticing:p.body;
+  const loc=isProfile?p.location:p.date_label;
+  const onclick=isProfile?'openProfile(\''+p.id+'\')':'openEntryCard(\''+p.id+'\')';
+  const typeRow=types.map(t=>'<span class="wn-card-type '+t.toLowerCase().replace(/ /g,'-')+'">'+t+'</span>').join('<span style="color:var(--rule-m);margin:0 .15rem">&middot;</span>');
+  const imgHtml=img
+    ?'<img src="'+img+'" class="wn-card-img" alt="">'
+    :'<div class="wn-card-img-empty"><span style="font-family:var(--s);font-size:24px;font-style:italic;color:var(--ink-faint)">'+name.charAt(0)+'</span></div>';
 
-  if(p._kind==='entry'){
-    const img = p.photo_url;
-    return`<div class="${cls}" onclick="openEntryCard('${p.id}')" style="border-left:2px solid rgba(200,112,48,.2)">
-      ${img?`<img src="${img}" class="wn-card-img" alt="${p.title}">`:'<div class="wn-card-img" style="background:var(--parch);display:flex;align-items:center;justify-content:center"><span style='font-family:var(--s);font-size:11px;font-style:italic;color:var(--ink-faint)'>field note</span></div>'}
-      <div class="wn-card-body">
-        <div class="wn-card-name">${p.title}</div>
-        <div class="wn-card-type-row">
-          <span class="wn-card-type" style="color:var(--ink-faint)">Field Note</span>
-          ${p.subject?`<span style="color:var(--rule-m)">&middot;</span><span class="wn-card-type ${p.subject.toLowerCase()}">${p.subject}</span>`:''}
-        </div>
-        ${p.date_label?`<div class="wn-card-loc">${p.date_label}</div>`:''}
-        ${p.body?`<div class="wn-card-wn">${p.body}</div>`:''}
-      </div>
-    </div>`;
-  }
-
-  const types = p.types&&p.types.length ? p.types : [p.type].filter(Boolean);
-  return`<div class="${cls}" onclick="openProfile('${p.id}')">
-    ${p.featured_image
-      ?`<img src="${p.featured_image}" class="wn-card-img" alt="${p.name}">`
-      :`<div class="wn-card-img" style="background:var(--parch);display:flex;align-items:center;justify-content:center"><span style='font-family:var(--s);font-size:28px;font-style:italic;color:var(--ink-faint)'>${p.name.charAt(0)}</span></div>`}
-    <div class="wn-card-body">
-      <div class="wn-card-name">${p.name}</div>
-      <div class="wn-card-type-row">${types.map(t=>`<span class="wn-card-type ${t.toLowerCase().replace(' ','-')}">${t}</span>`).join('<span style="color:var(--rule-m);font-size:9px;margin:0 .1rem">&middot;</span>')}</div>
-      ${p.location?`<div class="wn-card-loc">${p.location}</div>`:''}
-      ${p.worth_noticing?`<div class="wn-card-wn">${p.worth_noticing}</div>`:''}
-    </div>
-  </div>`;
-}
-
-function openEntryCard(id){
-  const e=profiles.find(x=>x.id===id&&x._kind==='entry');
-  if(!e)return;
-  document.getElementById('profile-content').innerHTML=`
-    ${e.photo_url?`<img src="${e.photo_url}" class="ol-hero" alt="${e.title}">`:''}
-    <div class="ol-body">
-      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">
-        <span class="ol-type" style="position:static;margin:0;color:var(--ink-faint)">Field Note</span>
-        <span style="color:var(--rule-m)">&middot;</span>
-        <span class="ol-type ${e.subject?.toLowerCase()||''}" style="position:static;margin:0">${e.subject||''}</span>
-      </div>
-      <div class="ol-name">${e.title}</div>
-      <div class="ol-loc">${e.date_label||''}${e.moon_phase?' &middot; '+e.moon_phase:''}</div>
-      <div class="ol-links"></div>
-      ${e.body?`<div class="ol-sec"><div class="ol-sec-lbl">The observation</div><div class="ol-text">${e.body}</div></div>`:''}
-      ${(e.threads||[]).length?`<div class="ol-sec"><div class="ol-sec-lbl">Themes</div><div class="ol-themes">${(e.threads||[]).map(t=>`<span class="ol-theme">${t}</span>`).join('')}</div></div>`:''}
-      <div class="ol-sec" style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--rule)">
-        <a href="/" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500">Read in Field Notes &rarr;</a>
-      </div>
-    </div>`;
-  document.getElementById('overlay').classList.add('open');
-  document.body.style.overflow='hidden';
-  document.getElementById('overlay').scrollTop=0;
+  return '<div class="'+cls+'" onclick="'+onclick+'">'
+    +imgHtml
+    +'<div class="wn-card-body">'
+    +'<div class="wn-card-name">'+name+'</div>'
+    +'<div class="wn-card-type-row">'+typeRow+(isProfile?'':'<span style="color:var(--rule-m);margin:0 .15rem">&middot;</span><span class="wn-card-type" style="color:var(--ink-faint)">Field Note</span>')+'</div>'
+    +(loc?'<div class="wn-card-loc">'+loc+'</div>':'')
+    +(obs?'<div class="wn-card-wn">'+obs+'</div>':'')
+    +'</div></div>';
 }
 
 async function openProfile(id){
@@ -351,24 +292,57 @@ async function openProfile(id){
     relatedNotes=data||[];
   }
 
-  document.getElementById('profile-content').innerHTML=`
-    ${p.featured_image?`<img src="${p.featured_image}" class="ol-hero" alt="${p.name}">`:''}
-    <div class="ol-body">
-      <div class="ol-type ${p.type}">${p.type}</div>
-      <div class="ol-name">${p.name}</div>
-      ${p.location?`<div class="ol-loc">${p.location}</div>`:''}
-      <div class="ol-links">
-        ${p.website?`<a href="${p.website}" target="_blank" rel="noopener" class="ol-link">Website &rarr;</a>`:''}
-      </div>
-      ${[p.instagram?'@'+p.instagram.replace('@',''):'',p.facebook||'',p.twitter?'@'+p.twitter.replace('@',''):'',p.etsy?'etsy: '+p.etsy:'',p.tiktok?'@'+p.tiktok.replace('@',''):'',p.pinterest||''].filter(Boolean).length?`<div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);margin-bottom:1.5rem;line-height:1.8">${[p.instagram?'@'+p.instagram.replace('@',''):'',p.facebook||'',p.twitter?'@'+p.twitter.replace('@',''):'',p.etsy?'etsy: '+p.etsy:'',p.tiktok?'@'+p.tiktok.replace('@',''):'',p.pinterest||''].filter(Boolean).join(' &middot; ')}</div>`:''}`
-      ${p.worth_noticing?`<div class="ol-sec"><div class="ol-sec-lbl">Worth Noticing</div><div class="ol-wn">${p.worth_noticing}</div></div>`:''}
-      ${p.short_description?`<div class="ol-sec"><div class="ol-sec-lbl">About</div><div class="ol-text">${p.short_description}</div></div>`:''}
-      ${p.story?`<div class="ol-sec"><div class="ol-sec-lbl">Why it matters</div><div class="ol-text">${p.story}</div></div>`:''}
-      ${p.field_note?`<div class="ol-sec"><div class="ol-sec-lbl">A field note from my visit</div><div class="ol-text" style="border-left:1px solid var(--rule-m);padding-left:.85rem">${p.field_note}</div></div>`:''}
-      ${p.gallery_images&&p.gallery_images.length?`<div class="ol-sec"><div class="ol-sec-lbl">Gallery</div><div class="ol-gallery">${p.gallery_images.map(i=>`<img src="${i}" alt="">`).join('')}</div></div>`:''}
-      ${p.related_themes&&p.related_themes.length?`<div class="ol-sec"><div class="ol-sec-lbl">Themes</div><div class="ol-themes">${p.related_themes.map(t=>`<span class="ol-theme">${t}</span>`).join('')}</div></div>`:''}
-      ${relatedNotes.length?`<div class="ol-sec"><div class="ol-sec-lbl">From the field notes</div>${relatedNotes.map(e=>`<div class="ol-fn"><div class="ol-fn-date">${e.date_label||''}</div><div class="ol-fn-title">${e.title}</div>${e.body?`<div class="ol-fn-excerpt">${e.body.substring(0,120)}...</div>`:''}</div>`).join('')}</div>`:''}
-    </div>`;
+  const types=p.types&&p.types.length?p.types:[p.type].filter(Boolean);
+  const handles=[
+    p.instagram?'@'+p.instagram.replace('@',''):'',
+    p.facebook||'',
+    p.twitter?'@'+p.twitter.replace('@',''):'',
+    p.etsy?'etsy: '+p.etsy:'',
+    p.tiktok?'@'+p.tiktok.replace('@',''):'',
+    p.pinterest||''
+  ].filter(Boolean);
+
+  document.getElementById('profile-content').innerHTML=
+    (p.featured_image?'<img src="'+p.featured_image+'" class="ol-hero" alt="'+p.name+'">':'')
+    +'<div class="ol-body">'
+    +'<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.4rem">'+types.map(t=>'<span class="ol-type '+t.toLowerCase()+'">'+t+'</span>').join('')+'</div>'
+    +'<div class="ol-name">'+p.name+'</div>'
+    +(p.location?'<div class="ol-loc">'+p.location+'</div>':'')
+    +'<div class="ol-links">'+(p.website?'<a href="'+p.website+'" target="_blank" rel="noopener" class="ol-link">Website &rarr;</a>':'')+'</div>'
+    +(handles.length?'<div class="ol-handles">'+handles.join(' &middot; ')+'</div>':'')
+    +(p.worth_noticing?'<div class="ol-sec"><div class="ol-sec-lbl">Worth Noticing</div><div class="ol-wn">'+p.worth_noticing+'</div></div>':'')
+    +(p.short_description?'<div class="ol-sec"><div class="ol-sec-lbl">About</div><div class="ol-text">'+p.short_description+'</div></div>':'')
+    +(p.story?'<div class="ol-sec"><div class="ol-sec-lbl">Why it matters</div><div class="ol-text">'+p.story+'</div></div>':'')
+    +(p.field_note?'<div class="ol-sec"><div class="ol-sec-lbl">A field note from my visit</div><div class="ol-text" style="border-left:1px solid var(--rule-m);padding-left:.85rem">'+p.field_note+'</div></div>':'')
+    +(p.gallery_images&&p.gallery_images.length?'<div class="ol-sec"><div class="ol-sec-lbl">Gallery</div><div class="ol-gallery">'+p.gallery_images.map(i=>'<img src="'+i+'" alt="">').join('')+'</div></div>':'')
+    +(p.related_themes&&p.related_themes.length?'<div class="ol-sec"><div class="ol-sec-lbl">Themes</div><div class="ol-themes">'+p.related_themes.map(t=>'<span class="ol-theme">'+t+'</span>').join('')+'</div></div>':'')
+    +(relatedNotes.length?'<div class="ol-sec"><div class="ol-sec-lbl">From the field notes</div>'+relatedNotes.map(e=>'<div class="ol-fn"><div class="ol-fn-date">'+(e.date_label||'')+'</div><div class="ol-fn-title">'+e.title+'</div>'+(e.body?'<div class="ol-fn-excerpt">'+e.body.substring(0,120)+'...</div>':'')+'</div>').join('')+'</div>':'')
+    +'</div>';
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('overlay').scrollTop=0;
+}
+
+function openEntryCard(id){
+  const e=profiles.find(x=>x.id===id&&x._kind==='entry');
+  if(!e)return;
+
+  document.getElementById('profile-content').innerHTML=
+    (e.photo_url?'<img src="'+e.photo_url+'" class="ol-hero" alt="'+e.title+'">':'')
+    +'<div class="ol-body">'
+    +'<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">'
+    +'<span class="ol-type" style="color:var(--ink-faint)">Field Note</span>'
+    +(e.subject?'<span style="color:var(--rule-m)">&middot;</span><span class="ol-type '+e.subject.toLowerCase()+'">'+e.subject+'</span>':'')
+    +'</div>'
+    +'<div class="ol-name">'+e.title+'</div>'
+    +(e.date_label?'<div class="ol-loc">'+e.date_label+(e.moon_phase?' &middot; '+e.moon_phase:'')+'</div>':'')
+    +(e.body?'<div class="ol-sec"><div class="ol-sec-lbl">The observation</div><div class="ol-text">'+e.body+'</div></div>':'')
+    +((e.threads||[]).length?'<div class="ol-sec"><div class="ol-sec-lbl">Themes</div><div class="ol-themes">'+e.threads.map(t=>'<span class="ol-theme">'+t+'</span>').join('')+'</div></div>':'')
+    +'<div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--rule)">'
+    +'<a href="/" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500">Read in Field Notes &rarr;</a>'
+    +'</div>'
+    +'</div>';
 
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow='hidden';
