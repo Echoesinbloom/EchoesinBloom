@@ -524,9 +524,9 @@
   <div class="wn-label">Worth Noticing</div>
   <div class="wn-title">People, places, and experiences<br>that invite you in.</div>
   <div class="wn-body">Makers, gathering spaces, community builders, and everyday discoveries helping shape the world around me.</div>
-  <div id="wn-preview" style="margin:1.5rem 0 0"></div>
-  <div style="margin-top:1.5rem">
-    <a href="/community" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;border-bottom:1px solid rgba(200,112,48,.3);padding-bottom:.15rem;transition:border-color .2s">Explore Worth Noticing &rarr;</a>
+  <div id="wn-preview" style="margin:1.5rem -2rem 0;padding:0 2rem"></div>
+  <div style="margin-top:1.25rem">
+    <a href="/community" id="wn-load-more" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;border-bottom:1px solid rgba(200,112,48,.3);padding-bottom:.15rem">See all in Worth Noticing &rarr;</a>
   </div>
 </div>
 
@@ -1525,20 +1525,20 @@ async function loadWNPreview(){
   const items=[...(profiles||[]).map(p=>({...p,_kind:'profile'})),...(entries||[]).map(e=>({...e,_kind:'entry'}))];
   if(!items.length){el.style.display='none';return;}
   const preview=items.slice(0,4);
-  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(${Math.min(preview.length,4)},1fr);gap:12px;margin-top:1.25rem">${
-    preview.map(item=>{
+  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">${
+    preview.slice(0,3).map(item=>{
       const isProfile=item._kind==='profile';
       const img=isProfile?item.featured_image:item.photo_url;
       const typeLabel=isProfile?(item.types&&item.types.length?item.types[0]:item.type):('Field Note · '+item.subject);
       const name=isProfile?item.name:item.title;
       const obs=isProfile?item.worth_noticing:item.body;
-      return`<div class="wn-preview-card" onclick="window.location='/community'">
-        ${img?`<img src="${img}" class="wn-preview-card-img" alt="">`:
-          `<div class="wn-preview-card-empty"><span style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--on-dark-soft)">${name.charAt(0)}</span></div>`}
-        <div style="padding:.75rem">
-          <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.2rem">${typeLabel}</div>
-          <div style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark);line-height:1.2;margin-bottom:.2rem">${name}</div>
-          ${obs?`<div style="font-family:var(--s);font-size:11px;font-style:italic;color:var(--on-dark-mid);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${obs}</div>`:''}
+      return`<div style="background:rgba(255,255,255,.07);cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:border-color .2s" onclick="window.location='/community'" onmouseenter="this.style.borderColor='rgba(200,112,48,.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,.06)'">
+        ${img?`<img src="${img}" style="width:100%;height:160px;object-fit:cover;display:block" alt="">`:
+          `<div style="width:100%;height:160px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center"><span style="font-family:var(--s);font-size:20px;font-style:italic;color:var(--on-dark-soft)">${name.charAt(0)}</span></div>`}
+        <div style="padding:1rem">
+          <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.3rem">${typeLabel}</div>
+          <div style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark);line-height:1.2;margin-bottom:.35rem">${name}</div>
+          ${obs?`<div style="font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-mid);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${obs}</div>`:''}
         </div>
       </div>`;
     }).join('')
