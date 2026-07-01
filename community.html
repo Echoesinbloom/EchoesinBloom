@@ -359,13 +359,8 @@ async function openProfile(id){
       ${p.location?`<div class="ol-loc">${p.location}</div>`:''}
       <div class="ol-links">
         ${p.website?`<a href="${p.website}" target="_blank" rel="noopener" class="ol-link">Website &rarr;</a>`:''}
-        ${p.instagram?`<a href="https://instagram.com/${p.instagram.replace('@','')}" target="_blank" rel="noopener" class="ol-link">Instagram</a>`:''}
-        ${p.facebook?`<a href="https://facebook.com/${p.facebook.replace('@','')}" target="_blank" rel="noopener" class="ol-link">Facebook</a>`:''}
-        ${p.twitter?`<a href="https://x.com/${p.twitter.replace('@','')}" target="_blank" rel="noopener" class="ol-link">X</a>`:''}
-        ${p.etsy?`<a href="https://etsy.com/shop/${p.etsy}" target="_blank" rel="noopener" class="ol-link">Etsy</a>`:''}
-        ${p.tiktok?`<a href="https://tiktok.com/${p.tiktok.replace('@','')}" target="_blank" rel="noopener" class="ol-link">TikTok</a>`:''}
-        ${p.pinterest?`<a href="https://pinterest.com/${p.pinterest.replace('@','')}" target="_blank" rel="noopener" class="ol-link">Pinterest</a>`:''}
       </div>
+      ${[p.instagram?'@'+p.instagram.replace('@',''):'',p.facebook||'',p.twitter?'@'+p.twitter.replace('@',''):'',p.etsy?'etsy: '+p.etsy:'',p.tiktok?'@'+p.tiktok.replace('@',''):'',p.pinterest||''].filter(Boolean).length?`<div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);margin-bottom:1.5rem;line-height:1.8">${[p.instagram?'@'+p.instagram.replace('@',''):'',p.facebook||'',p.twitter?'@'+p.twitter.replace('@',''):'',p.etsy?'etsy: '+p.etsy:'',p.tiktok?'@'+p.tiktok.replace('@',''):'',p.pinterest||''].filter(Boolean).join(' &middot; ')}</div>`:''}`
       ${p.worth_noticing?`<div class="ol-sec"><div class="ol-sec-lbl">Worth Noticing</div><div class="ol-wn">${p.worth_noticing}</div></div>`:''}
       ${p.short_description?`<div class="ol-sec"><div class="ol-sec-lbl">About</div><div class="ol-text">${p.short_description}</div></div>`:''}
       ${p.story?`<div class="ol-sec"><div class="ol-sec-lbl">Why it matters</div><div class="ol-text">${p.story}</div></div>`:''}
