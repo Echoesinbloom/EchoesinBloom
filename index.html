@@ -526,7 +526,7 @@
   <div class="wn-body">Makers, gathering spaces, community builders, and everyday discoveries helping shape the world around me.</div>
   <div id="wn-preview" style="margin:1.5rem -2rem 0;padding:0 2rem"></div>
   <div style="margin-top:1.25rem">
-    <a href="/community" id="wn-load-more" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;border-bottom:1px solid rgba(200,112,48,.3);padding-bottom:.15rem">See all in Worth Noticing &rarr;</a>
+    <a href="/community" id="wn-load-more" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;border-bottom:1px solid rgba(200,112,48,.3);padding-bottom:.15rem">See all &rarr;</a>
   </div>
 </div>
 
@@ -1568,8 +1568,17 @@ async function loadWNPreview(){
       ${story?`<div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-mid);line-height:1.85;margin-bottom:1rem">${story}</div>`:''}
       ${fieldNote?`<div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--on-dark-soft);line-height:1.7;border-left:1px solid rgba(255,255,255,.1);padding-left:.85rem;margin-bottom:1rem">${fieldNote}</div>`:''}
       ${themes.length?`<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem">${themes.map(t=>`<span style="font-family:var(--s);font-size:11px;font-style:italic;color:var(--on-dark-soft);padding:.2rem .55rem;border:1px solid rgba(255,255,255,.1)">#${t}</span>`).join('')}</div>`:''}
-      ${isProfile&&p.website?`<a href="${p.website}" target="_blank" rel="noopener" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;margin-right:1.5rem">Website &rarr;</a>`:''}
-      ${isProfile&&p.instagram?`<a href="https://instagram.com/${p.instagram.replace('@','')}" target="_blank" rel="noopener" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500">Instagram &rarr;</a>`:''}
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:1rem;margin-bottom:.5rem">
+        ${isProfile&&p.website?`<a href="${p.website}" target="_blank" rel="noopener" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500">Website &rarr;</a>`:''}
+      </div>
+      ${isProfile?`<div style="font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-soft);line-height:1.8">${[
+        p.instagram?'@'+p.instagram.replace('@',''):'',
+        p.facebook?p.facebook:'',
+        p.twitter?'@'+p.twitter.replace('@',''):'',
+        p.etsy?'etsy: '+p.etsy:'',
+        p.tiktok?'@'+p.tiktok.replace('@',''):'',
+        p.pinterest?p.pinterest:'',
+      ].filter(Boolean).join(' &middot; ')}</div>`:''}`
       <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08)">
         <a href="/community" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-soft);text-decoration:none">See all in Worth Noticing &rarr;</a>
       </div>
