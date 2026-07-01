@@ -1519,11 +1519,33 @@ async function loadWNPreview(){
   const el=document.getElementById('wn-preview');
   if(!el)return;
   const[{data:entries},{data:profiles}]=await Promise.all([
-    db.from('entries').select('id,title,body,subject,photo_url').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(2),
-    db.from('community_profiles').select('id,name,type,types,worth_noticing,featured_image,location').eq('public',true).order('created_at',{ascending:false}).limit(2)
+    db.from('entries').select('id,title,body,subject,photo_url').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(4),
+    db.from('community_profiles').select('id,name,type,types,worth_noticing,featured_image,location').eq('public',true).order('created_at',{ascending:false}).limit(4)
   ]);
   const items=[...(profiles||[]).map(p=>({...p,_kind:'profile'})),...(entries||[]).map(e=>({...e,_kind:'entry'}))];
   if(!items.length){el.style.display='none';return;}
+  const preview=items.slice(0,4);
+  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:1.25rem">${
+    preview.map(p=>{
+      const isProfile=p._kind==='profile';
+      const img=isProfile?p.featured_image:p.photo_url;
+      const name=isProfile?p.name:p.title;
+      const type=isProfile?(p.types&&p.types.length?p.types[0]:p.type):('Field Note');
+      const obs=isProfile?p.worth_noticing:p.body;
+      const loc=isProfile?p.location:null;
+      return`<div style="background:rgba(255,255,255,.06);cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:border-color .2s" onclick="window.location='/community'" onmouseenter="this.style.borderColor='rgba(200,112,48,.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,.06)'">
+        ${img?`<img src="${img}" style="width:100%;height:140px;object-fit:cover;display:block" alt="">`:
+          `<div style="width:100%;height:100px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center"><span style="font-family:var(--s);font-size:22px;font-style:italic;color:var(--on-dark-soft)">${name.charAt(0)}</span></div>`}
+        <div style="padding:.85rem">
+          <div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark);line-height:1.2;margin-bottom:.2rem">${name}</div>
+          <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.3rem">${type}</div>
+          ${loc?`<div style="font-size:10px;color:var(--on-dark-soft);margin-bottom:.3rem">${loc}</div>`:''}
+          ${obs?`<div style="font-family:var(--s);font-size:11px;font-style:italic;color:var(--on-dark-mid);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${obs}</div>`:''}
+        </div>
+      </div>`;
+    }).join('')
+  }</div>`;
+}
 
   // Show featured card + up to 2 smaller ones
   const [hero,...rest]=items.slice(0,3);
@@ -1562,11 +1584,6 @@ async function loadWNPreview(){
     </div>`;
   };
 
-  el.innerHTML=`
-    <div style="margin-bottom:12px">${heroHTML(hero)}</div>
-    ${rest.length?`<div style="display:grid;grid-template-columns:repeat(${rest.length},1fr);gap:12px">${rest.map(p=>miniHTML(p)).join('')}</div>`:''}
-  `;
-}
 
 
 window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.loadCyclesPublic=loadCyclesPublic;window.setBranchFilter=setBranchFilter;window.peekDesc=peekDesc;window.unpeekDesc=unpeekDesc;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
