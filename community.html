@@ -49,10 +49,10 @@
     .wn-card{background:white;border:1px solid var(--rule-m);cursor:pointer;transition:border-color .2s;overflow:hidden}
     .wn-card:hover{border-color:rgba(200,112,48,.35)}
     .wn-card.featured{grid-column:span 2}
-    .wn-card-img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
-    .wn-card.featured .wn-card-img{aspect-ratio:8/5}
-    .wn-card-img-empty{width:100%;aspect-ratio:4/5;background:var(--parch);display:flex;align-items:center;justify-content:center}
-    .wn-card.featured .wn-card-img-empty{aspect-ratio:8/5}
+    .wn-card-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+    .wn-card.featured .wn-card-img{aspect-ratio:16/9}
+    .wn-card-img-empty{width:100%;aspect-ratio:3/4;background:var(--parch);display:flex;align-items:center;justify-content:center}
+    .wn-card.featured .wn-card-img-empty{aspect-ratio:16/9}
     .wn-card-body{padding:1rem}
     .wn-card-name{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:.2rem;transition:color .2s}
     .wn-card:hover .wn-card-name{color:var(--amber)}
@@ -258,7 +258,8 @@ function setFilter(type,btn){
 
 function buildCard(p){
   cardCount++;
-  const isFeatured=cardCount%9===1&&(p.featured_image||p.photo_url);
+  // Only feature if there are enough cards to fill the row alongside it
+  const isFeatured=cardCount===1&&profiles.length>=3&&(p.featured_image||p.photo_url);
   const cls='wn-card'+(isFeatured?' featured':'');
   const isProfile=p._kind==='profile';
   const img=isProfile?p.featured_image:p.photo_url;
