@@ -1519,30 +1519,53 @@ async function loadWNPreview(){
   const el=document.getElementById('wn-preview');
   if(!el)return;
   const[{data:entries},{data:profiles}]=await Promise.all([
-    db.from('entries').select('id,title,body,subject,date_label,photo_url').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(4),
-    db.from('community_profiles').select('id,name,type,types,worth_noticing,featured_image').eq('public',true).order('created_at',{ascending:false}).limit(4)
+    db.from('entries').select('id,title,body,subject,photo_url').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(2),
+    db.from('community_profiles').select('id,name,type,types,worth_noticing,featured_image,location').eq('public',true).order('created_at',{ascending:false}).limit(2)
   ]);
   const items=[...(profiles||[]).map(p=>({...p,_kind:'profile'})),...(entries||[]).map(e=>({...e,_kind:'entry'}))];
   if(!items.length){el.style.display='none';return;}
-  const preview=items.slice(0,4);
-  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">${
-    preview.slice(0,3).map(item=>{
-      const isProfile=item._kind==='profile';
-      const img=isProfile?item.featured_image:item.photo_url;
-      const typeLabel=isProfile?(item.types&&item.types.length?item.types[0]:item.type):('Field Note · '+item.subject);
-      const name=isProfile?item.name:item.title;
-      const obs=isProfile?item.worth_noticing:item.body;
-      return`<div style="background:rgba(255,255,255,.07);cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:border-color .2s" onclick="window.location='/community'" onmouseenter="this.style.borderColor='rgba(200,112,48,.4)'" onmouseleave="this.style.borderColor='rgba(255,255,255,.06)'">
-        ${img?`<img src="${img}" style="width:100%;height:160px;object-fit:cover;display:block" alt="">`:
-          `<div style="width:100%;height:160px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center"><span style="font-family:var(--s);font-size:20px;font-style:italic;color:var(--on-dark-soft)">${name.charAt(0)}</span></div>`}
-        <div style="padding:1rem">
-          <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.3rem">${typeLabel}</div>
-          <div style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark);line-height:1.2;margin-bottom:.35rem">${name}</div>
-          ${obs?`<div style="font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-mid);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${obs}</div>`:''}
-        </div>
-      </div>`;
-    }).join('')
-  }</div>`;
+
+  // Show featured card + up to 2 smaller ones
+  const [hero,...rest]=items.slice(0,3);
+  const isProfile=p=>p._kind==='profile';
+
+  const heroHTML=p=>{
+    const img=isProfile(p)?p.featured_image:p.photo_url;
+    const name=isProfile(p)?p.name:p.title;
+    const type=isProfile(p)?(p.types&&p.types.length?p.types[0]:p.type):('Field Note · '+p.subject);
+    const obs=isProfile(p)?p.worth_noticing:p.body;
+    const loc=isProfile(p)?p.location:null;
+    return`<div style="cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.08);transition:border-color .2s;display:grid;grid-template-columns:${img?'1fr 1fr':'1fr'};gap:0" onclick="window.location='/community'" onmouseenter="this.style.borderColor='rgba(200,112,48,.35)'" onmouseleave="this.style.borderColor='rgba(255,255,255,.08)'">
+      ${img?`<img src="${img}" style="width:100%;height:240px;object-fit:cover;display:block" alt="">` :''}
+      <div style="padding:1.5rem;display:flex;flex-direction:column;justify-content:center">
+        <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.4rem">${type}</div>
+        <div style="font-family:var(--s);font-size:24px;font-style:italic;color:var(--on-dark);line-height:1.15;margin-bottom:.5rem">${name}</div>
+        ${loc?`<div style="font-size:10px;color:var(--on-dark-soft);margin-bottom:.5rem">${loc}</div>`:''}
+        ${obs?`<div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--on-dark-mid);line-height:1.65;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden">${obs}</div>`:''}
+      </div>
+    </div>`;
+  };
+
+  const miniHTML=p=>{
+    const img=isProfile(p)?p.featured_image:p.photo_url;
+    const name=isProfile(p)?p.name:p.title;
+    const type=isProfile(p)?(p.types&&p.types.length?p.types[0]:p.type):('Field Note');
+    const obs=isProfile(p)?p.worth_noticing:p.body;
+    return`<div style="cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04)" onclick="window.location='/community'">
+      ${img?`<img src="${img}" style="width:100%;height:120px;object-fit:cover;display:block" alt="">`:
+        `<div style="width:100%;height:80px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center"><span style="font-family:var(--s);font-size:18px;font-style:italic;color:var(--on-dark-soft)">${name.charAt(0)}</span></div>`}
+      <div style="padding:.75rem">
+        <div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark);margin-bottom:.2rem;line-height:1.2">${name}</div>
+        <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.3rem">${type}</div>
+        ${obs?`<div style="font-family:var(--s);font-size:11px;font-style:italic;color:var(--on-dark-mid);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${obs}</div>`:''}
+      </div>
+    </div>`;
+  };
+
+  el.innerHTML=`
+    <div style="margin-bottom:12px">${heroHTML(hero)}</div>
+    ${rest.length?`<div style="display:grid;grid-template-columns:repeat(${rest.length},1fr);gap:12px">${rest.map(p=>miniHTML(p)).join('')}</div>`:''}
+  `;
 }
 
 
