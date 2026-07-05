@@ -353,6 +353,28 @@ async function openProfile(id){
     </div>`;
   }
 
+  // The Person Behind the Work
+  const personFields=[
+    {key:'person_draw',pub:'person_draw_public',label:'What drew them to this work'},
+    {key:'person_start',pub:'person_start_public',label:'How they started'},
+    {key:'person_keeps',pub:'person_keeps_public',label:'What keeps them creating'},
+    {key:'person_cares',pub:'person_cares_public',label:'What they care about'},
+    {key:'person_hopes',pub:'person_hopes_public',label:'What they hope people feel'},
+    {key:'person_moment',pub:'person_moment_public',label:'A moment they shared'},
+  ];
+  const publicPersonFields=personFields.filter(f=>p[f.pub]&&p[f.key]);
+
+  if(publicPersonFields.length){
+    html+=`<div class="ns"><div class="ns-label">The Person Behind the Work</div>`;
+    publicPersonFields.forEach(f=>{
+      html+=`<div style="margin-bottom:1.5rem">
+        <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-bottom:.4rem">${f.label}</div>
+        <div class="ns-body">${p[f.key]}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+
   // About Their Work
   const hasStory=
     (p.short_description&&p.introduction_public)||
