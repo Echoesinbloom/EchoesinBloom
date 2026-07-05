@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Worth Noticing — Echoes in Bloom</title>
+  <meta name="description" content="A living collection of makers, places, experiences, and products that invite fuller participation in life.">
+  <meta property="og:site_name" content="Echoes in Bloom">
+  <meta property="og:type" content="website">
+  <meta id="og-title" property="og:title" content="Worth Noticing — Echoes in Bloom">
+  <meta id="og-desc" property="og:description" content="A living collection of makers, places, and experiences worth noticing.">
+  <meta id="og-img" property="og:image" content="">
+  <meta id="og-url" property="og:url" content="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -14,7 +21,7 @@
       --linen:#f2ece0;--linen-s:#e8e0d0;--parch:#ede4d4;
       --deep:#16120c;
       --amber:#c87030;--amber-d:#a05020;
-      --monarch:#8b5e3c;--moss:#6a8a58;--moss-d:#4a6038;
+      --moss:#6a8a58;--moss-d:#4a6038;
       --fog-dim:#607888;
       --on-dark:#f0e4cc;--on-dark-mid:#b09878;--on-dark-soft:#886858;
       --ink:#1a1710;--ink-mid:#3a3428;--ink-soft:#6a6258;--ink-faint:#a89e90;
@@ -29,12 +36,17 @@
     .nav-links{display:flex;align-items:center;gap:1.75rem}
     .nl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;transition:color .2s;font-weight:400}
     .nl:hover,.nl.active{color:var(--ink)}
+    /* HERO */
     .hero{padding:3.5rem 2rem 2.5rem;max-width:600px}
     .hero-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1rem}
     .hero-title{font-family:var(--s);font-size:clamp(32px,5vw,46px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:1rem}
-    .browse-strip{padding:.85rem 2rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;background:white}
+    /* PHILOSOPHY */
+    .philosophy{padding:0 2rem 2.5rem;max-width:620px;border-bottom:1px solid var(--rule)}
+    .philosophy p{font-family:var(--s);font-style:italic;line-height:1.8}
+    /* BROWSE */
+    .browse-strip{padding:.85rem 2rem;border-bottom:1px solid var(--rule);display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;background:white}
     .browse-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-right:.25rem;white-space:nowrap}
-    .f-chip{font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .7rem;border:1px solid var(--rule-m);cursor:pointer;color:var(--ink-soft);transition:all .18s;font-family:var(--n);font-weight:400}
+    .f-chip{font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .7rem;border:1px solid var(--rule-m);cursor:pointer;color:var(--ink-soft);transition:all .18s;font-family:var(--n)}
     .f-chip:hover{border-color:var(--ink-soft);color:var(--ink)}
     .f-chip.on{background:var(--ink);color:white;border-color:var(--ink)}
     .f-chip[data-t="maker"].on{background:var(--c-maker);border-color:var(--c-maker)}
@@ -42,6 +54,7 @@
     .f-chip[data-t="experience"].on{background:var(--c-experience);border-color:var(--c-experience)}
     .f-chip[data-t="product"].on{background:var(--c-product);border-color:var(--c-product)}
     #filter-question{padding:.6rem 2rem;background:var(--linen-s);border-bottom:1px solid var(--rule);display:none}
+    /* CARD GRID */
     .wn-grid{padding:2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
     @media(max-width:1000px){.wn-grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:680px){.wn-grid{grid-template-columns:repeat(2,1fr);padding:1rem;gap:10px}}
@@ -52,7 +65,6 @@
     .wn-card-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
     .wn-card.featured .wn-card-img{aspect-ratio:16/9}
     .wn-card-img-empty{width:100%;aspect-ratio:3/4;background:var(--parch);display:flex;align-items:center;justify-content:center}
-    .wn-card.featured .wn-card-img-empty{aspect-ratio:16/9}
     .wn-card-body{padding:1rem}
     .wn-card-name{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:.2rem;transition:color .2s}
     .wn-card:hover .wn-card-name{color:var(--amber)}
@@ -63,49 +75,70 @@
     .wn-card-type.experience{color:var(--c-experience)}.wn-card-type.product{color:var(--c-product)}
     .wn-card-loc{font-size:10px;letter-spacing:.06em;color:var(--ink-faint);margin-bottom:.5rem}
     .wn-card-wn{font-family:var(--s);font-size:12px;font-style:italic;color:var(--ink-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-    .wn-card.featured .wn-card-wn{font-size:14px;-webkit-line-clamp:4}
     #load-more-wrap{text-align:center;padding:0 2rem 3rem;display:none}
     #load-more-wrap button{background:none;border:1px solid var(--rule-m);padding:.65rem 2rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft)}
-    #load-more-wrap button:hover{border-color:var(--ink-soft);color:var(--ink)}
-    .empty-state{padding:5rem 2rem;text-align:center;grid-column:1/-1}
-    .empty-title{font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink-faint);margin-bottom:.65rem}
-    .empty-body{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);line-height:1.7}
-    .overlay{display:none;position:fixed;inset:0;background:rgba(26,23,16,.5);z-index:200;overflow-y:auto;padding:2rem}
+    /* PROFILE OVERLAY */
+    .overlay{display:none;position:fixed;inset:0;z-index:200;overflow-y:auto;background:var(--linen)}
     .overlay.open{display:block}
-    .overlay-inner{background:var(--linen);max-width:660px;margin:0 auto;position:relative}
-    .overlay-close{position:sticky;top:0;display:flex;justify-content:flex-end;padding:.6rem 1rem;background:var(--linen);z-index:1;border-bottom:1px solid var(--rule)}
-    .overlay-close-btn{background:none;border:none;cursor:pointer;font-family:var(--n);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
-    .overlay-close-btn:hover{color:var(--ink)}
-    .ol-hero{width:100%;height:300px;object-fit:cover;display:block}
-    .ol-body{padding:2rem}
-    .ol-type{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:.4rem}
-    .ol-type.maker{color:var(--c-maker)}.ol-type.place{color:var(--c-place)}.ol-type.experience{color:var(--c-experience)}.ol-type.product{color:var(--c-product)}
-    .ol-name{font-family:var(--s);font-size:clamp(28px,5vw,40px);font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:.35rem}
-    .ol-loc{font-size:11px;letter-spacing:.1em;color:var(--ink-faint);margin-bottom:.4rem}
-    .ol-links{display:flex;gap:1.25rem;margin-bottom:.5rem;flex-wrap:wrap}
-    .ol-link{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500}
-    .ol-link:hover{opacity:.7}
-    .ol-handles{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);margin-bottom:1.5rem;line-height:1.8}
-    .ol-sec{margin-bottom:1.75rem}
-    .ol-sec-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-bottom:.6rem;padding-bottom:.35rem;border-bottom:1px solid var(--rule)}
-    .ol-wn{font-family:var(--s);font-size:19px;font-style:italic;color:var(--amber);line-height:1.65;padding:.7rem 1rem;border-left:2px solid var(--amber)}
-    .ol-text{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.85}
-    .ol-fn{padding:.7rem 0;border-bottom:1px solid var(--rule);cursor:pointer}
-    .ol-fn:last-child{border-bottom:none}
-    .ol-fn-date{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.2rem}
-    .ol-fn-title{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);transition:color .2s}
-    .ol-fn:hover .ol-fn-title{color:var(--amber)}
-    .ol-fn-excerpt{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.55;margin-top:.2rem}
-    .ol-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-    .ol-gallery img{width:100%;height:110px;object-fit:cover;display:block}
-    .ol-themes{display:flex;gap:.4rem;flex-wrap:wrap}
-    .ol-theme{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);padding:.22rem .6rem;border:1px solid var(--rule-m)}
-    .ol-theme::before{content:'#'}
+    .overlay-nav{position:sticky;top:0;background:var(--linen);border-bottom:1px solid var(--rule);padding:.85rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:10}
+    .overlay-back{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);cursor:pointer;background:none;border:none;display:flex;align-items:center;gap:.4rem;transition:color .2s}
+    .overlay-back:hover{color:var(--ink)}
+    .overlay-share{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);cursor:pointer;background:none;border:none;transition:opacity .2s}
+    .overlay-share:hover{opacity:.7}
+    /* PROFILE NARRATIVE */
+    .profile-hero{width:100%;max-height:500px;object-fit:cover;display:block}
+    .profile-body{max-width:680px;margin:0 auto;padding:3rem 2rem 5rem}
+    .profile-name{font-family:var(--s);font-size:clamp(36px,6vw,52px);font-style:italic;color:var(--ink);line-height:1.05;margin-bottom:.4rem}
+    .profile-meta{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:3rem}
+    .profile-meta span{color:var(--amber);margin-right:.5rem}
+    /* NARRATIVE SECTIONS */
+    .ns{margin-bottom:3rem}
+    .ns-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem}
+    .ns-label::after{content:'';flex:1;height:1px;background:rgba(200,112,48,.2)}
+    .ns-wn{font-family:var(--s);font-size:clamp(20px,3vw,26px);font-style:italic;color:var(--ink-mid);line-height:1.6;padding-left:1.5rem;border-left:2px solid var(--amber)}
+    .ns-body{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-mid);line-height:1.85;margin-bottom:1rem}
+    .ns-field-note{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.8;border-left:1px solid var(--rule-m);padding-left:1rem;margin:1.25rem 0}
+    .ns-field-note-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.4rem;display:block}
+    .ns-themes{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem}
+    .ns-theme{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);padding:.22rem .65rem;border:1px solid var(--rule-m);cursor:pointer;transition:border-color .2s}
+    .ns-theme:hover{border-color:var(--amber);color:var(--amber)}
+    .ns-theme::before{content:'#'}
+    .ns-what-noticing{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.7;margin-top:.75rem}
+    .ns-what-noticing-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:.3rem}
+    /* LINKS */
+    .ns-links{display:flex;flex-direction:column;gap:.65rem}
+    .ns-link{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;border:1px solid var(--rule-m);text-decoration:none;color:var(--ink);transition:border-color .2s}
+    .ns-link:hover{border-color:var(--amber)}
+    .ns-link-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:500}
+    .ns-link-value{font-family:var(--s);font-size:15px;font-style:italic;color:var(--amber)}
+    /* ECHOES */
+    .ns-echo{padding:.85rem 0;border-bottom:1px solid var(--rule)}
+    .ns-echo:last-child{border-bottom:none}
+    .ns-echo-date{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.3rem}
+    .ns-echo-note{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.7}
+    /* RELATED — wander section */
+    .wander-section{background:var(--deep);padding:4rem 2rem;margin-top:2rem}
+    .wander-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.5rem}
+    .wander-title{font-family:var(--s);font-size:clamp(22px,4vw,30px);font-style:italic;color:var(--on-dark);line-height:1.2;margin-bottom:2rem}
+    .wander-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media(max-width:600px){.wander-grid{grid-template-columns:1fr 1fr}}
+    .wander-card{background:rgba(255,255,255,.06);cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:border-color .2s}
+    .wander-card:hover{border-color:rgba(200,112,48,.4)}
+    .wander-card-img{width:100%;height:120px;object-fit:cover;display:block}
+    .wander-card-body{padding:.85rem}
+    .wander-card-kind{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.2rem}
+    .wander-card-name{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark);line-height:1.2;margin-bottom:.2rem}
+    .wander-card-obs{font-family:var(--s);font-size:11px;font-style:italic;color:var(--on-dark-mid);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .wander-cta{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-soft);margin-top:1.5rem;text-align:center}
+    .wander-cta a{color:var(--amber);text-decoration:none}
     .loading{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:3rem;text-align:center;grid-column:1/-1}
+    .empty-state{padding:5rem 2rem;text-align:center;grid-column:1/-1}
     .footer{padding:2rem;border-top:1px solid var(--rule);text-align:center}
     .footer-text{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint)}
     .footer-link{color:var(--ink-soft);text-decoration:none}
     .footer-link:hover{color:var(--amber)}
+    .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(12px);background:var(--deep);color:var(--on-dark);padding:.55rem 1.1rem;font-family:var(--s);font-size:14px;font-style:italic;opacity:0;transition:all .3s;pointer-events:none;z-index:500;white-space:nowrap;border-left:2px solid var(--amber)}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   </style>
 </head>
 <body>
@@ -125,10 +158,10 @@
   <h1 class="hero-title">Sometimes what changes us<br>isn't a grand revelation.</h1>
 </div>
 
-<div style="padding:0 2rem 2.5rem;max-width:620px;border-bottom:1px solid var(--rule)">
-  <p style="font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:1.25rem">Worth Noticing isn't about finding the best things. It's about finding the people and places that help us become more alive.</p>
-  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.75;margin-bottom:1.25rem">These are the people who put heart into what they make and believe in. The places that don't just exist, but invite you in. The experiences that don't just happen, but ask something of you. The makers, growers, builders, and gatherers who are already participating fully in life — and in doing so, make it easier for the rest of us to do the same.</p>
-  <p style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint);line-height:1.7;padding-top:1rem;border-top:1px solid var(--rule)">This isn't a review site or a directory. It's a living collection of encounters — gathered by someone who believes that paying attention to people who participate with intention is one of the quiet ways we learn to do the same.</p>
+<div class="philosophy">
+  <p style="font-size:17px;color:var(--ink-mid);margin-bottom:1.25rem">Worth Noticing isn't about finding the best things. It's about finding the people and places that help us become more alive.</p>
+  <p style="font-size:15px;color:var(--ink-soft);margin-bottom:1.25rem">These are the people who put heart into what they make and believe in. The places that don't just exist, but invite you in. The experiences that don't just happen, but ask something of you.</p>
+  <p style="font-size:14px;color:var(--ink-faint);padding-top:1rem;border-top:1px solid var(--rule)">This isn't a review site or a directory. It's a living collection of encounters — gathered by someone who believes that paying attention to people who participate with intention is one of the quiet ways we learn to do the same.</p>
 </div>
 
 <div class="browse-strip">
@@ -152,30 +185,37 @@
   <button onclick="loadMore()">Load more</button>
 </div>
 
-<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
-  <div class="overlay-inner" id="overlay-inner">
-    <div class="overlay-close">
-      <button class="overlay-close-btn" onclick="closeProfile()">&#x00D7; Close</button>
-    </div>
-    <div id="profile-content"></div>
+<!-- PROFILE OVERLAY — full narrative -->
+<div class="overlay" id="overlay">
+  <div class="overlay-nav">
+    <button class="overlay-back" onclick="closeProfile()">&#x2190; Worth Noticing</button>
+    <button class="overlay-share" onclick="shareProfile()" id="share-btn">Share this profile</button>
   </div>
+  <div id="profile-narrative"></div>
+  <div class="wander-section" id="wander-section" style="display:none">
+    <div style="max-width:680px;margin:0 auto">
+      <div class="wander-label">Continue exploring</div>
+      <div class="wander-title" id="wander-title">What else is worth noticing?</div>
+      <div class="wander-grid" id="wander-grid"></div>
+      <p class="wander-cta">More to discover in <a href="/community">Worth Noticing</a></p>
+    </div>
+  </div>
+  <footer class="footer" style="background:var(--deep);border-top:none">
+    <p class="footer-text" style="color:var(--on-dark-soft)"><a href="/" class="footer-link" style="color:var(--on-dark-mid)">Echoes in Bloom</a> &mdash; Let&rsquo;s meander.</p>
+  </footer>
 </div>
 
 <footer class="footer">
   <p class="footer-text"><a href="/" class="footer-link">Echoes in Bloom</a> &mdash; Let&rsquo;s meander.</p>
 </footer>
 
+<div class="toast" id="toast"></div>
+
 <script>
 const SB_URL='https://polewlvnwokvvoajsdfy.supabase.co';
 const SB_KEY='sb_publishable_MhZlQIwtcZyLf7iicRAYcQ_s7UY8tWs';
 const{createClient}=supabase;
 const db=createClient(SB_URL,SB_KEY);
-
-let activeFilter='all';
-let offset=0;
-const PAGE=12;
-let profiles=[];
-let cardCount=0;
 
 const FILTER_QUESTIONS={
   maker:'Who is creating something worth supporting?',
@@ -184,28 +224,36 @@ const FILTER_QUESTIONS={
   product:'What was made with care?',
 };
 
+let activeFilter='all';
+let offset=0;
+const PAGE=12;
+let profiles=[];
+let cardCount=0;
+let currentProfile=null;
+
+// ── GRID ──────────────────────────────────────────────────
+
 async function init(){
   await loadProfiles();
+  // Check for ?id= in URL and auto-open profile
+  const params=new URLSearchParams(window.location.search);
+  const id=params.get('id');
+  if(id)openProfile(id);
 }
 
 async function loadProfiles(){
   const grid=document.getElementById('wn-grid');
   grid.innerHTML='<div class="loading">Loading...</div>';
-  offset=0;
-  cardCount=0;
-
-  const subjectMap={maker:'Maker',place:'Place',experience:'Experience',product:'Product'};
-  const entrySubject=activeFilter==='all'?null:subjectMap[activeFilter];
+  offset=0;cardCount=0;
 
   const[{data:profileData},{data:entryData}]=await Promise.all([
     (()=>{
-      let q=db.from('community_profiles').select('*').eq('public',true).order('created_at',{ascending:false}).limit(PAGE);
+      let q=db.from('community_profiles').select('id,name,type,types,primary_type,worth_noticing,featured_image,location,related_themes,worth_noticing_public,photos_public').eq('visibility','public').order('created_at',{ascending:false}).limit(PAGE);
       if(activeFilter!=='all')q=q.eq('type',activeFilter);
       return q;
     })(),
     (()=>{
-      let q=db.from('entries').select('id,title,body,subject,date_label,photo_url,threads,moon_phase').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(PAGE);
-      if(entrySubject)q=q.eq('subject',entrySubject);
+      let q=db.from('entries').select('id,title,body,subject,date_label,photo_url,threads').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(4);
       return q;
     })()
   ]);
@@ -217,7 +265,7 @@ async function loadProfiles(){
   profiles=combined;
 
   if(!combined.length){
-    grid.innerHTML='<div class="empty-state"><div class="empty-title">Nothing here yet.</div><div class="empty-body">This collection is just beginning. Check back soon.</div></div>';
+    grid.innerHTML='<div class="empty-state"><p style="font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink-faint)">Nothing here yet.</p><p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);margin-top:.65rem">This collection is just beginning.</p></div>';
     document.getElementById('load-more-wrap').style.display='none';
     return;
   }
@@ -230,16 +278,14 @@ async function loadProfiles(){
 async function loadMore(){
   const btn=document.querySelector('#load-more-wrap button');
   if(btn)btn.textContent='Loading...';
-  const[{data:profileData},{data:entryData}]=await Promise.all([
-    db.from('community_profiles').select('*').eq('public',true).order('created_at',{ascending:false}).range(offset,offset+PAGE-1),
-    db.from('entries').select('id,title,body,subject,date_label,photo_url,threads').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).range(offset,offset+PAGE-1)
-  ]);
-  const combined=[...(profileData||[]).map(p=>({...p,_kind:'profile'})),...(entryData||[]).map(e=>({...e,_kind:'entry'}))];
-  if(!combined.length){document.getElementById('load-more-wrap').style.display='none';return;}
-  profiles=[...profiles,...combined];
-  offset+=combined.length;
-  document.getElementById('wn-grid').innerHTML+=combined.map(p=>buildCard(p)).join('');
-  if(combined.length<PAGE)document.getElementById('load-more-wrap').style.display='none';
+  let q=db.from('community_profiles').select('id,name,type,types,worth_noticing,featured_image,location,related_themes,worth_noticing_public,photos_public').eq('visibility','public').order('created_at',{ascending:false}).range(offset,offset+PAGE-1);
+  if(activeFilter!=='all')q=q.eq('type',activeFilter);
+  const{data}=await q;
+  if(!data||!data.length){document.getElementById('load-more-wrap').style.display='none';return;}
+  profiles=[...profiles,...data.map(p=>({...p,_kind:'profile'}))];
+  offset+=data.length;
+  document.getElementById('wn-grid').innerHTML+=data.map(p=>buildCard({...p,_kind:'profile'})).join('');
+  if(data.length<PAGE)document.getElementById('load-more-wrap').style.display='none';
   else if(btn)btn.textContent='Load more';
 }
 
@@ -247,121 +293,230 @@ function setFilter(type,btn){
   activeFilter=type;
   document.querySelectorAll('.f-chip').forEach(c=>c.classList.toggle('on',c.dataset.t===type));
   const fq=document.getElementById('filter-question');
-  if(FILTER_QUESTIONS[type]){
-    fq.style.display='block';
-    fq.querySelector('p').textContent=FILTER_QUESTIONS[type];
-  } else {
-    fq.style.display='none';
-  }
+  if(FILTER_QUESTIONS[type]){fq.style.display='block';fq.querySelector('p').textContent=FILTER_QUESTIONS[type];}
+  else{fq.style.display='none';}
   loadProfiles();
 }
 
 function buildCard(p){
   cardCount++;
-  // Only feature if there are enough cards to fill the row alongside it
   const isFeatured=cardCount===1&&profiles.length>=3&&(p.featured_image||p.photo_url);
   const cls='wn-card'+(isFeatured?' featured':'');
   const isProfile=p._kind==='profile';
-  const img=isProfile?p.featured_image:p.photo_url;
+  const img=isProfile?(p.photos_public?p.featured_image:null):p.photo_url;
   const name=isProfile?p.name:p.title;
   const types=isProfile?(p.types&&p.types.length?p.types:[p.type].filter(Boolean)):[p.subject].filter(Boolean);
-  const obs=isProfile?p.worth_noticing:p.body;
+  const obs=isProfile?(p.worth_noticing_public?p.worth_noticing:null):p.body;
   const loc=isProfile?p.location:p.date_label;
-  const onclick=isProfile?'openProfile(\''+p.id+'\')':'openEntryCard(\''+p.id+'\')';
-  const typeRow=types.map(t=>'<span class="wn-card-type '+t.toLowerCase().replace(/ /g,'-')+'">'+t+'</span>').join('<span style="color:var(--rule-m);margin:0 .15rem">&middot;</span>');
+  const onclick=isProfile?`openProfile('${p.id}')`:`openEntryCard('${p.id}')`;
+  const typeRow=types.map(t=>`<span class="wn-card-type ${t.toLowerCase().replace(/ /g,'-')}">${t}</span>`).join('<span style="color:var(--rule-m);margin:0 .15rem">&middot;</span>');
   const imgHtml=img
-    ?'<img src="'+img+'" class="wn-card-img" alt="">'
-    :'<div class="wn-card-img-empty"><span style="font-family:var(--s);font-size:24px;font-style:italic;color:var(--ink-faint)">'+name.charAt(0)+'</span></div>';
-
-  return '<div class="'+cls+'" onclick="'+onclick+'">'
-    +imgHtml
-    +'<div class="wn-card-body">'
-    +'<div class="wn-card-name">'+name+'</div>'
-    +'<div class="wn-card-type-row">'+typeRow+(isProfile?'':'<span style="color:var(--rule-m);margin:0 .15rem">&middot;</span><span class="wn-card-type" style="color:var(--ink-faint)">Field Note</span>')+'</div>'
-    +(loc?'<div class="wn-card-loc">'+loc+'</div>':'')
-    +(obs?'<div class="wn-card-wn">'+obs+'</div>':'')
-    +'</div></div>';
+    ?`<img src="${img}" class="wn-card-img" alt="">`
+    :`<div class="wn-card-img-empty"><span style="font-family:var(--s);font-size:24px;font-style:italic;color:var(--ink-faint)">${name.charAt(0)}</span></div>`;
+  return`<div class="${cls}" onclick="${onclick}">${imgHtml}<div class="wn-card-body"><div class="wn-card-name">${name}</div><div class="wn-card-type-row">${typeRow}${!isProfile?'<span style="color:var(--rule-m);margin:0 .15rem">&middot;</span><span class="wn-card-type" style="color:var(--ink-faint)">Field Note</span>':''}</div>${loc?`<div class="wn-card-loc">${loc}</div>`:''}${obs?`<div class="wn-card-wn">${obs}</div>`:''}</div></div>`;
 }
 
-async function openProfile(id){
-  const p=profiles.find(x=>x.id===id);
-  if(!p)return;
+// ── PROFILE NARRATIVE ─────────────────────────────────────
 
-  let relatedNotes=[];
-  if(p.related_entry_ids&&p.related_entry_ids.length){
-    const{data}=await db.from('entries').select('id,title,body,date_label,moon_phase').in('id',p.related_entry_ids).eq('public',true);
-    relatedNotes=data||[];
+async function openProfile(id){
+  const isPreview=new URLSearchParams(window.location.search).get('preview')==='1';
+  // Fetch full profile — allow preview of private profiles
+  let q=db.from('community_profiles').select('*').eq('id',id);
+  if(!isPreview)q=q.eq('visibility','public');
+  const{data:p,error}=await q.single();
+  if(error||!p){toast('Profile not found');return;}
+  currentProfile=p;
+
+  // Fetch public echoes
+  const{data:echoes}=await db.from('profile_echoes').select('*').eq('profile_id',id).eq('visibility','public').order('created_at',{ascending:true});
+
+  // Compose narrative HTML
+  let html='';
+
+  // Hero image
+  if(p.featured_image&&p.photos_public){
+    html+=`<img src="${p.featured_image}" class="profile-hero" alt="${p.name}">`;
   }
 
-  const types=p.types&&p.types.length?p.types:[p.type].filter(Boolean);
-  const handles=[
-    p.instagram?'@'+p.instagram.replace('@',''):'',
-    p.facebook||'',
-    p.twitter?'@'+p.twitter.replace('@',''):'',
-    p.etsy?'etsy: '+p.etsy:'',
-    p.tiktok?'@'+p.tiktok.replace('@',''):'',
-    p.pinterest||''
-  ].filter(Boolean);
+  html+=`<div class="profile-body">`;
 
-  document.getElementById('profile-content').innerHTML=
-    (p.featured_image?'<img src="'+p.featured_image+'" class="ol-hero" alt="'+p.name+'">':'')
-    +'<div class="ol-body">'
-    +'<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.4rem">'+types.map(t=>'<span class="ol-type '+t.toLowerCase()+'">'+t+'</span>').join('')+'</div>'
-    +'<div class="ol-name">'+p.name+'</div>'
-    +(p.location?'<div class="ol-loc">'+p.location+'</div>':'')
-    +'<div class="ol-links">'+(p.website?'<a href="'+p.website+'" target="_blank" rel="noopener" class="ol-link">Website &rarr;</a>':'')+'</div>'
-    +(handles.length?'<div class="ol-handles">'+handles.join(' &middot; ')+'</div>':'')
-    +(p.worth_noticing?'<div class="ol-sec"><div class="ol-sec-lbl">Worth Noticing</div><div class="ol-wn">'+p.worth_noticing+'</div></div>':'')
-    +(p.short_description?'<div class="ol-sec"><div class="ol-sec-lbl">About</div><div class="ol-text">'+p.short_description+'</div></div>':'')
-    +(p.story?'<div class="ol-sec"><div class="ol-sec-lbl">Why it matters</div><div class="ol-text">'+p.story+'</div></div>':'')
-    +(p.field_note?'<div class="ol-sec"><div class="ol-sec-lbl">A field note from my visit</div><div class="ol-text" style="border-left:1px solid var(--rule-m);padding-left:.85rem">'+p.field_note+'</div></div>':'')
-    +(p.gallery_images&&p.gallery_images.length?'<div class="ol-sec"><div class="ol-sec-lbl">Gallery</div><div class="ol-gallery">'+p.gallery_images.map(i=>'<img src="'+i+'" alt="">').join('')+'</div></div>':'')
-    +(p.related_themes&&p.related_themes.length?'<div class="ol-sec"><div class="ol-sec-lbl">Themes</div><div class="ol-themes">'+p.related_themes.map(t=>'<span class="ol-theme">'+t+'</span>').join('')+'</div></div>':'')
-    +(relatedNotes.length?'<div class="ol-sec"><div class="ol-sec-lbl">From the field notes</div>'+relatedNotes.map(e=>'<div class="ol-fn"><div class="ol-fn-date">'+(e.date_label||'')+'</div><div class="ol-fn-title">'+e.title+'</div>'+(e.body?'<div class="ol-fn-excerpt">'+e.body.substring(0,120)+'...</div>':'')+'</div>').join('')+'</div>':'')
-    +'</div>';
+  // Name + meta
+  const types=(p.types&&p.types.length?p.types:[p.type].filter(Boolean));
+  html+=`<div class="profile-name">${p.name}</div>`;
+  html+=`<div class="profile-meta">${types.map(t=>`<span>${t}</span>`).join('')}${p.location?p.location:''}</div>`;
 
-  document.getElementById('overlay').classList.add('open');
+  // Worth Noticing — the observation that began this
+  if(p.worth_noticing&&p.worth_noticing_public){
+    html+=`<div class="ns">
+      <div class="ns-label">Worth Noticing</div>
+      <div class="ns-wn">${p.worth_noticing}</div>
+    </div>`;
+  }
+
+  // About Their Work
+  const hasStory=
+    (p.short_description&&p.introduction_public)||
+    (p.story&&p.story_public)||
+    (p.field_note&&p.field_note_public)||
+    (p.related_themes&&p.related_themes.length&&p.themes_public)||
+    (p.what_noticing&&p.what_noticing_public);
+
+  if(hasStory){
+    html+=`<div class="ns"><div class="ns-label">About Their Work</div>`;
+    if(p.short_description&&p.introduction_public)html+=`<div class="ns-body">${p.short_description}</div>`;
+    if(p.story&&p.story_public)html+=`<div class="ns-body" style="margin-top:.85rem">${p.story}</div>`;
+    if(p.field_note&&p.field_note_public)html+=`<div class="ns-field-note"><span class="ns-field-note-lbl">A note from my visit</span>${p.field_note}</div>`;
+    if(p.related_themes&&p.related_themes.length&&p.themes_public){
+      html+=`<div class="ns-themes">${p.related_themes.map(t=>`<span class="ns-theme" onclick="setFilter('all',null);window.location='/community?theme=${t}'">${t}</span>`).join('')}</div>`;
+    }
+    if(p.what_noticing&&p.what_noticing_public){
+      html+=`<div class="ns-what-noticing"><span class="ns-what-noticing-lbl">What they are noticing</span>${p.what_noticing}</div>`;
+    }
+    html+=`</div>`;
+  }
+
+  // Continue Exploring — links
+  const links=[];
+  if(p.website&&p.website_public)links.push({label:'Website',value:p.website,href:p.website});
+  if(p.instagram&&p.instagram_public)links.push({label:'Instagram',value:'@'+p.instagram.replace('@',''),href:`https://instagram.com/${p.instagram.replace('@','')}`});
+  if(p.facebook&&p.facebook_public)links.push({label:'Facebook',value:p.facebook,href:`https://facebook.com/${p.facebook.replace('@','')}`});
+  if(p.twitter&&p.twitter_public)links.push({label:'X / Twitter',value:'@'+p.twitter.replace('@',''),href:`https://x.com/${p.twitter.replace('@','')}`});
+  if(p.etsy&&p.etsy_public)links.push({label:'Etsy',value:p.etsy,href:`https://etsy.com/shop/${p.etsy}`});
+  if(p.tiktok&&p.tiktok_public)links.push({label:'TikTok',value:'@'+p.tiktok.replace('@',''),href:`https://tiktok.com/${p.tiktok.replace('@','')}`});
+  if(p.pinterest&&p.pinterest_public)links.push({label:'Pinterest',value:p.pinterest,href:`https://pinterest.com/${p.pinterest.replace('@','')}`});
+
+  if(links.length){
+    html+=`<div class="ns"><div class="ns-label">Continue Exploring</div><div class="ns-links">`;
+    links.forEach(l=>{
+      html+=`<a href="${l.href}" target="_blank" rel="noopener" class="ns-link"><span class="ns-link-label">${l.label}</span><span class="ns-link-value">${l.value} &rarr;</span></a>`;
+    });
+    html+=`</div></div>`;
+  }
+
+  // Echoes — relationship over time
+  if(echoes&&echoes.length){
+    html+=`<div class="ns"><div class="ns-label">Echoes</div>`;
+    echoes.forEach(e=>{
+      const d=new Date(e.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+      html+=`<div class="ns-echo"><div class="ns-echo-date">${d}</div><div class="ns-echo-note">${e.note}</div></div>`;
+    });
+    html+=`</div>`;
+  }
+
+  html+=`</div>`; // end profile-body
+
+  document.getElementById('profile-narrative').innerHTML=html;
+
+  // Update SEO meta for sharing
+  document.getElementById('og-title').content=p.name+' — Worth Noticing · Echoes in Bloom';
+  document.getElementById('og-desc').content=p.worth_noticing_public&&p.worth_noticing?p.worth_noticing:'A profile on Echoes in Bloom — a living collection of people and places worth noticing.';
+  document.getElementById('og-img').content=p.photos_public&&p.featured_image?p.featured_image:'';
+  document.getElementById('og-url').content=window.location.href;
+  document.title=p.name+' — Worth Noticing · Echoes in Bloom';
+
+  // Show overlay
+  const overlay=document.getElementById('overlay');
+  overlay.classList.add('open');
+  overlay.scrollTop=0;
   document.body.style.overflow='hidden';
-  document.getElementById('overlay').scrollTop=0;
+
+  // Update URL for shareability
+  const url=new URL(window.location);
+  url.searchParams.set('id',id);
+  window.history.pushState({},'',url);
+
+  // Load related
+  loadRelated(p);
+}
+
+async function loadRelated(p){
+  const themes=p.related_themes||[];
+  if(!themes.length){document.getElementById('wander-section').style.display='none';return;}
+
+  const[{data:relProfiles},{data:relEntries}]=await Promise.all([
+    db.from('community_profiles').select('id,name,type,featured_image,worth_noticing,related_themes,photos_public,worth_noticing_public').eq('visibility','public').neq('id',p.id).contains('related_themes',themes.slice(0,2)).limit(4),
+    db.from('entries').select('id,title,body,photo_url,threads').eq('public',true).contains('threads',themes.slice(0,2)).limit(2)
+  ]);
+
+  const related=[
+    ...(relProfiles||[]).map(r=>({...r,_kind:'profile'})),
+    ...(relEntries||[]).map(e=>({...e,_kind:'entry'}))
+  ].slice(0,6);
+
+  if(!related.length){
+    // Show a soft fallback instead of hiding completely
+    document.getElementById('wander-section').style.display='block';
+    document.getElementById('wander-title').textContent='Keep wandering';
+    document.getElementById('wander-grid').innerHTML=`<div style="grid-column:1/-1;font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark-mid);line-height:1.7;padding:1rem 0">More to discover in <a href="/community" style="color:var(--amber);text-decoration:none">Worth Noticing &rarr;</a></div>`;
+    return;
+  }
+
+  const sharedTheme=themes[0];
+  document.getElementById('wander-title').textContent=`What else carries ${sharedTheme}?`;
+
+  document.getElementById('wander-grid').innerHTML=related.map(r=>{
+    const isProfile=r._kind==='profile';
+    const img=isProfile?(r.photos_public?r.featured_image:null):r.photo_url;
+    const name=isProfile?r.name:r.title;
+    const kind=isProfile?r.type:'Field Note';
+    const obs=isProfile?(r.worth_noticing_public?r.worth_noticing:null):r.body;
+    const click=isProfile?`openProfile('${r.id}')`:`window.location='/'`;
+    return`<div class="wander-card" onclick="${click}">
+      ${img?`<img src="${img}" class="wander-card-img" alt="">`:
+        `<div class="wander-card-img" style="height:80px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center"><span style="font-family:var(--s);font-size:20px;font-style:italic;color:var(--on-dark-soft)">${name.charAt(0)}</span></div>`}
+      <div class="wander-card-body">
+        <div class="wander-card-kind">${kind}</div>
+        <div class="wander-card-name">${name}</div>
+        ${obs?`<div class="wander-card-obs">${obs}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('wander-section').style.display='block';
 }
 
 function openEntryCard(id){
-  const e=profiles.find(x=>x.id===id&&x._kind==='entry');
-  if(!e)return;
-
-  document.getElementById('profile-content').innerHTML=
-    (e.photo_url?'<img src="'+e.photo_url+'" class="ol-hero" alt="'+e.title+'">':'')
-    +'<div class="ol-body">'
-    +'<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem">'
-    +'<span class="ol-type" style="color:var(--ink-faint)">Field Note</span>'
-    +(e.subject?'<span style="color:var(--rule-m)">&middot;</span><span class="ol-type '+e.subject.toLowerCase()+'">'+e.subject+'</span>':'')
-    +'</div>'
-    +'<div class="ol-name">'+e.title+'</div>'
-    +(e.date_label?'<div class="ol-loc">'+e.date_label+(e.moon_phase?' &middot; '+e.moon_phase:'')+'</div>':'')
-    +(e.body?'<div class="ol-sec"><div class="ol-sec-lbl">The observation</div><div class="ol-text">'+e.body+'</div></div>':'')
-    +((e.threads||[]).length?'<div class="ol-sec"><div class="ol-sec-lbl">Themes</div><div class="ol-themes">'+e.threads.map(t=>'<span class="ol-theme">'+t+'</span>').join('')+'</div></div>':'')
-    +'<div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--rule)">'
-    +'<a href="/" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500">Read in Field Notes &rarr;</a>'
-    +'</div>'
-    +'</div>';
-
-  document.getElementById('overlay').classList.add('open');
-  document.body.style.overflow='hidden';
-  document.getElementById('overlay').scrollTop=0;
+  // Field notes open on the main site
+  window.location='/';
 }
 
 function closeProfile(){
   document.getElementById('overlay').classList.remove('open');
   document.body.style.overflow='';
+  currentProfile=null;
+  document.title='Worth Noticing — Echoes in Bloom';
+  document.getElementById('wander-section').style.display='none';
+  // Clear ?id= from URL
+  const url=new URL(window.location);
+  url.searchParams.delete('id');
+  window.history.pushState({},'',url);
 }
 
-function handleOverlayClick(e){
-  if(e.target===document.getElementById('overlay'))closeProfile();
+function shareProfile(){
+  const url=window.location.href;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(()=>toast('Link copied'));
+  } else {
+    toast('Copy the URL to share');
+  }
 }
+
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// Handle browser back button
+window.addEventListener('popstate',()=>{
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('id')){openProfile(params.get('id'));}
+  else{document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+});
 
 document.addEventListener('DOMContentLoaded',init);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProfile();});
-window.setFilter=setFilter;window.openProfile=openProfile;window.openEntryCard=openEntryCard;window.closeProfile=closeProfile;window.handleOverlayClick=handleOverlayClick;window.loadMore=loadMore;
+window.setFilter=setFilter;window.openProfile=openProfile;window.openEntryCard=openEntryCard;
+window.closeProfile=closeProfile;window.shareProfile=shareProfile;window.loadMore=loadMore;
 </script>
 </body>
 </html>
