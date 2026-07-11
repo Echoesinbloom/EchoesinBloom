@@ -1154,7 +1154,7 @@ async function loadDynamicContent(){
   const fnGrid=document.getElementById('fn-grid');
 
   // Field Notes — all public text entries
-  const{data:notes}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).limit(12);
+  const{data:notes}=await db.from('entries').select('*').eq('public',true).order('date_label',{ascending:false,nullsFirst:false}).limit(6);
   if(notes&&notes.length){
     fnGrid.innerHTML=notes.map(e=>buildCard(e)).join('');
     notes.forEach(e=>{loadPublicEchoes(e.id);});
@@ -1258,7 +1258,7 @@ let fnOffset=12;
 async function loadMoreNotes(){
   const btn=document.querySelector('#fn-load-more button');
   if(btn)btn.textContent='Loading...';
-  const{data}=await db.from('entries').select('*').eq('public',true).order('created_at',{ascending:false}).range(fnOffset,fnOffset+11);
+  const{data}=await db.from('entries').select('*').eq('public',true).order('date_label',{ascending:false,nullsFirst:false}).range(fnOffset,fnOffset+5);
   if(!data||!data.length){document.getElementById('fn-load-more').style.display='none';return;}
   const fnGrid=document.getElementById('fn-grid');
   fnGrid.innerHTML+=data.map(e=>buildCard(e)).join('');
