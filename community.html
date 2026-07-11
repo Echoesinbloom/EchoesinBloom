@@ -55,10 +55,9 @@
     .f-chip[data-t="product"].on{background:var(--c-product);border-color:var(--c-product)}
     #filter-question{padding:.6rem 2rem;background:var(--linen-s);border-bottom:1px solid var(--rule);display:none}
     /* CARD GRID */
-    .wn-grid{padding:2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:start}
-    @media(max-width:1000px){.wn-grid{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:680px){.wn-grid{grid-template-columns:repeat(2,1fr);padding:1rem;gap:10px}}
-    @media(max-width:400px){.wn-grid{grid-template-columns:1fr}}
+    .wn-grid{padding:2rem;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+    @media(max-width:860px){.wn-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:500px){.wn-grid{grid-template-columns:1fr;padding:1.25rem}}
     .wn-card{background:white;border:1px solid var(--rule-m);cursor:pointer;transition:border-color .2s;overflow:hidden}
     .wn-card:hover{border-color:rgba(200,112,48,.35)}
     .wn-card.featured{grid-column:span 2}
@@ -226,7 +225,7 @@ const FILTER_QUESTIONS={
 
 let activeFilter='all';
 let offset=0;
-const PAGE=12;
+const PAGE=6;
 let profiles=[];
 let cardCount=0;
 let currentProfile=null;
@@ -248,7 +247,7 @@ async function loadProfiles(){
 
   const[{data:profileData},{data:entryData}]=await Promise.all([
     (()=>{
-      let q=db.from('community_profiles').select('id,name,type,types,primary_type,worth_noticing,featured_image,location,related_themes,worth_noticing_public,photos_public').eq('visibility','public').order('created_at',{ascending:false}).limit(PAGE);
+      let q=db.from('community_profiles').select('id,name,type,types,primary_type,worth_noticing,featured_image,location,related_themes,worth_noticing_public,photos_public').eq('visibility','public').order('created_at',{ascending:false}).limit(6);
       if(activeFilter!=='all')q=q.eq('type',activeFilter);
       return q;
     })(),
@@ -272,7 +271,7 @@ async function loadProfiles(){
 
   grid.innerHTML=combined.map(p=>buildCard(p)).join('');
   offset=combined.length;
-  document.getElementById('load-more-wrap').style.display=combined.length===PAGE?'block':'none';
+  document.getElementById('load-more-wrap').style.display=combined.length>=6?'block':'none';
 }
 
 async function loadMore(){
@@ -311,7 +310,7 @@ function buildCard(p){
   const onclick=isProfile?`openProfile('${p.id}')`:`openEntryCard('${p.id}')`;
   const typeRow=types.map(t=>`<span class="wn-card-type ${t.toLowerCase().replace(/ /g,'-')}">${t}</span>`).join('<span style="color:var(--rule-m);margin:0 .15rem">&middot;</span>');
   const imgHtml=img
-    ?`<img src="${img}" class="wn-card-img" alt="">`
+    ?`<div class="wn-card-img-wrap" onmousedown="startWnPan(event,this)" ontouchstart="startWnPanTouch(event,this)"><img src="${img}" class="wn-card-img" alt=""></div>`
     :`<div class="wn-card-img-empty"><span style="font-family:var(--s);font-size:24px;font-style:italic;color:var(--ink-faint)">${name.charAt(0)}</span></div>`;
   return`<div class="${cls}" onclick="${onclick}">${imgHtml}<div class="wn-card-body"><div class="wn-card-name">${name}</div><div class="wn-card-type-row">${typeRow}${!isProfile?'<span style="color:var(--rule-m);margin:0 .15rem">&middot;</span><span class="wn-card-type" style="color:var(--ink-faint)">Field Note</span>':''}</div>${loc?`<div class="wn-card-loc">${loc}</div>`:''}${obs?`<div class="wn-card-wn">${obs}</div>`:''}</div></div>`;
 }
@@ -537,7 +536,50 @@ window.addEventListener('popstate',()=>{
 
 document.addEventListener('DOMContentLoaded',init);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProfile();});
-window.setFilter=setFilter;window.openProfile=openProfile;window.openEntryCard=openEntryCard;
+
+// ── PAN ON CARD IMAGES ────────────────────────────────────
+let wnPanState=null;
+function startWnPan(e,wrap){
+  e.preventDefault();
+  const img=wrap.querySelector('img');
+  wnPanState={wrap,img,startX:e.clientX,startY:e.clientY};
+  document.addEventListener('mousemove',doWnPan);
+  document.addEventListener('mouseup',endWnPan);
+}
+function startWnPanTouch(e,wrap){
+  if(e.touches.length!==1)return;
+  const img=wrap.querySelector('img');
+  const t=e.touches[0];
+  wnPanState={wrap,img,startX:t.clientX,startY:t.clientY,posX:50,posY:50};
+  document.addEventListener('touchmove',doWnPanTouch,{passive:false});
+  document.addEventListener('touchend',endWnPan);
+}
+function doWnPan(e){
+  if(!wnPanState)return;
+  const dx=(e.clientX-wnPanState.startX)/wnPanState.wrap.offsetWidth*100;
+  const dy=(e.clientY-wnPanState.startY)/wnPanState.wrap.offsetHeight*100;
+  const px=Math.max(0,Math.min(100,50-dx*1.5));
+  const py=Math.max(0,Math.min(100,50-dy*1.5));
+  wnPanState.img.style.objectPosition=`${px}% ${py}%`;
+}
+function doWnPanTouch(e){
+  if(!wnPanState||e.touches.length!==1)return;
+  e.preventDefault();
+  const t=e.touches[0];
+  const dx=(t.clientX-wnPanState.startX)/wnPanState.wrap.offsetWidth*100;
+  const dy=(t.clientY-wnPanState.startY)/wnPanState.wrap.offsetHeight*100;
+  const px=Math.max(0,Math.min(100,50-dx*1.5));
+  const py=Math.max(0,Math.min(100,50-dy*1.5));
+  wnPanState.img.style.objectPosition=`${px}% ${py}%`;
+}
+function endWnPan(){
+  wnPanState=null;
+  document.removeEventListener('mousemove',doWnPan);
+  document.removeEventListener('mouseup',endWnPan);
+  document.removeEventListener('touchmove',doWnPanTouch);
+  document.removeEventListener('touchend',endWnPan);
+}
+window.setFilter=setFilter;window.startWnPan=startWnPan;window.startWnPanTouch=startWnPanTouch;window.openProfile=openProfile;window.openEntryCard=openEntryCard;
 window.closeProfile=closeProfile;window.shareProfile=shareProfile;window.loadMore=loadMore;
 </script>
 </body>
