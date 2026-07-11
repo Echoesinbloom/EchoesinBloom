@@ -114,7 +114,9 @@
     .fn-grid-wrap{padding:0 2rem 3rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
     .fn-card{background:white;padding:1.5rem;cursor:pointer;border:1px solid var(--rule-m);transition:border-color .2s}
     .fn-card:hover{border-color:rgba(200,112,48,.4)}
-    .fn-card-thumb{width:100%;height:180px;object-fit:cover;margin-bottom:.85rem;display:block}
+    .fn-card-thumb-wrap{width:100%;height:180px;overflow:hidden;margin-bottom:.85rem;cursor:grab;position:relative;user-select:none}
+    .fn-card-thumb-wrap:active{cursor:grabbing}
+    .fn-card-thumb{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:object-position .1s;pointer-events:none}
     .fn-card-meta{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
     .fn-card-moon{color:var(--fog-dim)}
     .fn-card-title{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:.45rem;transition:color .2s}
@@ -132,7 +134,8 @@
     .fn-card-body.open{display:block}
     .fn-card-body-close{float:right;background:none;border:none;cursor:pointer;font-size:16px;color:var(--ink-faint);line-height:1;padding:0 0 .5rem .5rem;margin:-0.2rem -0.2rem 0 0}
     .fn-card-body-close:hover{color:var(--ink)}
-    .fn-card-img{width:100%;max-height:220px;object-fit:cover;margin-bottom:.75rem}
+    .fn-card-img-wrap{width:100%;max-width:480px;margin:0 auto .75rem;overflow:hidden;background:var(--parch)}
+    .fn-card-img{width:100%;max-height:320px;object-fit:contain;display:block}
     .fn-card-full{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-mid);line-height:1.85;margin-bottom:.75rem}
     .fn-echoes-wrap{margin-top:.75rem}
     @media(max-width:800px){.fn-grid-wrap{grid-template-columns:1fr 1fr}}
@@ -893,7 +896,55 @@ async function setWorthNoticing(el){
   }
 }
 
-// BRANCH FILTER
+// ── PAN ON CARD THUMBNAILS ─────────────────────────────────
+let panState=null;
+
+function startPan(e,wrap){
+  e.preventDefault();
+  const img=wrap.querySelector('img');
+  panState={wrap,img,startX:e.clientX,startY:e.clientY,posX:50,posY:50};
+  document.addEventListener('mousemove',doPan);
+  document.addEventListener('mouseup',endPan);
+}
+
+function startPanTouch(e,wrap){
+  if(e.touches.length!==1)return;
+  const img=wrap.querySelector('img');
+  const t=e.touches[0];
+  panState={wrap,img,startX:t.clientX,startY:t.clientY,posX:50,posY:50};
+  document.addEventListener('touchmove',doPanTouch,{passive:false});
+  document.addEventListener('touchend',endPan);
+}
+
+function doPan(e){
+  if(!panState)return;
+  const dx=(e.clientX-panState.startX)/panState.wrap.offsetWidth*100;
+  const dy=(e.clientY-panState.startY)/panState.wrap.offsetHeight*100;
+  panState.posX=Math.max(0,Math.min(100,50-dx*1.5));
+  panState.posY=Math.max(0,Math.min(100,50-dy*1.5));
+  panState.img.style.objectPosition=`${panState.posX}% ${panState.posY}%`;
+}
+
+function doPanTouch(e){
+  if(!panState||e.touches.length!==1)return;
+  e.preventDefault();
+  const t=e.touches[0];
+  const dx=(t.clientX-panState.startX)/panState.wrap.offsetWidth*100;
+  const dy=(t.clientY-panState.startY)/panState.wrap.offsetHeight*100;
+  panState.posX=Math.max(0,Math.min(100,50-dx*1.5));
+  panState.posY=Math.max(0,Math.min(100,50-dy*1.5));
+  panState.img.style.objectPosition=`${panState.posX}% ${panState.posY}%`;
+}
+
+function endPan(){
+  panState=null;
+  document.removeEventListener('mousemove',doPan);
+  document.removeEventListener('mouseup',endPan);
+  document.removeEventListener('touchmove',doPanTouch);
+  document.removeEventListener('touchend',endPan);
+}
+
+
 let activeBranch='all';
 let lockedBranch=null;
 
@@ -960,7 +1011,7 @@ function closeFnCard(id,event){
 function buildCard(e){
   return`<div class="fn-card-wrap">
     <div class="fn-card" id="fn-note-${e.id}" onclick="toggleFnCard('${e.id}')">
-      ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-thumb" alt="">` : ''}
+      ${e.photo_url?`<div class="fn-card-thumb-wrap" onmousedown="startPan(event,this)" ontouchstart="startPanTouch(event,this)"><img src="${e.photo_url}" class="fn-card-thumb" alt=""></div>` : ''}
       <div class="fn-card-meta">
         ${e.date_label||''}
         ${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
@@ -975,7 +1026,7 @@ function buildCard(e){
     </div>
     <div class="fn-card-body" id="fn-body-${e.id}">
       <button class="fn-card-body-close" onclick="closeFnCard('${e.id}',event)">&#x00D7;</button>
-      ${e.photo_url?`<img src="${e.photo_url}" class="fn-card-img" alt="">` : ''}
+      ${e.photo_url?`<div class="fn-card-img-wrap"><img src="${e.photo_url}" class="fn-card-img" alt=""></div>` : ''}
       <div class="fn-card-meta" style="margin-bottom:.5rem">${e.date_label||''}${e.moon_phase?` &middot; ${e.moon_phase}`:''}</div>
       <div style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);margin-bottom:.6rem">${e.title}</div>
       <div class="fn-card-full">${e.body||''}</div>
@@ -1601,7 +1652,7 @@ function closeWNCard(i){
 }
 
 
-window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.loadCyclesPublic=loadCyclesPublic;window.setBranchFilter=setBranchFilter;window.peekDesc=peekDesc;window.unpeekDesc=unpeekDesc;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
+window.uploadProfilePhoto=uploadProfilePhoto;window.submitSignup=submitSignup;window.submitFooterSignup=submitFooterSignup;window.submitNote=submitNote;window.checkWorthNoticing=checkWorthNoticing;window.loadCyclesPublic=loadCyclesPublic;window.setBranchFilter=setBranchFilter;window.peekDesc=peekDesc;window.unpeekDesc=unpeekDesc;window.startPan=startPan;window.startPanTouch=startPanTouch;window.setWorthNoticing=setWorthNoticing;window.loadPublicMycelium=loadPublicMycelium;window.scrollToNote=scrollToNote;
 window.setTheme=setTheme;window.clearTheme=clearTheme;window.toggleFnCard=toggleFnCard;window.closeFnCard=closeFnCard;window.loadMoreNotes=loadMoreNotes;window.toggleWNCard=toggleWNCard;window.closeWNCard=closeWNCard;
 </script>
 </body>
