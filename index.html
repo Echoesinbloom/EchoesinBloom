@@ -1154,11 +1154,11 @@ async function loadDynamicContent(){
   const fnGrid=document.getElementById('fn-grid');
 
   // Field Notes — all public text entries
-  const{data:notes}=await db.from('entries').select('*').eq('public',true).order('date_label',{ascending:false,nullsFirst:false}).limit(6);
+  const{data:notes}=await db.from('entries').select('*').eq('public',true).order('entry_date',{ascending:false,nullsFirst:false}).limit(6);
   if(notes&&notes.length){
     fnGrid.innerHTML=notes.map(e=>buildCard(e)).join('');
     notes.forEach(e=>{loadPublicEchoes(e.id);});
-    if(notes.length===12) document.getElementById('fn-load-more').style.display='block';
+    if(notes.length===6) document.getElementById('fn-load-more').style.display='block';
   } else {
     fnGrid.innerHTML='';
   }
@@ -1254,17 +1254,17 @@ async function loadPublicEchoResponses(){
   }).join('');
 }
 
-let fnOffset=12;
+let fnOffset=6;
 async function loadMoreNotes(){
   const btn=document.querySelector('#fn-load-more button');
   if(btn)btn.textContent='Loading...';
-  const{data}=await db.from('entries').select('*').eq('public',true).order('date_label',{ascending:false,nullsFirst:false}).range(fnOffset,fnOffset+5);
+  const{data}=await db.from('entries').select('*').eq('public',true).order('entry_date',{ascending:false,nullsFirst:false}).range(fnOffset,fnOffset+5);
   if(!data||!data.length){document.getElementById('fn-load-more').style.display='none';return;}
   const fnGrid=document.getElementById('fn-grid');
   fnGrid.innerHTML+=data.map(e=>buildCard(e)).join('');
   data.forEach(e=>loadPublicEchoes(e.id));
-  fnOffset+=12;
-  if(data.length<12)document.getElementById('fn-load-more').style.display='none';
+  fnOffset+=6;
+  if(data.length<6)document.getElementById('fn-load-more').style.display='none';
   else if(btn)btn.textContent='Load more notes';
 }
 
