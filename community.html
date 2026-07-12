@@ -132,6 +132,27 @@
     .wander-cta a{color:var(--amber);text-decoration:none}
     .loading{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:3rem;text-align:center;grid-column:1/-1}
     .empty-state{padding:5rem 2rem;text-align:center;grid-column:1/-1}
+    /* AROUND HERE BLOCK */
+    .ah-block{background:var(--deep);padding:3rem 2rem;margin-top:3rem}
+    .ah-block-inner{max-width:680px;margin:0 auto}
+    .ah-block-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.5rem}
+    .ah-block-title{font-family:var(--s);font-size:clamp(22px,4vw,30px);font-style:italic;color:var(--on-dark);line-height:1.2;margin-bottom:.5rem}
+    .ah-block-sub{font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-mid);line-height:1.65;margin-bottom:2rem}
+    .ah-group-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.85rem;margin-top:1.75rem;display:flex;align-items:center;gap:.6rem}
+    .ah-group-lbl::after{content:'';flex:1;height:1px;background:rgba(200,112,48,.2)}
+    .ah-group-lbl:first-of-type{margin-top:0}
+    .ah-event{display:flex;gap:1rem;align-items:flex-start;padding:.85rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
+    .ah-event:last-child{border-bottom:none}
+    .ah-event-date{text-align:center;min-width:40px;flex-shrink:0}
+    .ah-event-day{font-family:var(--s);font-size:20px;font-style:italic;color:var(--amber);line-height:1}
+    .ah-event-mon{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--on-dark-soft)}
+    .ah-event-body{flex:1}
+    .ah-event-cat{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-soft);margin-bottom:.15rem}
+    .ah-event-title{font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark);line-height:1.2;margin-bottom:.15rem}
+    .ah-event-meta{font-size:11px;color:var(--on-dark-mid);line-height:1.6}
+    .ah-event-desc{font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-soft);margin-top:.25rem;line-height:1.55}
+    .ah-see-all{display:inline-block;margin-top:1.75rem;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);text-decoration:none;border-bottom:1px solid rgba(200,112,48,.3);padding-bottom:.15rem}
+    .ah-empty{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-soft);padding:1.5rem 0}
     .footer{padding:2rem;border-top:1px solid var(--rule);text-align:center}
     .footer-text{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint)}
     .footer-link{color:var(--ink-soft);text-decoration:none}
@@ -202,6 +223,21 @@
   <footer class="footer" style="background:var(--deep);border-top:none">
     <p class="footer-text" style="color:var(--on-dark-soft)"><a href="/" class="footer-link" style="color:var(--on-dark-mid)">Echoes in Bloom</a> &mdash; Let&rsquo;s meander.</p>
   </footer>
+</div>
+
+<!-- AROUND HERE — living signal within Worth Noticing -->
+<div id="ah-block" style="display:none;max-width:680px;margin:3rem auto 0;padding:0 2rem">
+  <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--rule)">
+    <div>
+      <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.2rem">Around Here</div>
+      <div style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint)">The timely layer — what's unfolding nearby right now.</div>
+    </div>
+    <a href="/around-here" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;white-space:nowrap;margin-left:1rem">See all &rarr;</a>
+  </div>
+  <!-- Featured event -->
+  <div id="ah-featured-event" style="margin-bottom:1.5rem"></div>
+  <!-- Compact list -->
+  <div id="ah-compact-list"></div>
 </div>
 
 <footer class="footer">
@@ -534,7 +570,56 @@ window.addEventListener('popstate',()=>{
   else{document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
 });
 
-document.addEventListener('DOMContentLoaded',init);
+const AH_CATS={food:'Food',farmers_market:'Farmers Market',art:'Art',music:'Music',community:'Community',family:'Family',agriculture:'Agriculture',workshop:'Workshop',seasonal:'Seasonal',volunteer:'Volunteer'};
+const AH_MONS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+async function loadAroundHerePreview(){
+  const block=document.getElementById('ah-block');
+  if(!block)return;
+
+  const today=new Date();today.setHours(0,0,0,0);
+  const todayStr=today.toISOString().split('T')[0];
+  const future=new Date(today);future.setDate(future.getDate()+60);
+
+  const{data}=await db.from('events').select('*').eq('public',true)
+    .gte('expires_at',todayStr).lte('event_date',future.toISOString().split('T')[0])
+    .order('event_date',{ascending:true}).limit(6);
+
+  if(!data||!data.length){block.style.display='none';return;}
+  block.style.display='block';
+
+  const [featured,...rest]=data;
+
+  // Featured event
+  const fd=new Date(featured.event_date+'T12:00:00');
+  const isToday=featured.event_date===todayStr;
+  const dow=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][fd.getDay()];
+  const timeStr=[featured.start_time,featured.end_time].filter(Boolean).join(' – ');
+  const whenLbl=isToday?'Today':`${dow} ${fd.getDate()} ${AH_MONS[fd.getMonth()]}`;
+
+  document.getElementById('ah-featured-event').innerHTML=`
+    <div style="border:1px solid var(--rule-m);background:white;padding:1.25rem">
+      <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.25rem">${AH_CATS[featured.category]||featured.category} &middot; ${whenLbl}</div>
+      <div style="font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:.3rem">${featured.title}</div>
+      <div style="font-size:11px;color:var(--ink-faint);line-height:1.7">${featured.location}${timeStr?' &middot; '+timeStr:''}</div>
+      ${featured.description?`<div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);margin-top:.5rem;line-height:1.6">${featured.description}</div>`:''}
+    </div>`;
+
+  // Compact remaining list
+  if(rest.length){
+    document.getElementById('ah-compact-list').innerHTML=rest.slice(0,4).map(e=>{
+      const d=new Date(e.event_date+'T12:00:00');
+      const ts=[e.start_time,e.end_time].filter(Boolean).join(' – ');
+      return`<div style="display:flex;gap:.85rem;align-items:baseline;padding:.6rem 0;border-bottom:1px solid var(--rule)">
+        <div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink);flex:1;line-height:1.2">${e.title}</div>
+        <div style="font-size:10px;color:var(--ink-faint);white-space:nowrap">${AH_MONS[d.getMonth()]} ${d.getDate()}${ts?' &middot; '+e.start_time:''}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+
+document.addEventListener('DOMContentLoaded',()=>{init();loadAroundHerePreview();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProfile();});
 
 // ── PAN ON CARD IMAGES ────────────────────────────────────
