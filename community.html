@@ -184,7 +184,56 @@
   <p style="font-size:14px;color:var(--ink-faint);padding-top:1rem;border-top:1px solid var(--rule)">This isn't a review site or a directory. It's a living collection of encounters — gathered by someone who believes that paying attention to people who participate with intention is one of the quiet ways we learn to do the same.</p>
 </div>
 
-<div class="browse-strip">
+<!-- THE FIRST ECHO — landmark, not a label -->
+<div style="padding:5rem 2rem;border-top:2px solid var(--amber);border-bottom:2px solid var(--amber);background:var(--linen);text-align:center">
+  <div style="max-width:480px;margin:0 auto">
+
+    <div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--amber);letter-spacing:.04em;margin-bottom:3rem">Every meaningful community begins with someone paying attention.</div>
+
+    <!-- The progression -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+      <div style="font-family:var(--s);font-size:clamp(22px,4vw,30px);font-style:italic;color:var(--ink);line-height:1">Noticing</div>
+      <div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);padding:.5rem 0;letter-spacing:.04em">becomes</div>
+      <div style="font-family:var(--s);font-size:clamp(22px,4vw,30px);font-style:italic;color:var(--ink);line-height:1">Curiosity</div>
+      <div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);padding:.5rem 0;letter-spacing:.04em">becomes</div>
+      <div style="font-family:var(--s);font-size:clamp(22px,4vw,30px);font-style:italic;color:var(--ink);line-height:1">Understanding</div>
+      <div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);padding:.5rem 0;letter-spacing:.04em">becomes</div>
+      <div style="font-family:var(--s);font-size:clamp(22px,4vw,30px);font-style:italic;color:var(--ink);line-height:1">Participation</div>
+      <div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);padding:.5rem 0;letter-spacing:.04em">becomes</div>
+      <div style="font-family:var(--s);font-size:clamp(22px,4vw,30px);font-style:italic;color:var(--amber);line-height:1">Community</div>
+    </div>
+
+    <div style="width:40px;height:1px;background:rgba(200,112,48,.3);margin:3rem auto"></div>
+
+    <div style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint);line-height:1.75;margin-bottom:2rem">Every profile here began with someone who noticed.</div>
+
+    <a href="#wn-grid" style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500">Begin exploring &rarr;</a>
+  </div>
+</div>
+
+<!-- LAYER 1: AROUND HERE — timely signal -->
+<div id="wn-around-here" style="display:none;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:white;padding:1.25rem 2rem">
+  <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1rem">
+    <div>
+      <span style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);font-weight:500">Around Here</span>
+      <span id="wn-ah-when" style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-left:.75rem"></span>
+    </div>
+    <a href="/around-here" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500">See all &rarr;</a>
+  </div>
+  <div id="wn-ah-title" style="font-family:var(--s);font-size:20px;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:.25rem"></div>
+  <div id="wn-ah-meta" style="font-size:11px;color:var(--ink-faint);line-height:1.7;margin-bottom:.25rem"></div>
+  <div id="wn-ah-desc" style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.6"></div>
+</div>
+
+<!-- LAYER 2: CURRENTLY NOTICING — early-stage public profiles -->
+<div id="wn-currently-noticing" style="display:none;padding:2rem 2rem 0">
+  <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.35rem">Currently Noticing</div>
+  <div style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint);margin-bottom:1.25rem">People and places whose stories are beginning to take shape.</div>
+  <div class="wn-grid" id="cn-grid"></div>
+</div>
+
+<!-- BROWSE FILTERS + THE COLLECTION -->
+<div class="browse-strip" style="margin-top:1.5rem">
   <span class="browse-lbl">Browse</span>
   <div class="f-chip on" data-t="all" onclick="setFilter('all',this)">All</div>
   <div class="f-chip" data-t="maker" onclick="setFilter('maker',this)">Makers</div>
@@ -197,12 +246,35 @@
   <p style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint)"></p>
 </div>
 
-<div class="wn-grid" id="wn-grid">
-  <div class="loading">Loading...</div>
+<!-- LAYER 3: PHILOSOPHY INTERSTITIAL — injected after card 3 by JS -->
+<div id="wn-philosophy-tpl" style="display:none">
+  <div style="grid-column:1/-1;background:var(--deep);padding:2.5rem 2rem;text-align:center;margin:4px 0">
+    <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1rem">Have you noticed what's happening?</div>
+    <div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--on-dark-mid);margin-bottom:1.25rem">Every meaningful community begins with someone paying attention.</div>
+    <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.1rem">
+      <span style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark)">Noticing</span>
+      <span style="font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-soft);padding:0 .65rem">becomes</span>
+      <span style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark)">Curiosity</span>
+      <span style="font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-soft);padding:0 .65rem">becomes</span>
+      <span style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark)">Understanding</span>
+      <span style="font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-soft);padding:0 .65rem">becomes</span>
+      <span style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark)">Participation</span>
+      <span style="font-family:var(--s);font-size:12px;font-style:italic;color:var(--on-dark-soft);padding:0 .65rem">becomes</span>
+      <span style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--amber)">Community</span>
+    </div>
+  </div>
 </div>
 
-<div id="load-more-wrap">
-  <button onclick="loadMore()">Load more</button>
+<!-- LAYER 4: THE COLLECTION -->
+<div id="wn-collection-wrap" style="padding:0 2rem">
+  <div class="wn-grid" id="wn-grid">
+    <div class="loading">Loading...</div>
+  </div>
+</div>
+
+<div id="load-more-wrap" style="display:none;text-align:center;padding:0 2rem 3rem">
+  <button onclick="loadMore()" style="background:none;border:1px solid var(--rule-m);padding:.65rem 2rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;color:var(--ink-soft)">Load more</button>
+  <button id="wn-show-less" onclick="collapseCollection()" style="display:none;background:none;border:none;padding:.65rem 1rem;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;color:var(--ink-faint)">Show less</button>
 </div>
 
 <!-- PROFILE OVERLAY — full narrative -->
@@ -269,60 +341,142 @@ let currentProfile=null;
 // ── GRID ──────────────────────────────────────────────────
 
 async function init(){
-  await loadProfiles();
-  // Check for ?id= in URL and auto-open profile
+  await Promise.all([loadAroundHereSignal(),loadCurrentlyNoticing(),loadCollection()]);
   const params=new URLSearchParams(window.location.search);
   const id=params.get('id');
   if(id)openProfile(id);
 }
 
-async function loadProfiles(){
+// LAYER 1: Around Here signal
+async function loadAroundHereSignal(){
+  const wrap=document.getElementById('wn-around-here');
+  if(!wrap)return;
+  const today=new Date();today.setHours(0,0,0,0);
+  const todayStr=today.toISOString().split('T')[0];
+  const future=new Date(today);future.setDate(future.getDate()+14);
+  const{data}=await db.from('events').select('*').eq('public',true)
+    .gte('expires_at',todayStr).lte('event_date',future.toISOString().split('T')[0])
+    .order('event_date',{ascending:true}).limit(1);
+  if(!data||!data.length){wrap.style.display='none';return;}
+  const e=data[0];
+  const d=new Date(e.event_date+'T12:00:00');
+  const isToday=e.event_date===todayStr;
+  const dow=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+  const mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+  const whenLbl=isToday?'Today':`${dow} ${d.getDate()} ${mon}`;
+  const cats={food:'Food',farmers_market:'Farmers Market',art:'Art',music:'Music',community:'Community',family:'Family',agriculture:'Agriculture',workshop:'Workshop',seasonal:'Seasonal',volunteer:'Volunteer'};
+  document.getElementById('wn-ah-when').textContent=`${cats[e.category]||e.category} · ${whenLbl}`;
+  document.getElementById('wn-ah-title').textContent=e.title;
+  document.getElementById('wn-ah-meta').textContent=e.location+([e.start_time,e.end_time].filter(Boolean).join(' – ')?' · '+[e.start_time,e.end_time].filter(Boolean).join(' – '):'');
+  const descEl=document.getElementById('wn-ah-desc');
+  if(e.description){descEl.textContent=e.description;descEl.style.display='block';}
+  else{descEl.style.display='none';}
+  wrap.style.display='block';
+}
+
+// LAYER 2: Currently Noticing — early-stage public profiles
+async function loadCurrentlyNoticing(){
+  const wrap=document.getElementById('wn-currently-noticing');
+  const grid=document.getElementById('cn-grid');
+  if(!wrap||!grid)return;
+  const{data}=await db.from('community_profiles')
+    .select('id,name,type,featured_image,location,worth_noticing,where_found,status,photos_public,worth_noticing_public')
+    .eq('visibility','public')
+    .contains('collections',['currently_noticing'])
+    .order('created_at',{ascending:false})
+    .limit(3);
+  if(!data||!data.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  const statusLine={noticed:'A first impression. A fuller story is taking shape.',growing:'A connection is forming. More to come.',developing:'The story is beginning to unfold.'};
+  grid.innerHTML=data.map(p=>{
+    const img=p.photos_public&&p.featured_image?`<div class="wn-card-img-wrap" onmousedown="startWnPan(event,this)" ontouchstart="startWnPanTouch(event,this)"><img src="${p.featured_image}" class="wn-card-img" alt=""></div>`:`<div class="wn-card-img-empty"><span style="font-family:var(--s);font-size:24px;font-style:italic;color:var(--ink-faint)">${p.name.charAt(0)}</span></div>`;
+    const obs=p.worth_noticing_public&&p.worth_noticing?`<div class="wn-card-wn">${p.worth_noticing}</div>`:'';
+    const status=statusLine[p.status]||'A fuller story is taking shape.';
+    return`<div class="wn-card" onclick="openProfile('${p.id}')" style="opacity:.85">
+      ${img}
+      <div class="wn-card-body">
+        <div class="wn-card-name">${p.name}</div>
+        <div class="wn-card-type-row"><span class="wn-card-type ${p.type}">${p.type}</span></div>
+        ${p.location?`<div class="wn-card-loc">${p.location}</div>`:''}
+        ${obs}
+        <div style="font-family:var(--s);font-size:11px;font-style:italic;color:var(--ink-faint);margin-top:.4rem;line-height:1.5">${p.where_found?'Met at '+p.where_found+' — ':''}<em>${status}</em></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// LAYER 4: The Collection — with philosophy interstitial after card 3
+let collOffset=0;
+const COLL_PAGE=6;
+
+async function loadCollection(){
   const grid=document.getElementById('wn-grid');
-  grid.innerHTML='<div class="loading">Loading...</div>';
-  offset=0;cardCount=0;
+  if(!grid)return;
+  grid.innerHTML='<div class="loading" style="grid-column:1/-1">Loading...</div>';
+  collOffset=0;
 
-  const[{data:profileData},{data:entryData}]=await Promise.all([
-    (()=>{
-      let q=db.from('community_profiles').select('id,name,type,types,primary_type,worth_noticing,featured_image,location,related_themes,worth_noticing_public,photos_public').eq('visibility','public').order('created_at',{ascending:false}).limit(6);
-      if(activeFilter!=='all')q=q.eq('type',activeFilter);
-      return q;
-    })(),
-    (()=>{
-      let q=db.from('entries').select('id,title,body,subject,date_label,photo_url,threads').eq('public',true).not('subject','is',null).order('created_at',{ascending:false}).limit(4);
-      return q;
-    })()
-  ]);
+  let q=db.from('community_profiles')
+    .select('id,name,type,types,worth_noticing,featured_image,location,related_themes,worth_noticing_public,photos_public,featured,collections,status')
+    .eq('visibility','public')
+    .order('featured',{ascending:false})
+    .order('created_at',{ascending:false})
+    .limit(COLL_PAGE);
 
-  const combined=[
-    ...(profileData||[]).map(p=>({...p,_kind:'profile'})),
-    ...(entryData||[]).map(e=>({...e,_kind:'entry',type:e.subject?.toLowerCase()||'note'}))
-  ];
-  profiles=combined;
+  if(activeFilter!=='all')q=q.eq('type',activeFilter);
 
-  if(!combined.length){
-    grid.innerHTML='<div class="empty-state"><p style="font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink-faint)">Nothing here yet.</p><p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);margin-top:.65rem">This collection is just beginning.</p></div>';
+  const{data}=await q;
+  if(!data||!data.length){
+    grid.innerHTML='<div style="grid-column:1/-1;font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-faint);padding:3rem 0;text-align:center">The collection is growing. Come back soon.</div>';
     document.getElementById('load-more-wrap').style.display='none';
     return;
   }
 
-  grid.innerHTML=combined.map(p=>buildCard(p)).join('');
-  offset=combined.length;
-  document.getElementById('load-more-wrap').style.display=combined.length>=6?'block':'none';
+  renderCollectionCards(grid,data,true);
+  collOffset=data.length;
+  document.getElementById('load-more-wrap').style.display=data.length>=COLL_PAGE?'block':'none';
+  document.getElementById('wn-show-less').style.display='none';
+}
+
+function renderCollectionCards(grid,data,inject){
+  // inject = whether to add philosophy interstitial after card 3
+  const cards=data.map((p,i)=>buildCard({...p,_kind:'profile'}));
+  if(inject&&cards.length>=3){
+    const tpl=document.getElementById('wn-philosophy-tpl');
+    const interstitial=tpl?tpl.innerHTML:'';
+    grid.innerHTML=cards.slice(0,3).join('')+interstitial+cards.slice(3).join('');
+  } else {
+    grid.innerHTML=cards.join('');
+  }
 }
 
 async function loadMore(){
-  const btn=document.querySelector('#load-more-wrap button');
+  const btn=document.querySelector('#load-more-wrap button:first-child');
   if(btn)btn.textContent='Loading...';
-  let q=db.from('community_profiles').select('id,name,type,types,worth_noticing,featured_image,location,related_themes,worth_noticing_public,photos_public').eq('visibility','public').order('created_at',{ascending:false}).range(offset,offset+PAGE-1);
+  let q=db.from('community_profiles')
+    .select('id,name,type,types,worth_noticing,featured_image,location,related_themes,worth_noticing_public,photos_public,featured,collections,status')
+    .eq('visibility','public')
+    .order('featured',{ascending:false})
+    .order('created_at',{ascending:false})
+    .range(collOffset,collOffset+COLL_PAGE-1);
   if(activeFilter!=='all')q=q.eq('type',activeFilter);
   const{data}=await q;
   if(!data||!data.length){document.getElementById('load-more-wrap').style.display='none';return;}
-  profiles=[...profiles,...data.map(p=>({...p,_kind:'profile'}))];
-  offset+=data.length;
-  document.getElementById('wn-grid').innerHTML+=data.map(p=>buildCard({...p,_kind:'profile'})).join('');
-  if(data.length<PAGE)document.getElementById('load-more-wrap').style.display='none';
+  const grid=document.getElementById('wn-grid');
+  grid.innerHTML+=data.map(p=>buildCard({...p,_kind:'profile'})).join('');
+  collOffset+=data.length;
+  if(data.length<COLL_PAGE)document.querySelector('#load-more-wrap button:first-child').style.display='none';
   else if(btn)btn.textContent='Load more';
+  document.getElementById('wn-show-less').style.display='inline';
 }
+
+function collapseCollection(){
+  collOffset=0;
+  document.getElementById('wn-show-less').style.display='none';
+  document.querySelector('#load-more-wrap button:first-child').style.display='inline';
+  loadCollection();
+  document.getElementById('wn-collection-wrap')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 
 function setFilter(type,btn){
   activeFilter=type;
@@ -665,7 +819,7 @@ function endWnPan(){
   document.removeEventListener('touchend',endWnPan);
 }
 window.setFilter=setFilter;window.startWnPan=startWnPan;window.startWnPanTouch=startWnPanTouch;window.openProfile=openProfile;window.openEntryCard=openEntryCard;
-window.closeProfile=closeProfile;window.shareProfile=shareProfile;window.loadMore=loadMore;
+window.closeProfile=closeProfile;window.shareProfile=shareProfile;window.loadMore=loadMore;window.collapseCollection=collapseCollection;
 </script>
 </body>
 </html>
