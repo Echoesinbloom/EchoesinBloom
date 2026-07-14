@@ -94,9 +94,11 @@
     .sec-head{display:flex;align-items:center;gap:1.25rem;margin-bottom:1.75rem}
     .sec-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;white-space:nowrap;color:var(--ink-faint)}
     .sec-rule{flex:1;height:1px;background:var(--rule)}
-    .ci{display:flex;align-items:baseline;gap:1rem;padding:.65rem 0;border-bottom:1px solid var(--rule);cursor:pointer}
+    .ci{display:flex;align-items:baseline;gap:1rem;padding:.65rem 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:all .2s}
     .ci:last-of-type{border-bottom:none}
-    .ci:hover .ci-t{color:var(--ink)}
+    .ci:hover .ci-t{color:var(--amber)}
+    .ci-arrow{margin-left:auto;font-size:9px;letter-spacing:.06em;color:var(--ink-faint);transition:transform .25s;flex-shrink:0;font-family:var(--n);padding-top:.1rem}
+    .ci.open .ci-arrow{transform:rotate(180deg);color:var(--amber)}
     .ci-dash{font-size:11px;color:var(--ink-faint);flex-shrink:0}
     .ci-t{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink-mid);flex:1;transition:color .2s;line-height:1.3}
     .ci-badge{font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;font-weight:500;margin-left:auto;flex-shrink:0}
@@ -391,6 +393,7 @@
       .hero,.gh,.bloom,.ech,.cur,.about{padding-left:1.25rem;padding-right:1.25rem}
       .mp-deep.open{grid-template-columns:1fr}
     }
+  @media(max-width:600px){.foyer-path{display:block!important}}
   </style>
 </head>
 <body>
@@ -455,16 +458,7 @@
 </div>
 
 
-<div class="branch-bar" id="branch-bar">
-  <div class="branch-bar-lbl">Browse by space</div>
-  <div class="branch-pill active" data-branch="all" onclick="setBranchFilter('all',this)" onmouseenter="peekDesc('all')" onmouseleave="unpeekDesc()">All</div>
-  <div class="branch-pill" data-branch="Field Notes" onclick="setBranchFilter('Field Notes',this)" onmouseenter="peekDesc('Field Notes')" onmouseleave="unpeekDesc()">Field Notes</div>
-  <div class="branch-pill" data-branch="Spiral Up" onclick="setBranchFilter('Spiral Up',this)" onmouseenter="peekDesc('Spiral Up')" onmouseleave="unpeekDesc()">Spiral Up</div>
-  <div class="branch-pill" data-branch="Velvet Butterfly" onclick="setBranchFilter('Velvet Butterfly',this)" onmouseenter="peekDesc('Velvet Butterfly')" onmouseleave="unpeekDesc()">Velvet Butterfly</div>
-  <div class="branch-pill" data-branch="Marigold Wings" onclick="setBranchFilter('Marigold Wings',this)" onmouseenter="peekDesc('Marigold Wings')" onmouseleave="unpeekDesc()">Marigold Wings</div>
-  <div class="branch-pill" data-branch="Petals & Echoes" onclick="setBranchFilter('Petals & Echoes',this)" onmouseenter="peekDesc('Petals & Echoes')" onmouseleave="unpeekDesc()">Petals & Echoes</div>
-  <div class="branch-pill" data-branch="Future Echoes" onclick="setBranchFilter('Future Echoes',this)" onmouseenter="peekDesc('Future Echoes')" onmouseleave="unpeekDesc()">Future Echoes</div>
-</div>
+<!-- branch-bar removed from primary experience — data preserved in entries -->
 <div class="branch-desc" id="branch-desc">
   <div class="branch-desc-text" id="branch-desc-text"></div>
 </div>
@@ -495,14 +489,14 @@
     <div>
       <div class="gh-marker">The Greenhouse</div>
       <h2 class="gh-heading">Currently<br>incubating</h2>
-      <p class="gh-note">The Greenhouse is where ideas, observations, and questions are cultivated before they bloom. Some begin as curiosities. Some become experiments. Some grow into projects, experiences, and connections. This is where I keep track of what I'm actively tending.</p>
+      <p class="gh-note">Some things ask to be shared. Others ask to be lived with a little longer.<br><br>The Greenhouse is where Echoes holds its living inquiries — observations, relationships, symbols, and questions that continue unfolding through time. Nothing here is finished. Everything here is becoming.</p>
     </div>
     <div>
       <div class="gh-seeds" id="gh-seeds">
-        <div class="gh-seed">What becomes visible when we learn how to pay attention?</div>
-        <div class="gh-seed">Observation + Inquiry = Bloom</div>
-        <div class="gh-seed">The nervous system's relationship to Wonder</div>
-        <div class="gh-seed">Community as a practice of Aliveness and Embodiment</div>
+        <div class="gh-seed">Observation + Inquiry = Bloom<span style="display:block;font-size:14px;opacity:.6;margin-top:.2rem">How attention, curiosity, and return gradually reveal meaning.</span></div>
+        <div class="gh-seed">The nervous system's relationship to Wonder<span style="display:block;font-size:14px;opacity:.6;margin-top:.2rem">Can feeling safe change what we're capable of noticing?</span></div>
+        <div class="gh-seed">Community as a practice of aliveness<span style="display:block;font-size:14px;opacity:.6;margin-top:.2rem">What becomes possible when belonging is something we actively cultivate?</span></div>
+        <div class="gh-seed">What continues to ask for my attention<span style="display:block;font-size:14px;opacity:.6;margin-top:.2rem">The question underneath all the others.</span></div>
       </div>
       <a href="https://greenhouse.echoesinbloom.co" class="gh-enter">Enter the greenhouse <span class="gh-enter-rule"></span></a>
     </div>
@@ -511,17 +505,20 @@
 
 <div class="cur" id="spiral-up">
   <div class="sec-head"><div class="sec-lbl">Current curiosity</div><div class="sec-rule"></div></div>
-  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.7;margin-bottom:1.25rem">These are the questions currently shaping my attention. Not answers. Not conclusions. Just threads I'm following to see where they lead.</p>
-  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">How does meaning evolve over time?</span><span class="ci-badge b-alive">Alive</span></div>
-  <div class="cx"><div class="cx-in">Not the concept. The sensation. Where does it land? How long does it stay before the nervous system decides it's safe to keep?</div></div>
-  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">Nature as Teacher</span><span class="ci-badge b-alive">Alive</span></div>
-  <div class="cx"><div class="cx-in">Not just finding people. Learning to believe again that you are worth being found.</div></div>
-  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">Symbolism that keeps returning</span><span class="ci-badge b-alive">Alive</span></div>
-  <div class="cx"><div class="cx-in">Not happiness. Closer to participation. The moment you stop watching your life and start being inside it.</div></div>
-  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">The relationship between attention and Becoming</span><span class="ci-badge b-seed">Seed</span></div>
-  <div class="cx"><div class="cx-in">No further explanation yet. That's fine.</div></div>
-  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">Fascia and memory</span><span class="ci-badge b-new">New</span></div>
-  <div class="cx"><div class="cx-in">The fascia holds things the mind has already moved on from. Learning to listen there first.</div></div>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.75;margin-bottom:.5rem">These are the questions currently shaping my attention.</p>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.75;margin-bottom:.5rem">I don't collect them because I expect quick answers. I return to them because they keep changing the way I notice.</p>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.75;margin-bottom:.5rem">Some become Field Notes. Some become conversations. Some become relationships.</p>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.75;margin-bottom:1.75rem">Some simply become companions.</p>
+  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">How does meaning evolve over time?</span><span class="ci-badge b-alive">Returning</span><span class="ci-arrow">&#x25BE;</span></div>
+  <div class="cx"><div class="cx-in"><em style="display:block;color:var(--amber-d);margin-bottom:.6rem;font-size:14px">What becomes visible when we stop expecting meaning to arrive all at once?</em>Not as a destination but as a process. The same field note, the same maker, the same place — each return reveals something that wasn't visible before. Meaning seems to accumulate the way soil does: slowly, through what keeps coming back.</div></div>
+  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">Nature as Teacher</span><span class="ci-badge b-alive">Returning</span><span class="ci-arrow">&#x25BE;</span></div>
+  <div class="cx"><div class="cx-in"><em style="display:block;color:var(--amber-d);margin-bottom:.6rem;font-size:14px">What becomes visible when we stop treating nature as scenery and begin relating to it as a participant?</em>The natural world doesn't explain itself. It simply keeps unfolding. What would it look like to practice that — to observe without needing to conclude, to let patterns emerge rather than forcing them into language?</div></div>
+  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">Symbolism that keeps returning</span><span class="ci-badge b-alive">Returning</span><span class="ci-arrow">&#x25BE;</span></div>
+  <div class="cx"><div class="cx-in"><em style="display:block;color:var(--amber-d);margin-bottom:.6rem;font-size:14px">Why do certain images keep arriving before we understand what they mean?</em>Certain images recur — the butterfly, the spiral, the field, the garden. Not because I chose them. Because they kept showing up. This inquiry is about learning to trust what returns before understanding why it matters.</div></div>
+  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">The relationship between attention and becoming</span><span class="ci-badge b-seed">Seed</span><span class="ci-arrow">&#x25BE;</span></div>
+  <div class="cx"><div class="cx-in"><em style="display:block;color:var(--amber-d);margin-bottom:.6rem;font-size:14px">How does what we choose to notice shape who we are becoming?</em>A question still forming. Something about how the things we pay attention to shape who we're becoming — and how choosing what to notice might be one of the most significant acts available to us.</div></div>
+  <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">What makes a place feel alive?</span><span class="ci-badge b-new">Growing</span><span class="ci-arrow">&#x25BE;</span></div>
+  <div class="cx"><div class="cx-in"><em style="display:block;color:var(--amber-d);margin-bottom:.6rem;font-size:14px">What accumulates in a place when people keep returning with intention?</em>Some places hold more than their size would suggest. A market, a studio, a stretch of road. The question isn't what's there — it's what builds when attention is paid consistently and care is brought back again and again.</div></div>
 </div>
 
 <div class="wn-block">
@@ -549,6 +546,7 @@
 <section class="fn" id="field-notes">
   <div class="fn-head">
     <div class="sec-lbl">Field Notes &middot; What I witnessed</div>
+    <a href="/almanac" style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);text-decoration:none;transition:color .2s;white-space:nowrap" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--ink-faint)'">Browse the Almanac &rarr;</a>
   </div>
   <div class="fn-grid-wrap" id="fn-grid"></div>
   <div id="fn-load-more" style="display:none;text-align:center;padding:0 2rem 3rem">
@@ -561,19 +559,19 @@
   <div class="bloom-lbl">From the bloom</div>
   <div id="bloom-entries">
     <div class="bi">
-      <div class="bi-k">Echoes &middot; Philosophy &middot; Foundations</div>
+      <div class="bi-k">Echo &middot; Bloom &middot; Field</div>
       <div class="bi-t">Observation + Inquiry = Bloom</div>
-      <div class="bi-e">Every entry on this site begins the same way: Something noticed, followed by a curiosity. Meaning tends to emerge somewhere in between.</div>
+      <div class="bi-e">Every inquiry in Echoes begins the same way: something is noticed. Curiosity follows. Meaning rarely arrives all at once — it grows through attention, conversation, and return. Bloom isn't the answer. Bloom is what becomes visible when we stay with the question.</div>
     </div>
     <div class="bi">
-      <div class="bi-k">Bloom &middot; Aliveness &middot; Participation</div>
+      <div class="bi-k">Attention &middot; Participation &middot; Garden</div>
       <div class="bi-t">What becomes visible when we learn how to pay attention?</div>
-      <div class="bi-e">This whole thing started as a healing journey. Now, it has evolved into an experiment in living on purpose. Participating. To meet the people, places, and experiences that make a life feel more alive.</div>
+      <div class="bi-e">Echoes began as a personal practice of noticing. Over time, I realized attention isn't passive. The more closely we observe, the more invitations we receive — to participate, to connect, to belong. Paying attention isn't the destination. It's the doorway.</div>
     </div>
     <div class="bi">
-      <div class="bi-k">Symbols &middot; Intuition &middot; Wonder</div>
+      <div class="bi-k">Wonder &middot; Pattern &middot; Spiral</div>
       <div class="bi-t">Listening to what cannot be seen</div>
-      <div class="bi-e">Not everything arrives as language. Sometimes this is a symbol, a repeated image, or a quiet knowing. This project explores what happens when we learn to listen before we understand.</div>
+      <div class="bi-e">Not everything arrives as language. Sometimes it begins as a feeling, a repeated pattern, a place that keeps calling you back, or a question that won't leave. Rather than rushing to explain these moments, Echoes practices staying with them long enough to see what they become.</div>
     </div>
   </div>
 </section>
@@ -588,9 +586,11 @@
   <div>
     <div class="a-name">A Living Inquiry</div>
     <div class="a-body" id="a-body">For a long time, I thought what I was studying was healing. What I eventually discovered was that I was becoming interested in something much bigger: how we reconnect with life once we begin to feel safe enough to engage with it.<br><br>Echoes in Bloom began as a personal practice of paying attention. Over time, it became something larger — a place to document observations, explore questions, share experiences, and highlight the people, places, and ideas helping us participate more fully in life.<br><br>I'm fascinated by the relationship between attention and meaning, people and place, intuition and understanding, and the way community shapes what becomes possible.<br><br>Through field notes, conversations, experiences, and community stories, I document what I'm noticing and the meaning that emerges when I stay curious long enough to follow it.<br><br>I don't have answers. I'm interested in what becomes visible when we slow down enough to notice, and brave enough to participate in what we find.<br><br>I often describe this as experimenting with myself.<br><br>You're welcome to wander alongside.</div>
+    <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);line-height:1.85;margin-top:1.5rem">There are many ways in. <a href="#field-notes" style="color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--rule-m)">Field Notes</a> document the journey. The <a href="/field-guide" style="color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--rule-m)">Field Guide</a> offers a shared language. <a href="#spiral-up" style="color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--rule-m)">Spiral Up</a> follows the questions that keep returning.</p>
     <button class="a-edit-btn" onclick="editAbout()">Edit about me</button>
   </div>
 </div>
+
 
 
 <div class="signup" style="width:100%"><div style="max-width:520px">
@@ -631,12 +631,13 @@
   </div>
 </div>
 
-<!-- FIELD GUIDE DOORWAY — quiet invitation -->
+<!-- ALMANAC + FIELD GUIDE DOORWAY — quiet invitations -->
 <div style="padding:.85rem 2rem;border-top:1px solid var(--rule);background:var(--linen)">
-  <a href="/field-guide" style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint);text-decoration:none;transition:color .2s">
-    New here? <span style="color:var(--amber)">Enter the Field Guide &rarr;</span>
-  </a>
-  <div style="font-size:10px;color:var(--ink-faint);margin-top:.2rem;font-family:var(--n);letter-spacing:.04em">A guide to the language, symbols, and living ecosystem of Echoes in Bloom.</div>
+  <div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:baseline">
+    <a href="/field-guide" style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--ink-faint)'">New here? <span style="color:var(--amber)">Enter the Field Guide &rarr;</span></a>
+    <a href="/almanac" style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--ink-faint)'">Browse the Almanac &rarr;</a>
+  </div>
+  <div style="font-size:10px;color:var(--ink-faint);margin-top:.3rem;font-family:var(--n);letter-spacing:.04em">A guide to the language · A memory of the seasons</div>
 </div>
 
 <footer class="foot">
@@ -778,7 +779,8 @@ function toggleCi(el){
   const cx=el.nextElementSibling;
   const isOpen=cx.classList.contains('open');
   document.querySelectorAll('.cx.open').forEach(c=>c.classList.remove('open'));
-  if(!isOpen)cx.classList.add('open');
+  document.querySelectorAll('.ci.open').forEach(c=>c.classList.remove('open'));
+  if(!isOpen){cx.classList.add('open');el.classList.add('open');}
 }
 
 
