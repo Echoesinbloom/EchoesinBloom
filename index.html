@@ -412,17 +412,16 @@
     <div class="moon-display" id="moon-display" onclick="toggleMoon()"></div>
     <a href="#field-notes" class="nl">Field Notes</a>
     <a href="/community" class="nl">Worth Noticing</a>
-    <a href="#spiral-up" class="nl">Spiral Up</a>
-    <a href="#echoes" class="nl">Echoes</a>
-    <a href="#bloom" class="nl">Bloom</a>
+    <a href="/around-here" class="nl">Around Here</a>
     <a href="/philosophy" class="nl">Philosophy</a>
-    <a href="https://greenhouse.echoesinbloom.co" class="nl nl-gh"><span class="gh-pip"></span>Greenhouse</a>
     <a href="/field-guide" class="nl" style="opacity:.65;font-size:9px">Field Guide</a>
   </div>
 </nav>
 
 <div class="moon-panel" id="moon-panel">
   <div class="moon-current">
+    <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.5rem">Under This Moon</div>
+    <div style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--on-dark-soft);line-height:1.6;margin-bottom:1rem;max-width:520px">For centuries, the moon has helped people mark time — in gardens, bodies, rituals, and stories. Here, each phase offers a way to notice the conditions around us and within us.</div>
     <div class="mp-top">
       <div class="mp-phase" id="mp-phase"></div>
       <div class="mp-sign" id="mp-sign"></div>
@@ -432,15 +431,15 @@
     <button class="mp-expand-btn" onclick="toggleMoonDeep()">Read more about this phase</button>
     <div class="mp-deep" id="mp-deep">
       <div class="mp-deep-section">
-        <div class="mp-deep-lbl">Astronomical</div>
-        <div class="mp-deep-text" id="mp-astro"></div>
-      </div>
-      <div class="mp-deep-section">
-        <div class="mp-deep-lbl">Agricultural</div>
+        <div class="mp-deep-lbl">In the Garden</div>
         <div class="mp-deep-text" id="mp-agri"></div>
       </div>
       <div class="mp-deep-section">
-        <div class="mp-deep-lbl">Astrological</div>
+        <div class="mp-deep-lbl">In the Inner Life</div>
+        <div class="mp-deep-text" id="mp-inner"></div>
+      </div>
+      <div class="mp-deep-section">
+        <div class="mp-deep-lbl">In Astrology</div>
         <div class="mp-deep-text" id="mp-astro2"></div>
       </div>
       <div class="mp-prompt" id="mp-prompt"></div>
@@ -464,16 +463,6 @@
   <div class="branch-desc-text" id="branch-desc-text"></div>
 </div>
 
-<div class="theme-bar" id="theme-bar">
-  <div class="theme-bar-lbl">Wander by theme</div>
-  <div class="theme-pill worth-noticing-pill" id="worth-noticing-pill" data-theme="__worth_noticing__" onclick="setWorthNoticing(this)" style="font-weight:500;display:none">Worth Noticing</div>
-  <div id="theme-pills" style="display:contents"></div>
-</div>
-<div class="theme-banner" id="theme-banner">
-  <div class="theme-banner-text">Showing everything connected to <span id="theme-banner-name"></span></div>
-  <button class="theme-banner-clear" onclick="clearTheme()">Clear &times;</button>
-</div>
-
 <div class="hero">
   <div class="hero-season"><span class="hero-line"></span><span id="hero-season-text">Summer 2025</span></div>
   <h1 class="hero-title" id="hero-title">What if paying closer<br>attention changed the way<br>we lived together?</h1>
@@ -484,6 +473,15 @@
   <div class="fn-head">
     <div class="sec-lbl">Field Notes &middot; What I witnessed</div>
     <a href="/almanac" style="font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);text-decoration:none;transition:color .2s;white-space:nowrap" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--ink-faint)'">Browse the Almanac &rarr;</a>
+  </div>
+  <div class="theme-bar" id="theme-bar">
+    <div class="theme-bar-lbl">Wander by theme</div>
+    <div class="theme-pill worth-noticing-pill" id="worth-noticing-pill" data-theme="__worth_noticing__" onclick="setWorthNoticing(this)" style="font-weight:500;display:none">Worth Noticing</div>
+    <div id="theme-pills" style="display:contents"></div>
+  </div>
+  <div class="theme-banner" id="theme-banner">
+    <div class="theme-banner-text">Showing everything connected to <span id="theme-banner-name"></span></div>
+    <button class="theme-banner-clear" onclick="clearTheme()">Clear &times;</button>
   </div>
   <div class="fn-grid-wrap" id="fn-grid"></div>
   <div id="fn-load-more" style="display:none;text-align:center;padding:0 2rem 3rem">
@@ -535,13 +533,13 @@
     <div>
       <div class="gh-marker">The Greenhouse</div>
       <h2 class="gh-heading">Currently<br>incubating</h2>
-      <p class="gh-note">Some things ask to be shared. Others ask to be lived with a little longer.<br><br>The Greenhouse is where observations are tended before they're ready to be shared. Questions, relationships, symbols, and patterns are allowed to unfold here over time. Nothing here is finished. Everything here is becoming.</p>
+      <p class="gh-note">Some things ask to be shared. Others ask to be lived with a little longer.<br><br>The Greenhouse holds observations that are still unfolding — questions, relationships, symbols, and recurring patterns that have not yet found their final form.</p>
     </div>
     <div>
       <div class="gh-seeds" id="gh-seeds">
         <div class="gh-seed">Observation + Inquiry = Bloom<span style="display:block;font-size:14px;opacity:.6;margin-top:.2rem">How attention, curiosity, and return gradually reveal meaning.</span></div>
         <div class="gh-seed">The nervous system's relationship to Wonder<span style="display:block;font-size:14px;opacity:.6;margin-top:.2rem">Can feeling safe change what we're capable of noticing?</span></div>
-        <div class="gh-seed">Community as a practice of aliveness<span style="display:block;font-size:14px;opacity:.6;margin-top:.2rem">What becomes possible when belonging is something we actively cultivate?</span></div>
+        <div class="gh-seed">Community as a practice of aliveness and embodiment<span style="display:block;font-size:14px;opacity:.6;margin-top:.2rem">What becomes possible when belonging is something we actively cultivate?</span></div>
         <div class="gh-seed">What continues to ask for my attention<span style="display:block;font-size:14px;opacity:.6;margin-top:.2rem">The question underneath all the others.</span></div>
       </div>
       <a href="https://greenhouse.echoesinbloom.co" class="gh-enter">Enter the greenhouse <span class="gh-enter-rule"></span></a>
@@ -555,17 +553,21 @@
     <div class="bi">
       <div class="bi-k">Echo &middot; Bloom &middot; Field</div>
       <div class="bi-t">Observation + Inquiry = Bloom</div>
-      <div class="bi-e">Most things reveal themselves slowly. They ask to be noticed. Then revisited. Then lived with. Bloom isn't the answer. It's what becomes visible when curiosity is given enough time.</div>
+      <div class="bi-e">An observation becomes more than a passing moment when we return to it with curiosity. Bloom is the form that begins to emerge through that continued relationship — a story, a connection, a question, or a new way of seeing.</div>
     </div>
     <div class="bi">
-      <div class="bi-k">Attention &middot; Participation &middot; Garden</div>
-      <div class="bi-t">What becomes visible when we learn how to pay attention?</div>
-      <div class="bi-e">Attention changes us because it changes our relationship with what surrounds us. The more closely we pay attention, the more invitations we receive — to participate, to care, to contribute, and to belong. Attention isn't the destination. It's how relationship begins.</div>
+      <div class="bi-k">Attention &middot; Safety &middot; Participation</div>
+      <div class="bi-t">The nervous system's relationship to Wonder</div>
+      <div class="bi-e">Wonder asks us to soften our certainty and become available to what is here. This inquiry explores how safety, presence, and regulation affect our ability to notice beauty, receive surprise, and participate in life beyond survival.</div>
     </div>
     <div class="bi">
+      <div class="bi-k">Relationship &middot; Reciprocity &middot; Belonging</div>
+      <div class="bi-t">Community as a practice of Aliveness and Embodiment</div>
+      <div class="bi-e">Aliveness does not develop only within the self. It is practiced through showing up, exchanging care, witnessing other people's work, and contributing to the places we inhabit. This inquiry follows what becomes possible when community is treated as a lived relationship rather than an abstract ideal.</div>
+    </div>
+    <div class="bi" style="border-bottom:none;padding-bottom:.5rem">
       <div class="bi-k">Wonder &middot; Pattern &middot; Spiral</div>
-      <div class="bi-t">Listening to what cannot be seen</div>
-      <div class="bi-e">Not everything arrives as language. Sometimes it begins as a feeling, a repeated pattern, a place that keeps calling you back, or a question that won't leave. Rather than rushing to explain them, Echoes practices staying with them long enough to see what they become.</div>
+      <div style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.7">Not everything begins in language. Some things first appear as sensation, intuition, repetition, or a place that keeps calling us back. The Greenhouse makes room for these quieter forms of knowing without requiring them to become conclusions too quickly.</div>
     </div>
   </div>
 </section>
@@ -620,20 +622,22 @@
     </div>
     <div class="ln-success" id="ln-success">Your note arrived. Thank you for taking the time to reach out &mdash; I&rsquo;ll write back when I can.</div>
   </div>
-  <div style="padding:1.5rem 0 0;max-width:520px;margin:1.5rem auto 0;border-top:1px solid rgba(255,255,255,.08)">
-    <div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:baseline">
-      <a href="/field-guide" style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-soft);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--on-dark-soft)'">New here? <span style="color:var(--amber)">Enter the Field Guide &rarr;</span></a>
-      <a href="/almanac" style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-soft);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--amber)'" onmouseout="this.style.color='var(--on-dark-soft)'">Browse the Almanac &rarr;</a>
-    </div>
-    <div style="font-size:10px;color:var(--on-dark-soft);margin-top:.3rem;font-family:var(--n);letter-spacing:.04em">A guide to the language &middot; A memory of the seasons</div>
-  </div>
 </div>
 
 
 <footer class="foot">
-  <div class="foot-l">Let's meander.</div>
-  <div class="foot-r" id="foot-season">Echoes in Bloom</div>
-  <div class="foot-admin" onclick="openAdminModal()">admin</div>
+  <div style="width:100%">
+    <div style="text-align:center;margin-bottom:1rem;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-soft)">
+      <a href="https://greenhouse.echoesinbloom.co" style="display:inline-flex;align-items:center;gap:.35rem;color:var(--on-dark-soft);text-decoration:none"><span class="gh-pip"></span>Greenhouse</a>
+      <span style="margin:0 .6rem;opacity:.5">&middot;</span>
+      <a href="/almanac" style="color:var(--on-dark-soft);text-decoration:none">Almanac</a>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="foot-l">Let's meander.</div>
+      <div class="foot-r" id="foot-season">Echoes in Bloom</div>
+      <div class="foot-admin" onclick="openAdminModal()">admin</div>
+    </div>
+  </div>
 </footer>
 
 <div class="admin-modal-bg" id="admin-modal">
@@ -699,14 +703,14 @@ const db=createClient(SB_URL,SB_KEY);
 
 // MOON DATA
 const MOON_DEEP={
-  'New Moon':{para:'The dark before the beginning. This is the moment of pure potential — when the slate is wiped clean and new intentions can take root.',astro:'The moon sits between the earth and sun, its illuminated face turned away from us. We are in the dark, which is not absence but possibility.',agri:'Plant above-ground crops now. Seeds sown at the New Moon germinate quickly, drawing energy from the building light. Leafy greens, herbs, and flowers all benefit from being planted in this phase.',astro2:'The New Moon in each sign carries the flavour of that sign. In Virgo, intentions around healing, craft, and discernment take root most deeply.',prompt:'What are you ready to begin? What needs to be cleared before something new can grow?'},
-  'Waxing Crescent':{para:'The first sliver of light returning. This is the phase of commitment — you have set your intention, now you take the first steps toward it.',astro:'The moon is moving away from the sun, its lit face slowly turning toward us. Energy is building, momentum is possible.',agri:'Continue planting above-ground crops. Good for transplanting seedlings. Water generously — moisture is drawn upward in the waxing cycle.',astro2:'The crescent asks: are you willing to show up for what you said you wanted? Small consistent actions matter more than grand gestures now.',prompt:'What first step have you been avoiding? What would it look like to show up for this?'},
-  'First Quarter':{para:'Half-lit and decisive. You may encounter the first resistance — the moment when the intention meets reality and you have to choose to continue.',astro:'The moon is at a 90-degree angle to the sun. Half illuminated. A moment of tension between where you were and where you are going.',agri:'A good time for cultivating — weeding, pruning, and tending. The energy supports action and decision-making. Plant beans and grains.',astro2:'This phase asks you to make decisions. What needs to be released to move forward? What habit or belief is slowing the growth?',prompt:'Where are you meeting resistance? Is the resistance a sign to stop, or a sign that something real is being built?'},
-  'Waxing Gibbous':{para:'Almost full. You can see the shape of what you have been building. This is a time of refinement — adjusting, editing, preparing for the fullness that is coming.',astro:'The moon is nearly fully illuminated, growing larger each night. Maximum energy is approaching. Plants and tides feel it.',agri:'Water and fertilise. The waxing energy pulls moisture and nutrients upward. Harvest herbs and flowers for maximum potency.',astro2:'Review and refine. What needs to be adjusted before the Full Moon reveals everything? What are you still carrying that does not belong?',prompt:'What have you built so far? What still needs tending before it is ready to be seen?'},
-  'Full Moon':{para:'Everything is illuminated. What has been growing in the dark is now fully visible — to you and to others. This is a moment of revelation, completion, and release.',astro:'The moon is directly opposite the sun, fully illuminated from our perspective. Tides are at their highest. The gravitational pull is strongest.',agri:'Harvest now for maximum potency. Root vegetables are fullest. Avoid planting — the energy is too intense for germination.',astro2:'What is being revealed? The Full Moon lights up what has been hidden — in our lives and in ourselves. Emotions run close to the surface for good reason.',prompt:'What has been revealed to you this cycle? What are you ready to release? What are you celebrating?'},
-  'Waning Gibbous':{para:'The light is beginning to recede. This is a time of gratitude and sharing — you have received, now you give back, teach, and integrate.',astro:'The moon is past full and beginning to wane. Still bright, but retreating. The intense energy of the Full Moon is softening into reflection.',agri:'Harvest root vegetables and crops meant for storage. Prune fruit trees and shrubs — cuts made now heal more cleanly. Avoid planting.',astro2:'The disseminating phase is for sharing what you have learned. Who needs to hear what you now know? What wisdom wants to move through you?',prompt:'What did this cycle teach you? What are you grateful for? What do you want to share or pass on?'},
-  'Last Quarter':{para:'Half-lit again, but now retreating. This is a time of release, forgiveness, and clearing. Let go of what did not work without judgment.',astro:'The moon is again at a 90-degree angle to the sun, but now on the other side. The energy is turning inward. Reflection deepens.',agri:'Rest the soil. Clear, weed, and compost. A good time to turn compost and prepare beds for future planting. Harvest root crops for storage.',astro2:'Release without attachment. What beliefs, habits, or relationships have outlived their season? The Last Quarter supports honest endings.',prompt:'What are you ready to let go of? What has run its course? What would make space for something new?'},
-  'Waning Crescent':{para:'The final sliver before the dark. A time of rest, surrender, and preparation. You do not need to do anything right now. Just rest.',astro:'Only a thin crescent remains visible, rising just before dawn. The moon is almost back to where the cycle began. The dark is coming and it is not to be feared.',agri:'Rest the soil and yourself. Plant garlic — one of the few crops that benefits from the waning crescent. Prepare and plan for the next cycle.',astro2:'The Balsamic Moon is the most mystical phase — a time for dreams, visions, and deep inner knowing. Pay attention to what arrives in the quiet.',prompt:'What do you need to surrender? What is asking for rest? What visions or dreams are arriving as you slow down?'}
+  'New Moon':{para:'The dark before the beginning. This is the moment of pure potential — when the slate is wiped clean and new intentions can take root.',agri:'Plant above-ground crops now. Seeds sown at the New Moon germinate quickly, drawing energy from the building light. Leafy greens, herbs, and flowers all benefit from being planted in this phase.',inner:'Energy may be gathering around what has not yet taken shape. A good time to clear space for something new before deciding exactly what it is.',astro2:'Often associated with new intentions and beginnings — the New Moon in each sign carries that sign\'s particular flavor of starting over.',prompt:'What are you ready to begin? What needs to be cleared before something new can grow?'},
+  'Waxing Crescent':{para:'The first sliver of light returning. This is the phase of commitment — you have set your intention, now you take the first steps toward it.',agri:'Continue planting above-ground crops. Good for transplanting seedlings. Water generously — moisture is drawn upward in the waxing cycle.',inner:'Momentum is building around an early commitment. Small, consistent actions matter more than grand gestures right now.',astro2:'Often linked to the first real test of follow-through — are you willing to show up for what you said you wanted?',prompt:'What first step have you been avoiding? What would it look like to show up for this?'},
+  'First Quarter':{para:'Half-lit and decisive. You may encounter the first resistance — the moment when the intention meets reality and you have to choose to continue.',agri:'A good time for cultivating — weeding, pruning, and tending. The energy supports action and decision-making. Plant beans and grains.',inner:'Intention meets reality, and resistance often shows up here — not as a warning, but as part of what it takes to build something real.',astro2:'Often associated with decision points, where held tension turns into forward motion.',prompt:'Where are you meeting resistance? Is the resistance a sign to stop, or a sign that something real is being built?'},
+  'Waxing Gibbous':{para:'Almost full. You can see the shape of what you have been building. This is a time of refinement — adjusting, editing, preparing for the fullness that is coming.',agri:'Water and fertilise. The waxing energy pulls moisture and nutrients upward. Harvest herbs and flowers for maximum potency — they are at their most vital.',inner:'A time of refinement — adjusting, editing, and preparing for the fullness that is coming, rather than rushing to meet it unfinished.',astro2:'Often tied to review and fine-tuning, the quiet work that happens right before something comes fully into view.',prompt:'What have you built so far? What still needs tending before it is ready to be seen?'},
+  'Full Moon':{para:'Everything is illuminated. What has been growing in the dark is now fully visible — to you and to others. This is a moment of revelation, completion, and release.',agri:'Harvest now for maximum potency. Root vegetables are fullest. Avoid planting — the energy is too intense for germination. A good time to harvest medicinal herbs.',inner:'What has been growing quietly becomes visible — to you and to the people around you. Emotions often run close to the surface for good reason.',astro2:'Often associated with culmination and revelation — what the Full Moon lights up was already there, just not yet seen.',prompt:'What has been revealed to you this cycle? What are you ready to release? What are you celebrating?'},
+  'Waning Gibbous':{para:'The light is beginning to recede. This is a time of gratitude and sharing — you have received, now you give back, teach, and integrate.',agri:'Harvest root vegetables and crops meant for storage. Prune fruit trees and shrubs — cuts made now heal more cleanly. Avoid planting.',inner:'A time of gratitude and sharing — what you have received starts moving back out into the world, toward whoever needs it next.',astro2:'Often linked to disseminating what has been learned, and to the people this cycle\'s knowledge might still reach.',prompt:'What did this cycle teach you? What are you grateful for? What do you want to share or pass on?'},
+  'Last Quarter':{para:'Half-lit again, but now retreating. This is a time of release, forgiveness, and clearing. Let go of what did not work without judgment.',agri:'Rest the soil. Clear, weed, and compost. A good time to turn compost and prepare beds for future planting. Harvest root crops for storage.',inner:'A season for honest endings — releasing what has run its course, without needing to judge it or explain why it is time.',astro2:'Often associated with release, the quiet unwinding of what no longer fits before the cycle turns dark again.',prompt:'What are you ready to let go of? What has run its course? What would make space for something new?'},
+  'Waning Crescent':{para:'The final sliver before the dark. A time of rest, surrender, and preparation. You do not need to do anything right now. Just rest.',agri:'Rest the soil and yourself. Plant garlic — one of the few crops that benefits from the waning crescent. Prepare and plan for the next cycle.',inner:'A time for rest, surrender, and quiet preparation. Nothing needs to be done right now — that is the point of this phase, not a failure of it.',astro2:'Often tied to dreams, visions, and inner knowing that arrive more easily in stillness than in effort.',prompt:'What do you need to surrender? What is asking for rest? What visions or dreams are arriving as you slow down?'}
 };
 const MOON_SYMBOLS={'New Moon':'○','Waxing Crescent':'◑','First Quarter':'◑','Waxing Gibbous':'◑','Full Moon':'●','Waning Gibbous':'◐','Last Quarter':'◐','Waning Crescent':'◐'};
 const MOON_NEXT={'New Moon':'A thin crescent will appear — the first invitation to act on what you have been intending.','Waxing Crescent':'The moon reaches its first major decision point. Momentum is building toward the full light.','First Quarter':'The waxing energy intensifies. You are past the halfway point toward fullness.','Waxing Gibbous':'The Full Moon approaches. What you have been building is about to be fully illuminated.','Full Moon':'The light begins to recede. A time of gratitude, sharing, and integration begins.','Waning Gibbous':'A moment of decision and release. The cycle is moving toward completion.','Last Quarter':'The final quiet before the dark. Rest, surrender, and prepare.','Waning Crescent':'The cycle begins again. The slate is cleared. New intentions can take root.'};
@@ -746,7 +750,7 @@ function initMoon(){
   document.getElementById('mp-sign').textContent='Moon in '+d.sign;
   document.getElementById('mp-energy').textContent=d.energy;
   document.getElementById('mp-para').textContent=deep.para||'';
-  document.getElementById('mp-astro').textContent=deep.astro||'';
+  document.getElementById('mp-inner').textContent=deep.inner||'';
   document.getElementById('mp-agri').textContent=deep.agri||'';
   document.getElementById('mp-astro2').textContent=deep.astro2||'';
   document.getElementById('mp-prompt').textContent=deep.prompt||'';
