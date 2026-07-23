@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Echoes in Bloom — Philosophy. A living inquiry into how life is tended.">
+  <meta property="og:title" content="Philosophy — Echoes in Bloom">
+  <title>Philosophy — Echoes in Bloom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --linen:#f2ece0;--linen-s:#e8e0d0;--parch:#ede4d4;
+      --deep:#16120c;
+      --amber:#c87030;--amber-d:#a05020;--amber-w:#f5e8d8;
+      --moss:#6a8a58;
+      --ink:#1a1710;--ink-mid:#3a3428;--ink-soft:#6a6258;--ink-faint:#a89e90;
+      --on-dark:#f0e4cc;--on-dark-mid:#b09878;--on-dark-soft:#886858;
+      --rule:rgba(40,30,15,.09);--rule-m:rgba(40,30,15,.14);
+      --s:'Cormorant Garamond',serif;--n:'Jost',sans-serif;
+      color-scheme:light only;
+    }
+    body{font-family:var(--n);background:var(--linen);color:var(--ink);-webkit-font-smoothing:antialiased}
+
+    /* NAV — same pattern as the rest of the site */
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--rule);background:var(--linen);position:sticky;top:0;z-index:100}
+    .nav-home{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);text-decoration:none;letter-spacing:.02em}
+    .nav-home:hover{color:var(--amber)}
+    .nav-links{display:flex;gap:1.75rem;align-items:center;flex-wrap:wrap}
+    .nl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;font-family:var(--n);font-weight:400;transition:color .2s}
+    .nl:hover,.nl.active{color:var(--ink)}
+    .nl-gh{color:var(--moss);font-weight:500;display:flex;align-items:center;gap:.35rem}
+    .gh-pip{width:5px;height:5px;border-radius:50%;background:var(--moss);flex-shrink:0}
+
+    /* HERO — this page's job is to explain, so it can say so directly */
+    .p-hero{padding:4rem 2rem 3rem;max-width:640px}
+    .p-eyebrow{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1.5rem}
+    .p-hero-title{font-family:var(--s);font-size:clamp(36px,6vw,52px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.08;margin-bottom:1.5rem;letter-spacing:-.01em}
+    .p-hero-body{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink-mid);line-height:1.75;max-width:520px}
+
+    /* SECTION DIVIDER — dark, marks each part */
+    .p-divider{background:var(--deep);padding:3.5rem 2rem;background-image:radial-gradient(ellipse at 30% 50%, rgba(200,112,48,.06) 0%, transparent 65%)}
+    .p-divider-inner{max-width:640px}
+    .p-divider-num{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1rem}
+    .p-divider-title{font-family:var(--s);font-size:clamp(26px,4vw,36px);font-weight:300;font-style:italic;color:var(--on-dark);line-height:1.15;margin-bottom:.85rem}
+    .p-divider-body{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-mid);line-height:1.7;max-width:520px}
+
+    /* PROSE SECTION — light */
+    .p-section{padding:3rem 2rem;max-width:640px;border-bottom:1px solid var(--rule)}
+    .p-section-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-bottom:1.25rem}
+    .p-section p{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:1rem}
+    .p-section p:last-child{margin-bottom:0}
+
+    /* QUOTE — stands alone, amber, no card */
+    .p-quote{padding:3.5rem 2rem;max-width:640px}
+    .p-quote p{font-family:var(--s);font-size:24px;font-style:italic;color:var(--amber-d);line-height:1.5}
+
+    /* DEFINITION — specimen label */
+    .p-def{display:flex;gap:2rem;padding:2rem;max-width:820px;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+    .p-def-left{flex:0 0 200px}
+    .p-def-term{font-family:var(--s);font-size:32px;font-style:italic;color:var(--amber);line-height:1}
+    .p-def-pos{font-family:var(--s);font-size:12px;font-style:italic;color:var(--ink-faint);margin-top:.4rem}
+    .p-def-right{flex:1;min-width:260px}
+    .p-def-meaning{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);line-height:1.6;margin-bottom:.6rem}
+    .p-def-body{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.75}
+
+    /* PILLARS */
+    .p-pillars{padding:1rem 2rem 3rem;max-width:900px}
+    .p-pillar{display:flex;gap:1.75rem;padding:1.75rem 0;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+    .p-pillar:last-child{border-bottom:none}
+    .p-pillar-word{flex:0 0 150px;font-family:var(--s);font-size:28px;font-style:italic;color:var(--amber)}
+    .p-pillar-body{flex:1;min-width:260px}
+    .p-pillar-def{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.65;margin-bottom:.5rem}
+    .p-pillar-q{font-family:var(--n);font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:.4rem}
+    .p-pillar-reveals{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:500}
+    .p-pillar-reveals em{font-family:var(--s);font-style:italic;text-transform:none;letter-spacing:0;color:var(--ink-soft);font-size:13px}
+
+    /* FIELD METHOD FLOW */
+    .p-flow{padding:1rem 2rem 3rem;max-width:900px}
+    .p-flow-row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:stretch;margin:1.5rem 0}
+    .p-flow-step{background:var(--parch);padding:.85rem 1.1rem;flex:1;min-width:130px;text-align:center}
+    .p-flow-step-n{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.3rem}
+    .p-flow-step-w{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink);margin-bottom:.5rem}
+    .p-flow-step-def{font-family:var(--n);font-size:11px;color:var(--ink-soft);line-height:1.5}
+    .p-flow-step.hinge{background:var(--amber);border:1px solid var(--amber-d)}
+    .p-flow-step.hinge .p-flow-step-n{color:rgba(255,255,255,.8)}
+    .p-flow-step.hinge .p-flow-step-w{color:white}
+    .p-flow-step.hinge .p-flow-step-def{color:rgba(255,255,255,.88)}
+    .p-flow-arrow{display:flex;align-items:center;color:var(--ink-faint);font-size:14px}
+
+    /* LIVING SYSTEMS — bare questions */
+    .p-questions{padding:1rem 2rem 3rem;max-width:640px}
+    .p-question{font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink);line-height:1.5;padding:.9rem 0;border-bottom:1px solid var(--rule)}
+    .p-question:last-child{border-bottom:none}
+
+    /* CONTRAST — extraction / pollination */
+    .p-contrast{display:flex;gap:1.5rem;padding:1rem 2rem 2rem;max-width:820px;flex-wrap:wrap}
+    .p-contrast-card{flex:1;min-width:240px;background:var(--parch);padding:1.5rem}
+    .p-contrast-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.6rem}
+    .p-contrast-card p{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-mid);line-height:1.6}
+
+    /* CLOSING */
+    .p-closing{background:var(--deep);padding:4.5rem 2rem;background-image:radial-gradient(ellipse at 70% 50%, rgba(200,112,48,.07) 0%, transparent 65%)}
+    .p-closing-inner{max-width:600px}
+    .p-closing-heading{font-family:var(--s);font-size:clamp(24px,4vw,32px);font-weight:300;font-style:italic;color:var(--on-dark);line-height:1.35;margin-bottom:1.25rem}
+    .p-closing-body{font-family:var(--s);font-size:15px;font-style:italic;color:var(--on-dark-mid);line-height:1.75;margin-bottom:2rem}
+    .p-closing-links{display:flex;flex-wrap:wrap;gap:1.5rem}
+    .p-closing-link{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;display:inline-flex;align-items:center;gap:.6rem}
+    .p-closing-link:hover{opacity:.75}
+
+    .footer{padding:2rem;border-top:1px solid rgba(255,255,255,.08);background:var(--deep);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .footer-l{font-family:var(--s);font-size:16px;font-style:italic;color:var(--on-dark)}
+    .footer-r{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-soft)}
+
+    @media(max-width:640px){
+      .nav-links{gap:1rem}
+      .p-def,.p-pillar{flex-direction:column;gap:.75rem}
+      .p-def-left,.p-pillar-word{flex:none}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-home">Echoes in Bloom</a>
+  <div class="nav-links">
+    <a href="/#field-notes" class="nl">Field Notes</a>
+    <a href="/community" class="nl">Worth Noticing</a>
+    <a href="/around-here" class="nl">Around Here</a>
+    <a href="/philosophy" class="nl active">Philosophy</a>
+    <a href="/field-guide" class="nl" style="opacity:.65;font-size:9px">Field Guide</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="p-hero">
+  <div class="p-eyebrow">Philosophy</div>
+  <p class="p-hero-body" style="margin-bottom:1.75rem">Most of us notice pieces of a place. A favorite coffee shop. A garden. A mural. A farmer's market. A conversation. A trail we keep returning to.<br><br>Echoes began when I wondered what happened if I stopped seeing them as separate.<br><br>I didn't arrive at these ideas all at once. I kept following questions until they started finding each other.</p>
+  <h1 class="p-hero-title">How life is tended.</h1>
+  <p class="p-hero-body">Echoes in Bloom is a living inquiry into wonder, change, and the conditions that help life flourish — in a person, a place, and the living systems around both.</p>
+</div>
+
+<!-- WHY NOW -->
+<div class="p-section">
+  <div class="p-section-lbl">Why This Inquiry Exists Now</div>
+  <p>Every generation inherits moments that ask new questions about how we want to live together.</p>
+  <p>Echoes in Bloom is one way of staying awake, human, and participatory while that happens — not by arriving with answers, but by following a question closely enough to let it keep changing shape.</p>
+</div>
+
+<div class="p-quote">
+  <p>The life of a community is shaped by what its people choose to make, grow, tend, preserve, gather, and share.</p>
+</div>
+
+<!-- WONDER -->
+<div class="p-def">
+  <div class="p-def-left">
+    <div class="p-def-term">wonder</div>
+    <div class="p-def-pos">noun</div>
+  </div>
+  <div class="p-def-right">
+    <div class="p-def-meaning">Attention softened by curiosity, surprise, and reverence.</div>
+    <div class="p-def-body">Wonder is not the opposite of seeing clearly. It's what keeps us sensitive enough to notice what is still alive — and it's not only a feeling. It's also how life is sustained.</div>
+  </div>
+</div>
+
+<!-- CENTRAL INQUIRY -->
+<div class="p-section" style="border-bottom:none">
+  <div class="p-section-lbl">The Central Inquiry</div>
+  <p style="font-size:22px">How do we stay awake, human, and participatory while the world changes around us? What helps life flourish — within a person, a place, and a living system?</p>
+</div>
+
+<!-- PART: LIVING SYSTEMS BENEATH A PLACE -->
+<div class="p-divider">
+  <div class="p-divider-inner">
+    <div class="p-divider-title">The Living Systems Beneath a Place</div>
+    <div class="p-divider-body">Community is the web of contributions through which a place remains alive. Art tends meaning. Food tends bodies. Gardens tend relationship with earth and season. Animals invite care and interdependence. Businesses tend local exchange. Places tend belonging. Stories tend memory. Community tends what can continue.</div>
+  </div>
+</div>
+
+<div class="p-questions">
+  <div class="p-question">Who feeds it?</div>
+  <div class="p-question">Who tends its land, animals, and water?</div>
+  <div class="p-question">Who preserves its knowledge, stories, and skills?</div>
+  <div class="p-question">Who creates beauty and belonging?</div>
+  <div class="p-question">Who repairs, teaches, hosts, gathers, and remembers?</div>
+</div>
+
+<div class="p-section" style="border-bottom:none">
+  <p>A garden, a studio, a chicken coop, a market table, and a gathering place may all be participating in the same question: what helps life continue here?</p>
+</div>
+
+<!-- PART: FIVE PILLARS -->
+<div class="p-divider">
+  <div class="p-divider-inner">
+    <div class="p-divider-title">Five Ways of Seeing</div>
+    <div class="p-divider-body">Five symbolic lenses the inquiry keeps returning to. Not categories to sort things into — ways of noticing what's already there.</div>
+  </div>
+</div>
+
+<div class="p-pillars">
+  <div class="p-pillar">
+    <div class="p-pillar-word">Echo</div>
+    <div class="p-pillar-body">
+      <div class="p-pillar-def">Something that returns altered by time, distance, or experience.</div>
+      <div class="p-pillar-q">What keeps returning — and why is it asking to be heard now?</div>
+      <div class="p-pillar-reveals">Reveals <em>the pattern.</em></div>
+    </div>
+  </div>
+  <div class="p-pillar">
+    <div class="p-pillar-word">Butterfly</div>
+    <div class="p-pillar-body">
+      <div class="p-pillar-def">A living expression of transformation through stages.</div>
+      <div class="p-pillar-q">What is changing form — and what must dissolve for that change to occur?</div>
+      <div class="p-pillar-reveals">Reveals <em>the transformation.</em></div>
+    </div>
+  </div>
+  <div class="p-pillar">
+    <div class="p-pillar-word">Garden</div>
+    <div class="p-pillar-body">
+      <div class="p-pillar-def">A living system shaped by relationship, conditions, and care.</div>
+      <div class="p-pillar-q">What conditions are shaping what can grow here?</div>
+      <div class="p-pillar-reveals">Reveals <em>the conditions.</em></div>
+    </div>
+  </div>
+  <div class="p-pillar">
+    <div class="p-pillar-word">Spiral</div>
+    <div class="p-pillar-body">
+      <div class="p-pillar-def">A form of return that does not arrive at the same place unchanged.</div>
+      <div class="p-pillar-q">What becomes visible when we return with greater awareness?</div>
+      <div class="p-pillar-reveals">Reveals <em>the process.</em></div>
+    </div>
+  </div>
+  <div class="p-pillar">
+    <div class="p-pillar-word">Field</div>
+    <div class="p-pillar-body">
+      <div class="p-pillar-def">The living environment in which observation, relationship, and change occur.</div>
+      <div class="p-pillar-q">What can only be understood by being present here?</div>
+      <div class="p-pillar-reveals">Reveals <em>the evidence.</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- PART: FIELD METHOD -->
+<div class="p-divider">
+  <div class="p-divider-inner">
+    <div class="p-divider-title">The Field Practice</div>
+    <div class="p-divider-body">A repeatable way of moving through a question. Echoes doesn't begin by proving a fixed theory — it begins with curiosity, and lets life revise the hypothesis.</div>
+  </div>
+</div>
+
+<div class="p-flow">
+  <div class="p-flow-row">
+    <div class="p-flow-step"><div class="p-flow-step-n">01</div><div class="p-flow-step-w">Inquiry</div><div class="p-flow-step-def">Begin with a genuine question — not to solve it, but to stay with it long enough for it to reveal something new.</div></div>
+    <div class="p-flow-arrow">&rarr;</div>
+    <div class="p-flow-step"><div class="p-flow-step-n">02</div><div class="p-flow-step-w">Observation</div><div class="p-flow-step-def">Pay close attention to what is happening — in yourself, in others, in a place, or in the living systems around you.</div></div>
+    <div class="p-flow-arrow">&rarr;</div>
+    <div class="p-flow-step hinge"><div class="p-flow-step-n">03</div><div class="p-flow-step-w">Participation</div><div class="p-flow-step-def">Step into relationship. Visit the place. Have the conversation. Plant the seed. Attend the gathering.</div></div>
+    <div class="p-flow-arrow">&rarr;</div>
+    <div class="p-flow-step"><div class="p-flow-step-n">04</div><div class="p-flow-step-w">Reflection</div><div class="p-flow-step-def">Pause to make meaning. What surprised you? What changed? What patterns are beginning to emerge?</div></div>
+    <div class="p-flow-arrow">&rarr;</div>
+    <div class="p-flow-step"><div class="p-flow-step-n">05</div><div class="p-flow-step-w">Cultivation</div><div class="p-flow-step-def">Tend what deserves to grow — a relationship, a practice, a question, a place. Keep returning with care.</div></div>
+    <div class="p-flow-arrow">&rarr;</div>
+    <div class="p-flow-step"><div class="p-flow-step-n">06</div><div class="p-flow-step-w">Return</div><div class="p-flow-step-def">Come back changed. Revisit the same question with new experience, and notice what's now visible.</div></div>
+  </div>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.7">The process doesn't end with an answer. It spirals — the same question, returned to with more awareness each time.</p>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.7;margin-top:1rem">Participation is where the inquiry leaves the notebook and enters the world — the hinge between seeing and becoming.</p>
+</div>
+
+<!-- PART: POLLINATION -->
+<div class="p-divider">
+  <div class="p-divider-inner">
+    <div class="p-divider-title">Pollination, Reciprocity, and Non-Extraction</div>
+    <div class="p-divider-body">Pollination is a reminder that life flourishes through exchange. Nothing blooms entirely alone — literally, in the ecology of bees and flowers and food systems, and relationally, in how stories, ideas, and encouragement move between people.</div>
+  </div>
+</div>
+
+<div class="p-contrast">
+  <div class="p-contrast-card">
+    <div class="p-contrast-lbl">Extraction Asks</div>
+    <p>What can be taken from this?</p>
+  </div>
+  <div class="p-contrast-card">
+    <div class="p-contrast-lbl">Pollination Asks</div>
+    <p>What connection might help this grow?</p>
+  </div>
+</div>
+
+<div class="p-def">
+  <div class="p-def-left">
+    <div class="p-def-term">reciprocity</div>
+    <div class="p-def-pos">noun</div>
+  </div>
+  <div class="p-def-right">
+    <div class="p-def-meaning">An exchange in which receiving creates a responsibility to respond.</div>
+    <div class="p-def-body">What does this encounter now ask of me? Support, sharing, returning, introducing, protecting, creating, paying fuller attention — reciprocity has many small shapes.</div>
+  </div>
+</div>
+
+<div class="p-section" style="border-bottom:none">
+  <p>Pollination happens one relationship at a time. Over time, those relationships become the character of a place.</p>
+</div>
+
+<!-- PART: SEASONALITY -->
+<div class="p-divider">
+  <div class="p-divider-inner">
+    <div class="p-divider-title">Seasonality and the Almanac</div>
+    <div class="p-divider-body">A season is a period with its own conditions, rhythms, limits, and possibilities. What becomes possible when we stop expecting every season to produce the same thing?</div>
+  </div>
+</div>
+
+<div class="p-quote">
+  <p>The Almanac records not only what happened — but the conditions in which it appeared.</p>
+</div>
+
+<!-- PART: THE ETHIC -->
+<div class="p-divider">
+  <div class="p-divider-inner">
+    <div class="p-divider-title">Recognition Rooted in Gratitude</div>
+    <div class="p-divider-body">Every community is already full of people tending something. Echoes in Bloom exists, in part, to say: we see what you are tending.</div>
+  </div>
+</div>
+
+<div class="p-section" style="border-bottom:none">
+  <p>Contribution does not have to be enormous to be consequential. A pollinator does not create the whole garden. It carries something from one bloom to another.</p>
+  <p>What travels should strengthen the place it came from — never deplete it.</p>
+</div>
+
+<!-- CLOSING -->
+<div class="p-closing">
+  <div class="p-closing-inner">
+    <div class="p-closing-heading">Notice what is changing. Listen for what is returning. Participate in what deserves to grow.</div>
+    <div class="p-closing-body">You don't need to understand Echoes before you begin noticing. The philosophy isn't something to memorize. It's something you gradually recognize. You have probably already experienced it somewhere on this site.</div>
+    <div class="p-closing-links">
+      <a href="/#field-notes" class="p-closing-link">Follow a Field Note &rarr;</a>
+      <a href="/community" class="p-closing-link">Meet Worth Noticing &rarr;</a>
+      <a href="/around-here" class="p-closing-link">Join Around Here &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-l">Let's meander.</div>
+  <div class="footer-r">Echoes in Bloom</div>
+</footer>
+<div style="text-align:center;padding:0 2rem 1.5rem;background:var(--deep)">
+  <span style="font-size:11px;letter-spacing:.06em;color:var(--on-dark-soft)">
+    <a href="https://greenhouse.echoesinbloom.co" style="display:inline-flex;align-items:center;gap:.35rem;color:var(--on-dark-soft);text-decoration:none"><span class="gh-pip"></span>Greenhouse</a>
+    <span style="margin:0 .5rem;opacity:.5">&middot;</span>
+    <a href="/almanac" style="color:var(--on-dark-soft);text-decoration:none">Almanac</a>
+  </span>
+</div>
+
+</body>
+</html>
