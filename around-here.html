@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Around Here — Echoes in Bloom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --linen:#f2ece0;--linen-s:#e8e0d0;--parch:#ede4d4;
+      --deep:#16120c;
+      --amber:#c87030;--amber-d:#a05020;
+      --moss:#6a8a58;--moss-d:#4a6038;
+      --ink:#1a1710;--ink-mid:#3a3428;--ink-soft:#6a6258;--ink-faint:#a89e90;
+      --rule:rgba(40,30,15,.09);--rule-m:rgba(40,30,15,.14);
+      --s:'Cormorant Garamond',serif;--n:'Jost',sans-serif;
+    }
+    body{font-family:var(--n);background:var(--linen);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--rule);background:var(--linen);position:sticky;top:0;z-index:100}
+    .nav-home{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);text-decoration:none}
+    .nav-home:hover{color:var(--amber)}
+    .nav-links{display:flex;align-items:center;gap:1.75rem}
+    .nl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;transition:color .2s}
+    .nl:hover,.nl.active{color:var(--ink)}
+    /* HERO */
+    .hero{padding:3.5rem 2rem 2.5rem;border-bottom:1px solid var(--rule);max-width:600px}
+    .hero-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1rem}
+    .hero-title{font-family:var(--s);font-size:clamp(32px,5vw,46px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:.85rem}
+    .hero-body{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-soft);line-height:1.75}
+    /* CONTENT */
+    .content{padding:2rem;max-width:680px}
+    /* TIME GROUP */
+    .time-group{margin-bottom:3rem}
+    .time-group-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem}
+    .time-group-lbl::after{content:'';flex:1;height:1px;background:rgba(200,112,48,.2)}
+    /* EVENT CARD */
+    .event-card{border:1px solid var(--rule-m);background:white;margin-bottom:12px;overflow:hidden;transition:border-color .2s;cursor:pointer}
+    .event-card:hover{border-color:rgba(200,112,48,.35)}
+    .event-card-inner{display:flex;gap:1.25rem;padding:1.25rem}
+    .event-date-col{text-align:center;min-width:50px;flex-shrink:0;padding-top:.1rem}
+    .event-day{font-family:var(--s);font-size:28px;font-style:italic;color:var(--amber);line-height:1}
+    .event-month{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-top:.1rem}
+    .event-dow{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-top:.1rem}
+    .event-body{flex:1;min-width:0}
+    .event-category{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-bottom:.25rem}
+    .event-title{font-family:var(--s);font-size:20px;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:.3rem}
+    .event-meta{font-size:11px;color:var(--ink-faint);line-height:1.7}
+    .event-meta strong{font-weight:500;color:var(--ink-soft)}
+    .event-desc{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);line-height:1.65;margin-top:.5rem;padding-top:.5rem;border-top:1px solid var(--rule)}
+    .event-links{display:flex;gap:1rem;margin-top:.65rem;flex-wrap:wrap}
+    .event-link{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500}
+    .event-link:hover{opacity:.7}
+    /* EMPTY */
+    .empty{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-faint);padding:3rem 0;text-align:center}
+    .loading{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);padding:3rem;text-align:center}
+    .footer{padding:2rem;border-top:1px solid var(--rule);text-align:center}
+    .footer-text{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint)}
+    .footer-link{color:var(--ink-soft);text-decoration:none}
+    .footer-link:hover{color:var(--amber)}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-home">Echoes in Bloom</a>
+  <div class="nav-links">
+    <a href="/" class="nl">Field Notes</a>
+    <a href="/community" class="nl">Worth Noticing</a>
+    <a href="/around-here" class="nl active">Around Here</a>
+    <a href="/#spiral-up" class="nl">Spiral Up</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Around Here</div>
+  <h1 class="hero-title">Where life is already<br>happening.</h1>
+  <p class="hero-body">Every gathering changes a place, even in small ways. These are the ways to step into what's already here.</p>
+</div>
+
+<div class="content">
+  <div id="events-container"><div class="loading">Loading...</div></div>
+</div>
+
+<footer class="footer">
+  <p class="footer-text"><a href="/" class="footer-link">Echoes in Bloom</a> &mdash; Let&rsquo;s meander.</p>
+</footer>
+
+<script>
+const SB_URL='https://polewlvnwokvvoajsdfy.supabase.co';
+const SB_KEY='sb_publishable_MhZlQIwtcZyLf7iicRAYcQ_s7UY8tWs';
+const{createClient}=supabase;
+const db=createClient(SB_URL,SB_KEY);
+
+const CATEGORY_LABELS={
+  food:'Food',farmers_market:'Farmers Market',art:'Art',music:'Music',
+  community:'Community',family:'Family',agriculture:'Agriculture',
+  workshop:'Workshop',seasonal:'Seasonal',volunteer:'Volunteer'
+};
+
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+async function init(){
+  const today=new Date();
+  today.setHours(0,0,0,0);
+  const todayStr=today.toISOString().split('T')[0];
+
+  // 60 days from now
+  const future=new Date(today);
+  future.setDate(future.getDate()+60);
+  const futureStr=future.toISOString().split('T')[0];
+
+  const{data,error}=await db.from('events')
+    .select('*, related_profile:related_profile_id(id,name,visibility)')
+    .eq('public',true)
+    .gte('expires_at',todayStr)
+    .lte('event_date',futureStr)
+    .order('event_date',{ascending:true});
+
+  if(error||!data||!data.length){
+    document.getElementById('events-container').innerHTML='<div class="empty">Nothing coming up just yet.<br>Check back soon.</div>';
+    return;
+  }
+
+  // Group — mutually exclusive
+  const todayGroup=[];
+  const weekendGroup=[];
+  const upcomingGroup=[];
+
+  // Find next Saturday and Sunday
+  const dow=today.getDay();
+  const daysToSat=dow===6?0:(6-dow);
+  const daysToSun=dow===0?0:(7-dow);
+  const sat=new Date(today);sat.setDate(today.getDate()+daysToSat);
+  const sun=new Date(today);sun.setDate(today.getDate()+daysToSun);
+  const satStr=sat.toISOString().split('T')[0];
+  const sunStr=sun.toISOString().split('T')[0];
+
+  data.forEach(e=>{
+    const d=e.event_date;
+    if(d===todayStr){
+      todayGroup.push(e);
+    } else if(d===satStr||d===sunStr){
+      weekendGroup.push(e);
+    } else {
+      upcomingGroup.push(e);
+    }
+  });
+
+  let html='';
+
+  if(todayGroup.length){
+    html+=`<div class="time-group"><div class="time-group-lbl">Today</div>${todayGroup.map(renderEvent).join('')}</div>`;
+  }
+
+  if(weekendGroup.length){
+    html+=`<div class="time-group"><div class="time-group-lbl">This Weekend</div>${weekendGroup.map(renderEvent).join('')}</div>`;
+  }
+
+  if(upcomingGroup.length){
+    html+=`<div class="time-group"><div class="time-group-lbl">Coming Up</div>${upcomingGroup.map(renderEvent).join('')}</div>`;
+  }
+
+  document.getElementById('events-container').innerHTML=html||'<div class="empty">Nothing coming up just yet.</div>';
+}
+
+function renderEvent(e){
+  const d=new Date(e.event_date+'T12:00:00');
+  const day=d.getDate();
+  const month=MONTHS[d.getMonth()].substring(0,3).toUpperCase();
+  const dow=DAYS[d.getDay()];
+
+  const timeStr=[e.start_time,e.end_time].filter(Boolean).join(' – ');
+  const hostedBy=(e.related_profile&&e.related_profile.visibility==='public')?e.related_profile:null;
+
+  return`<div class="event-card">
+    <div class="event-card-inner">
+      <div class="event-date-col">
+        <div class="event-day">${day}</div>
+        <div class="event-month">${month}</div>
+        <div class="event-dow">${dow.substring(0,3)}</div>
+      </div>
+      <div class="event-body">
+        <div class="event-category">${CATEGORY_LABELS[e.category]||e.category}</div>
+        <div class="event-title">${e.title}</div>
+        <div class="event-meta">
+          <strong>${e.location}</strong>${e.address?' &middot; '+e.address:''}
+          ${timeStr?'<br>'+timeStr:''}
+        </div>
+        ${e.description?`<div class="event-desc">${e.description}</div>`:''}
+        ${hostedBy||e.website||e.instagram?`<div class="event-links">
+          ${hostedBy?`<a href="/community?id=${hostedBy.id}" class="event-link">Hosted by ${hostedBy.name} &rarr;</a>`:''}
+          ${e.website?`<a href="${e.website}" target="_blank" rel="noopener" class="event-link">Website &rarr;</a>`:''}
+          ${e.instagram?`<a href="https://instagram.com/${e.instagram.replace('@','')}" target="_blank" rel="noopener" class="event-link">Instagram &rarr;</a>`:''}
+        </div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
+Done
+That's the c
