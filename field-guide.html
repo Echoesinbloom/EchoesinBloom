@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Language of Echoes — Field Guide · Echoes in Bloom</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --linen:#f2ece0;--linen-s:#e8e0d0;--parch:#ede4d4;
+      --deep:#16120c;
+      --amber:#c87030;--amber-d:#a05020;--amber-w:rgba(200,112,48,.2);
+      --moss:#6a8a58;--moss-d:#4a6038;
+      --ink:#1a1710;--ink-mid:#3a3428;--ink-soft:#6a6258;--ink-faint:#a89e90;
+      --rule:rgba(40,30,15,.09);--rule-m:rgba(40,30,15,.14);
+      --s:'Cormorant Garamond',serif;--n:'Jost',sans-serif;
+    }
+    body{font-family:var(--n);background:var(--linen);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+    /* NAV */
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--rule);background:var(--linen);position:sticky;top:0;z-index:100}
+    .nav-home{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink);text-decoration:none}
+    .nav-home:hover{color:var(--amber)}
+    .nav-links{display:flex;align-items:center;gap:1.75rem}
+    .nl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;transition:color .2s}
+    .nl:hover,.nl.active{color:var(--ink)}
+
+    /* HERO */
+    .hero{max-width:680px;padding:4rem 2rem 3rem}
+    .hero-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1rem}
+    .hero-title{font-family:var(--s);font-size:clamp(36px,6vw,54px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.05;margin-bottom:1.25rem}
+    .hero-body{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-soft);line-height:1.85;border-left:2px solid var(--amber-w);padding-left:1.25rem}
+
+    /* FOUNDATIONAL FIVE */
+    .foundational{padding:4rem 2rem 5rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:white}
+    .foundational-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:2.5rem}
+    .foundational-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+    @media(max-width:860px){.foundational-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:500px){.foundational-grid{grid-template-columns:1fr}}
+    .symbol-card{padding:2.5rem 1.75rem 2rem;border:1px solid var(--rule-m);background:var(--linen);transition:border-color .2s,background .2s;cursor:default;position:relative}
+    .symbol-card:hover{border-color:rgba(200,112,48,.3);background:white}
+    .symbol-card::before{content:'';display:block;width:24px;height:1px;background:var(--amber);margin-bottom:1.5rem;opacity:.5}
+    .symbol-glyph{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.85rem;display:block}
+    .symbol-name{font-family:var(--s);font-size:clamp(28px,3.5vw,38px);font-style:italic;color:var(--ink);line-height:1;margin-bottom:.6rem}
+    .symbol-meaning{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);line-height:1.55;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--rule)}
+    .symbol-body{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.8}
+    .symbol-related{margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--rule);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+    .symbol-related a{color:var(--amber);text-decoration:none}
+    .symbol-related a:hover{text-decoration:underline}
+
+    /* EXTENDED LANGUAGE */
+    .extended{padding:4rem 2rem;max-width:none}
+    .extended-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.5rem}
+    .extended-sub{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);margin-bottom:3rem}
+
+    /* ENTRY GRID — 2 col on wide, 1 on mobile */
+    .entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+    @media(max-width:700px){.entry-grid{grid-template-columns:1fr}}
+
+    .entry{padding:1.75rem;background:white;border:1px solid var(--rule);transition:border-color .2s}
+    .entry:hover{border-color:var(--amber-w)}
+    .entry-term{font-family:var(--s);font-size:22px;font-style:italic;color:var(--ink);line-height:1;margin-bottom:.3rem}
+    .entry-meaning{font-family:var(--s);font-size:14px;font-style:italic;color:var(--amber);margin-bottom:.85rem;line-height:1.45}
+    .entry-body{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);line-height:1.8}
+    .entry-related{margin-top:.85rem;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+    .entry-related a{color:var(--ink-soft);text-decoration:none;transition:color .2s}
+    .entry-related a:hover{color:var(--amber)}
+
+    /* CLOSING */
+    .closing{padding:5rem 2rem;text-align:center;border-top:1px solid var(--rule);background:var(--deep)}
+    .closing-body{font-family:var(--s);font-size:clamp(18px,3vw,24px);font-style:italic;color:rgba(240,228,204,.7);line-height:1.75;max-width:540px;margin:0 auto 2.5rem}
+    .closing-link{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500;border-bottom:1px solid rgba(200,112,48,.3);padding-bottom:.15rem}
+
+    /* FOOTER */
+    .footer{padding:2rem;border-top:1px solid var(--rule);text-align:center;background:var(--deep)}
+    .footer-text{font-family:var(--s);font-size:13px;font-style:italic;color:rgba(240,228,204,.4)}
+    .footer-link{color:rgba(240,228,204,.6);text-decoration:none}
+    .footer-link:hover{color:var(--amber)}
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-home">Echoes in Bloom</a>
+  <div class="nav-links">
+    <a href="/" class="nl">Field Notes</a>
+    <a href="/community" class="nl">Worth Noticing</a>
+    <a href="/#spiral-up" class="nl">Spiral Up</a>
+    <a href="/field-guide" class="nl active">Field Guide</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Field Guide</div>
+  <h1 class="hero-title">The Language<br>of Echoes</h1>
+  <p class="hero-body">Echoes in Bloom has developed a language of its own — shaped by observation, cultivation, transformation, relationship, and return. These words are more than names for sections of a website. They describe a way of paying attention and participating in a living world.</p>
+</div>
+
+<!-- INTRODUCTION -->
+<div style="padding:3rem 2rem;max-width:580px;border-bottom:1px solid var(--rule)">
+  <p style="font-family:var(--s);font-size:clamp(18px,2.5vw,22px);font-style:italic;color:var(--ink-mid);line-height:1.75;margin-bottom:2rem">Every community develops its own language.</p>
+  <p style="font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-soft);line-height:1.9;margin-bottom:2rem">The words collected here are living metaphors that have emerged through years of observation, conversation, and participation. They aren't strict definitions — they're invitations to notice.</p>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);line-height:1.85">You don't need to learn them all.<br>Just begin noticing.</p>
+</div>
+
+<!-- FIVE FOUNDATIONAL SYMBOLS -->
+<div class="foundational">
+  <div class="foundational-lbl">Five foundational symbols</div>
+  <p style="font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint);max-width:480px;line-height:1.75;margin-bottom:3rem">These are the stones at the entrance. Everything else in Echoes in Bloom grows from these five ideas.</p>
+  <div class="foundational-grid">
+
+    <div class="symbol-card">
+      <span class="symbol-glyph">Echo</span>
+      <div class="symbol-name">Echo</div>
+      <div class="symbol-meaning">What returns and continues to resonate.</div>
+      <div class="symbol-body">An echo is not a repetition. It is what a sound becomes after it has traveled — changed by the distance, shaped by what it passed through, but still carrying something of its origin. An echo is any observation, relationship, or experience that continues to grow after the first encounter.</div>
+      <div class="symbol-related">Related: <a href="#field-notes">Field Notes</a> · <a href="#worth-noticing">Worth Noticing</a> · <a href="#spiral">Spiral</a></div>
+    </div>
+
+    <div class="symbol-card">
+      <span class="symbol-glyph">Garden</span>
+      <div class="symbol-name">Garden</div>
+      <div class="symbol-meaning">The living ecosystem of cultivation, relationship, and community.</div>
+      <div class="symbol-body">A garden is not a decoration. It is a practice. It requires attention over time — planting, tending, waiting, returning. The garden is the full ecosystem of relationships, observations, and stories being cultivated. Some things are still seeds. Some are in full bloom.</div>
+      <div class="symbol-related">Related: <a href="#greenhouse">Greenhouse</a> · <a href="#seed">Seed</a> · <a href="#bloom">Bloom</a> · <a href="#seasons">Seasons</a></div>
+    </div>
+
+    <div class="symbol-card">
+      <span class="symbol-glyph">Butterfly</span>
+      <div class="symbol-name">Butterfly</div>
+      <div class="symbol-meaning">Transformation, emergence, movement, and pollination.</div>
+      <div class="symbol-body">The butterfly passes through stages — each one necessary, none of them permanent. It represents what becomes possible after a relationship has moved through noticing, curiosity, and understanding. It also represents the way ideas travel — moving from person to person, cross-pollinating communities.</div>
+      <div class="symbol-related">Related: <a href="#wings">Wings</a> · <a href="#petals">Petals</a> · <a href="#pollination">Pollination</a></div>
+    </div>
+
+    <div class="symbol-card" id="spiral">
+      <span class="symbol-glyph">Spiral</span>
+      <div class="symbol-name">Spiral</div>
+      <div class="symbol-meaning">Growth that returns to familiar places with deeper understanding.</div>
+      <div class="symbol-body">A spiral is not a circle. It covers the same ground but from a higher vantage point each time. Spiral Up describes the experience of revisiting — a maker you first met at a market, an idea that keeps surfacing, a place that keeps pulling you back. You are not going in circles. You are deepening.</div>
+      <div class="symbol-related">Related: <a href="#echo">Echo</a> · <a href="#seasons">Seasons</a> · <a href="#field-notes">Field Notes</a></div>
+    </div>
+
+    <div class="symbol-card">
+      <span class="symbol-glyph">Field</span>
+      <div class="symbol-name">Field</div>
+      <div class="symbol-meaning">The living world where observation, participation, and wonder occur.</div>
+      <div class="symbol-body">The field is not a metaphor for somewhere else. It is the actual place — the farmers market on Saturday morning, the street where the artist has her studio. Field Notes are taken in the field. Worth Noticing is discovered in the field. Around Here is the field, right now.</div>
+      <div class="symbol-related">Related: <a href="#field-notes">Field Notes</a> · <a href="#worth-noticing">Worth Noticing</a> · <a href="#place">Place</a></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EXTENDED LANGUAGE -->
+<div class="extended">
+  <div class="extended-lbl">The extended language</div>
+  <div class="extended-sub">Words that shape the way Echoes in Bloom sees and moves through the world.</div>
+
+  <div class="entry-grid">
+
+    <div class="entry" id="seed">
+      <div class="entry-term">Seed</div>
+      <div class="entry-meaning">The beginning before the beginning.</div>
+      <div class="entry-body">A seed holds everything it will become, but requires time, soil, and attention before any of that is visible. A seed is an early observation — a name written down, a photo taken at a market, a first impression that hasn't yet become a story. Seeds are not lesser than what they will become.</div>
+      <div class="entry-related">Related: <a href="#greenhouse">Greenhouse</a> · <a href="#soil">Soil</a> · <a href="#marigold">Marigold</a></div>
+    </div>
+
+    <div class="entry" id="root">
+      <div class="entry-term">Root</div>
+      <div class="entry-meaning">What anchors and nourishes over time.</div>
+      <div class="entry-body">Roots are invisible. They do the slow work of holding and feeding what grows above ground. Roots are the relationships and patterns that make the visible work possible — the years of attention, the community connections, the recurring observations that become a way of seeing.</div>
+      <div class="entry-related">Related: <a href="#soil">Soil</a> · <a href="#garden">Garden</a> · <a href="#seasons">Seasons</a></div>
+    </div>
+
+    <div class="entry" id="soil">
+      <div class="entry-term">Soil</div>
+      <div class="entry-meaning">The conditions that make growth possible.</div>
+      <div class="entry-body">Soil is not just dirt. It is the accumulated result of everything that has lived and returned to the earth — composted, transformed, made nutrient-rich over time. Soil is the culture of attention and care that makes meaningful observations and relationships possible. You cannot plant in soil you have not tended.</div>
+      <div class="entry-related">Related: <a href="#root">Root</a> · <a href="#seed">Seed</a> · <a href="#garden">Garden</a></div>
+    </div>
+
+    <div class="entry" id="greenhouse">
+      <div class="entry-term">Greenhouse</div>
+      <div class="entry-meaning">A protected place for becoming.</div>
+      <div class="entry-body">Not everything is ready to be shared. The Greenhouse holds ideas, observations, relationships, and stories while they are still being cultivated. It allows growth without requiring immediate visibility. Inside the Greenhouse, a maker's story can develop across many visits, a first impression can deepen into understanding.</div>
+      <div class="entry-related">Related: <a href="#seed">Seed</a> · <a href="#marigold">Marigold</a> · <a href="#bloom">Bloom</a></div>
+    </div>
+
+    <div class="entry" id="marigold">
+      <div class="entry-term">Marigold</div>
+      <div class="entry-meaning">The first observation. The beginning of a relationship.</div>
+      <div class="entry-body">Before a story, there is a noticing. A marigold is what grows from that moment — not a profile, not a feature, but a living record of a first encounter. It holds what caught your attention, what you were curious about, and what you might return to. Every profile in Echoes in Bloom began as a marigold.</div>
+      <div class="entry-related">Related: <a href="#seed">Seed</a> · <a href="#wings">Wings</a> · <a href="#petals">Petals</a> · <a href="#greenhouse">Greenhouse</a></div>
+    </div>
+
+    <div class="entry" id="bloom">
+      <div class="entry-term">Bloom</div>
+      <div class="entry-meaning">The moment something becomes visible to others.</div>
+      <div class="entry-body">Blooming is not an ending. It is a threshold. When something blooms, it is not finished — it is ready to be seen. A maker's profile that finally captures who they are, a field note ready to be published, a community connection made visible. Bloom is not arrival. It is opening.</div>
+      <div class="entry-related">Related: <a href="#marigold">Marigold</a> · <a href="#wings">Wings</a> · <a href="#garden">Garden</a></div>
+    </div>
+
+    <div class="entry" id="petals">
+      <div class="entry-term">Petals</div>
+      <div class="entry-meaning">The unfolding of a deeper story.</div>
+      <div class="entry-body">Petals appear one at a time. The story of a place or a maker opens gradually — through repeated visits, through conversation, through the slow accumulation of understanding. Petals & Echoes is where that unfolding lives: deeper profiles, longer narratives, the parts of a story that take time to tell.</div>
+      <div class="entry-related">Related: <a href="#wings">Wings</a> · <a href="#marigold">Marigold</a> · <a href="#bloom">Bloom</a></div>
+    </div>
+
+    <div class="entry" id="wings">
+      <div class="entry-term">Wings</div>
+      <div class="entry-meaning">The moment a story is ready to travel.</div>
+      <div class="entry-body">Wings mark the point in a relationship where sharing becomes possible. Not because the story is finished — stories are never finished — but because enough trust has been built, enough understanding gathered, enough care taken that it is time to let the story move into the world. What has wings can travel.</div>
+      <div class="entry-related">Related: <a href="#petals">Petals</a> · <a href="#butterfly">Butterfly</a> · <a href="#pollination">Pollination</a></div>
+    </div>
+
+    <div class="entry" id="pollination">
+      <div class="entry-term">Pollination</div>
+      <div class="entry-meaning">The way ideas and connections spread through a community.</div>
+      <div class="entry-body">Pollination is not broadcasting. It is the quiet, specific movement of something from one place to another — a maker introduced to a customer, an artist discovered through a field note, a community stronger because two people found each other here. Echoes in Bloom is, in part, a pollination project.</div>
+      <div class="entry-related">Related: <a href="#butterfly">Butterfly</a> · <a href="#wings">Wings</a> · <a href="#connection">Connection</a></div>
+    </div>
+
+    <div class="entry" id="field-notes">
+      <div class="entry-term">Field Notes</div>
+      <div class="entry-meaning">Observation before interpretation.</div>
+      <div class="entry-body">A field note is not a finished thought. It is the record of what you noticed before you decided what it meant. Field Notes are the raw layer — observations, reflections, encounters, and ideas captured close to the moment of experience. They are the ground from which everything else grows.</div>
+      <div class="entry-related">Related: <a href="#field">Field</a> · <a href="#worth-noticing">Worth Noticing</a> · <a href="#attention">Attention</a></div>
+    </div>
+
+    <div class="entry" id="worth-noticing">
+      <div class="entry-term">Worth Noticing</div>
+      <div class="entry-meaning">Attention is the beginning of relationship.</div>
+      <div class="entry-body">Worth Noticing is not a recommendation engine. It is a living collection of people, places, experiences, and products that have earned sustained attention — not because they are the best or most popular, but because they invite something in you to open. The question is not "Is this impressive?" but "Does this matter, and why?"</div>
+      <div class="entry-related">Related: <a href="#marigold">Marigold</a> · <a href="#attention">Attention</a> · <a href="#aliveness">Aliveness</a></div>
+    </div>
+
+    <div class="entry" id="around-here">
+      <div class="entry-term">Around Here</div>
+      <div class="entry-meaning">An invitation to participate in the life unfolding nearby.</div>
+      <div class="entry-body">Around Here is the timely layer of Worth Noticing. It holds what is happening right now — the market this Saturday, the workshop next weekend, the gathering that will be gone by Monday. Around Here does not tell you where to go. It makes visible what is already there, if you choose to show up.</div>
+      <div class="entry-related">Related: <a href="#field">Field</a> · <a href="#worth-noticing">Worth Noticing</a> · <a href="#participation">Participation</a></div>
+    </div>
+
+    <div class="entry" id="wonder">
+      <div class="entry-term">Wonder</div>
+      <div class="entry-meaning">The quality of attention that precedes understanding.</div>
+      <div class="entry-body">Wonder is not passive. It is an active orientation toward the world — a willingness to be surprised, to slow down, to ask why something matters before deciding if it does. Wonder is one of the primary threads running through Echoes in Bloom. It is what noticing feels like before it becomes knowledge.</div>
+      <div class="entry-related">Related: <a href="#attention">Attention</a> · <a href="#aliveness">Aliveness</a></div>
+    </div>
+
+    <div class="entry" id="aliveness">
+      <div class="entry-term">Aliveness</div>
+      <div class="entry-meaning">The quality that makes you want to pay attention.</div>
+      <div class="entry-body">Aliveness is hard to define but easy to recognize. It is what you feel in the presence of someone who cares deeply about what they do, or in a place that holds more meaning than its size would suggest. Echoes in Bloom is organized around the question: what makes something feel alive?</div>
+      <div class="entry-related">Related: <a href="#wonder">Wonder</a> · <a href="#attention">Attention</a> · <a href="#worth-noticing">Worth Noticing</a></div>
+    </div>
+
+    <div class="entry" id="attention">
+      <div class="entry-term">Attention</div>
+      <div class="entry-meaning">The practice that makes everything else possible.</div>
+      <div class="entry-body">Attention is not the same as looking. Attention is sustained, caring, interested looking — the kind that notices what is easy to miss, that slows down long enough to ask questions, that returns to something more than once. In Echoes in Bloom, attention is not a means to an end. It is the practice itself.</div>
+      <div class="entry-related">Related: <a href="#wonder">Wonder</a> · <a href="#aliveness">Aliveness</a> · <a href="#field-notes">Field Notes</a></div>
+    </div>
+
+    <div class="entry" id="participation">
+      <div class="entry-term">Participation</div>
+      <div class="entry-meaning">How community becomes real.</div>
+      <div class="entry-body">Participation is not consumption. It is showing up — to the market, to the workshop, to the conversation, to the ongoing practice of being present in a place. The profiles, the field notes, the events — they are all invitations to participate in something already happening around you.</div>
+      <div class="entry-related">Related: <a href="#around-here">Around Here</a> · <a href="#connection">Connection</a> · <a href="#place">Place</a></div>
+    </div>
+
+    <div class="entry" id="connection">
+      <div class="entry-term">Connection</div>
+      <div class="entry-meaning">What grows between noticing and belonging.</div>
+      <div class="entry-body">Connection is the middle of the journey — after the first noticing, before the sense of belonging. It is the moment when a face becomes a name, a name becomes a story, and a story becomes a reason to return. Echoes in Bloom is interested in the conditions that allow connection to happen naturally.</div>
+      <div class="entry-related">Related: <a href="#participation">Participation</a> · <a href="#worth-noticing">Worth Noticing</a> · <a href="#place">Place</a></div>
+    </div>
+
+    <div class="entry" id="place">
+      <div class="entry-term">Place</div>
+      <div class="entry-meaning">Somewhere specific enough to matter.</div>
+      <div class="entry-body">Place is not location. Location is coordinates. Place is meaning — the particular quality of a street, a market, a studio, a stretch of land that makes it different from everywhere else. Paying attention to place is one of the quieter forms of belonging.</div>
+      <div class="entry-related">Related: <a href="#field">Field</a> · <a href="#around-here">Around Here</a> · <a href="#soil">Soil</a></div>
+    </div>
+
+    <div class="entry" id="seasons">
+      <div class="entry-term">Seasons</div>
+      <div class="entry-meaning">The rhythm that holds everything else.</div>
+      <div class="entry-body">Seasons are not just weather. They are the larger patterns of return — what blooms in spring, what rests in winter, what comes back changed each year. The same market, the same maker, the same field note will be different in October than it was in June. Returning is not repetition. It is deepening.</div>
+      <div class="entry-related">Related: <a href="#spiral">Spiral</a> · <a href="#echo">Echo</a> · <a href="#garden">Garden</a></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CLOSING -->
+<div class="closing">
+  <p class="closing-body">Nothing here is finished.<br>Everything here is becoming.</p>
+  <p style="font-family:var(--s);font-size:16px;font-style:italic;color:rgba(240,228,204,.4);line-height:1.75;max-width:480px;margin:0 auto 2.5rem">Echoes in Bloom is not merely a collection of pages. It is a living ecosystem — one you are being invited to notice, explore, and eventually participate in.</p>
+  <a href="/community" class="closing-link">Begin with Worth Noticing &rarr;</a>
+</div>
+
+<footer class="footer">
+  <p class="footer-text"><a href="/" class="footer-link">Echoes in Bloom</a> &mdash; Let&rsquo;s meander.</p>
+</footer>
+
+</body>
+</html>
+Done
+Now index.html again (1,721 lines):
+
+
+Re-output index.html
