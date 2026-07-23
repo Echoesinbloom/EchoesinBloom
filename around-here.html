@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -26,6 +26,8 @@
     .nav-links{display:flex;align-items:center;gap:1.75rem}
     .nl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;transition:color .2s}
     .nl:hover,.nl.active{color:var(--ink)}
+    .nl-gh{color:var(--moss);font-weight:500;display:flex;align-items:center;gap:.35rem}
+    .gh-pip{width:5px;height:5px;border-radius:50%;background:var(--moss);flex-shrink:0}
     /* HERO */
     .hero{padding:3.5rem 2rem 2.5rem;border-bottom:1px solid var(--rule);max-width:600px}
     .hero-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1rem}
@@ -68,10 +70,11 @@
 <nav class="nav">
   <a href="/" class="nav-home">Echoes in Bloom</a>
   <div class="nav-links">
-    <a href="/" class="nl">Field Notes</a>
+    <a href="/#field-notes" class="nl">Field Notes</a>
     <a href="/community" class="nl">Worth Noticing</a>
     <a href="/around-here" class="nl active">Around Here</a>
-    <a href="/#spiral-up" class="nl">Spiral Up</a>
+    <a href="/philosophy" class="nl">Philosophy</a>
+    <a href="/field-guide" class="nl" style="opacity:.65;font-size:9px">Field Guide</a>
   </div>
 </nav>
 
@@ -87,6 +90,11 @@
 
 <footer class="footer">
   <p class="footer-text"><a href="/" class="footer-link">Echoes in Bloom</a> &mdash; Let&rsquo;s meander.</p>
+  <p class="footer-text" style="margin-top:.5rem;font-size:11px;letter-spacing:.06em">
+    <a href="https://greenhouse.echoesinbloom.co" class="footer-link" style="display:inline-flex;align-items:center;gap:.35rem"><span class="gh-pip"></span>Greenhouse</a>
+    <span style="margin:0 .5rem;color:var(--ink-faint)">&middot;</span>
+    <a href="/almanac" class="footer-link">Almanac</a>
+  </p>
 </footer>
 
 <script>
@@ -206,4 +214,3 @@ document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
-
