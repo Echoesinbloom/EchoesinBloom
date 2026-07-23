@@ -79,13 +79,13 @@
 
     /* GREENHOUSE */
     .gh{background:var(--deep);padding:4.5rem 2rem;background-image:radial-gradient(ellipse at 70% 50%, rgba(200,112,48,.07) 0%, transparent 65%)}
-    .gh-inner{display:grid;grid-template-columns:1fr 2fr;gap:4rem;align-items:start;max-width:840px}
+    .gh-inner{display:grid;grid-template-columns:1fr 2fr;gap:4rem;align-items:center;max-width:840px}
     .gh-marker{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--moss);margin-bottom:.75rem;font-weight:500}
     .gh-heading{font-family:var(--s);font-size:36px;font-weight:300;font-style:italic;color:var(--on-dark);line-height:1.1;margin-bottom:.6rem}
     .gh-note{font-family:var(--s);font-size:14px;font-style:italic;color:var(--on-dark-mid);line-height:1.65}
     .gh-seeds{display:flex;flex-direction:column;gap:1.1rem;margin-bottom:1.75rem}
     .gh-seed{font-family:var(--s);font-size:18px;font-style:italic;color:var(--on-dark-mid);line-height:1.5;padding-left:1rem;border-left:1px solid rgba(200,112,48,.2)}
-    .gh-enter{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--moss);text-decoration:none;font-family:var(--n);font-weight:500;display:inline-flex;align-items:center;gap:.75rem;transition:opacity .2s}
+    .gh-enter{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-family:var(--n);font-weight:500;display:inline-flex;align-items:center;gap:.75rem;transition:opacity .2s}
     .gh-enter:hover{opacity:.65}
     .gh-enter-rule{width:18px;height:1px;background:currentColor;display:inline-block}
 
@@ -160,8 +160,8 @@
     body.admin-mode .pc-admin-del{display:block!important}
 
     /* BLOOM */
-    .bloom{background:var(--amber-w);border-top:1px solid rgba(200,112,48,.12);padding:4.5rem 2rem}
-    .bloom-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--amber);margin-bottom:2.5rem}
+    .bloom{background:var(--amber-w);border-top:1px solid rgba(200,112,48,.12);padding:2.75rem 2rem 4.5rem}
+    .bloom-lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--amber);margin-bottom:1.5rem}
     .bi{padding:1.85rem 0;border-bottom:1px solid rgba(200,112,48,.12);max-width:640px;position:relative}
     .bi:last-child{border-bottom:none}
     .bi:hover .bi-t{color:var(--amber-d)}
@@ -572,7 +572,7 @@
   </div>
 </section>
 
-<section class="ech" id="echoes">
+<section class="ech" id="echoes" style="display:none">
   <div class="ech-lbl"><span>Echoes &middot; What continues</span><span class="ech-rule"></span></div>
   <div class="sym-row" id="sym-row" style="margin-bottom:1.5rem"></div>
   <div class="ech-items" id="ech-items"><div class="ech-empty">Echoes will surface as attention keeps traveling &mdash; from one person, one place, one story to the next.</div></div>
@@ -1229,9 +1229,10 @@ async function loadPublicEchoResponses(){
 
   const{data:responses}=await db.from('echo_responses').select('*').order('created_at',{ascending:false});
   if(!responses||!responses.length){
-    document.getElementById('ech-items').innerHTML=`<div class="ech-empty">Echoes will surface as what's noticed here continues elsewhere. The patterns are already here &mdash; the responses are forming.</div>`;
-    return;
+    return; // stays hidden — nothing real to show yet
   }
+  const echoSection=document.getElementById('echoes');
+  if(echoSection)echoSection.style.display='';
 
   // Group responses by echo_text (pattern)
   const grouped={};
