@@ -370,13 +370,11 @@
     .returning-heading{font-family:var(--s);font-size:32px;font-weight:300;font-style:italic;color:var(--ink);line-height:1.1;margin-bottom:.65rem}
     .returning-sub{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.65;margin-bottom:2rem}
     .returning-list{display:flex;flex-direction:column;gap:.35rem}
-    .returning-item{display:flex;align-items:baseline;gap:1rem;padding:.65rem 0;border-bottom:1px solid var(--rule);cursor:pointer}
+    .returning-item{display:block;padding:.75rem 0;border-bottom:1px solid var(--rule);cursor:pointer}
     .returning-item:last-of-type{border-bottom:none}
-    .returning-item:hover .returning-name{color:var(--ink)}
-    .returning-name{font-family:var(--s);font-size:19px;font-style:italic;color:var(--ink-mid);flex:1;transition:color .2s}
-    .returning-count{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);flex-shrink:0}
-    .returning-bar{height:2px;background:var(--rule-m);margin-top:.2rem;position:relative;overflow:hidden}
-    .returning-bar-fill{height:100%;background:var(--amber);transition:width .6s ease}
+    .returning-item:hover .returning-name{color:var(--amber)}
+    .returning-name{font-family:var(--s);font-size:19px;font-style:italic;color:var(--ink-mid);transition:color .2s}
+    .returning-context{font-family:var(--n);font-size:11px;color:var(--ink-faint);margin-top:.25rem;letter-spacing:.01em}
 
     /* SEASONAL MEMORY */
     .seasonal-mem{padding:.75rem 2rem;background:var(--linen-s);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:none}
@@ -533,7 +531,7 @@
     <div>
       <div class="gh-marker">The Greenhouse</div>
       <h2 class="gh-heading">Currently<br>incubating</h2>
-      <p class="gh-note">Some things ask to be shared. Others ask to be lived with a little longer.<br><br>The Greenhouse holds observations that are still unfolding — questions, relationships, symbols, and recurring patterns that have not yet found their final form.</p>
+      <p class="gh-note">Some things ask to be shared. Others ask to be lived with a little longer.<br><br>The Greenhouse is where observations become relationships. Here, they are cultivated long enough for patterns to emerge, connections to deepen, and the conditions that shape them to become more fully understood.</p>
     </div>
     <div>
       <div class="gh-seeds" id="gh-seeds">
@@ -572,12 +570,6 @@
   </div>
 </section>
 
-<section class="ech" id="echoes" style="display:none">
-  <div class="ech-lbl"><span>Echoes &middot; What continues</span><span class="ech-rule"></span></div>
-  <div class="sym-row" id="sym-row" style="margin-bottom:1.5rem"></div>
-  <div class="ech-items" id="ech-items"><div class="ech-empty">Echoes will surface as attention keeps traveling &mdash; from one person, one place, one story to the next.</div></div>
-</section>
-
 <div class="about" style="grid-template-columns:1fr;max-width:620px">
   <div>
     <div class="a-name">A Living Inquiry</div>
@@ -602,8 +594,8 @@
 
 <div class="returning" id="returning-section" style="display:none">
   <div class="returning-lbl">What keeps returning</div>
-  <div class="returning-heading">The site noticing what you notice.</div>
-  <div class="returning-sub">These threads keep arriving. Not because they were chosen — because they keep showing up.</div>
+  <div class="returning-heading">The inquiry noticing what keeps returning.</div>
+  <div class="returning-sub">Over time, certain threads begin to surface. Not because they were selected in advance, but because life kept bringing them back into view.</div>
   <div class="returning-list" id="returning-list"></div>
 </div>
 
@@ -829,11 +821,21 @@ async function loadCyclesPublic(){
     }
   }
 
-  // What Keeps Returning — thread frequency across all public entries + echoes
+  // What Keeps Returning — thread frequency + where each thread appears, across entries, echoes, and profiles
   const{data:echoes} = await db.from('note_echoes').select('threads').eq('public',true);
+  const{data:profiles} = await db.from('community_profiles').select('related_themes').eq('visibility','public');
   const counts = {};
-  data.forEach(e=>(e.threads||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
-  (echoes||[]).forEach(e=>(e.threads||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
+  const sources = {};
+  function tally(arr, label){
+    (arr||[]).forEach(t=>{
+      counts[t]=(counts[t]||0)+1;
+      if(!sources[t])sources[t]=new Set();
+      sources[t].add(label);
+    });
+  }
+  data.forEach(e=>tally(e.threads,'field notes'));
+  (echoes||[]).forEach(e=>tally(e.threads,'reflections'));
+  (profiles||[]).forEach(p=>tally(p.related_themes,'people and places'));
 
   const sorted = Object.entries(counts)
     .filter(([,c])=>c>1)
@@ -842,19 +844,26 @@ async function loadCyclesPublic(){
 
   if(sorted.length < 2) return; // Only show when patterns are meaningful
 
-  const max = sorted[0][1];
   const section = document.getElementById('returning-section');
   const list = document.getElementById('returning-list');
   if(!section||!list) return;
 
+  function contextPhrase(count, sourceSet){
+    const labels=[...(sourceSet||[])];
+    const word=count===1?'appearance':'appearances';
+    if(count<=2) return `${count} ${word}, beginning to form.`;
+    let sourceText;
+    if(labels.length<=1) sourceText=labels[0]||'the work so far';
+    else if(labels.length===2) sourceText=labels.join(' and ');
+    else sourceText=labels.slice(0,-1).join(', ')+', and '+labels[labels.length-1];
+    return `${count} ${word} across ${sourceText}.`;
+  }
+
   section.style.display = 'block';
   list.innerHTML = sorted.map(([thread, count]) => `
     <div class="returning-item" onclick="setTheme('${thread}')">
-      <div>
-        <div class="returning-name">${thread}</div>
-        <div class="returning-bar"><div class="returning-bar-fill" style="width:${Math.round((count/max)*100)}%"></div></div>
-      </div>
-      <div class="returning-count">${count} time${count===1?'':'s'}</div>
+      <div class="returning-name">${thread}</div>
+      <div class="returning-context">${contextPhrase(count, sources[thread])}</div>
     </div>`).join('');
 }
 
@@ -1205,72 +1214,9 @@ async function loadDynamicContent(){
 
 
 async function loadPublicEchoResponses(){
-  // Get all public entries and their threads
-  const{data:entries}=await db.from('entries').select('threads').eq('public',true);
-  if(!entries||!entries.length) return;
-
-  // Count thread appearances
-  const counts={};
-  entries.forEach(e=>(e.threads||[]).forEach(t=>{counts[t]=(counts[t]||0)+1}));
-
-  // Get patterns that appear more than once
-  const patterns=Object.entries(counts)
-    .filter(([,c])=>c>1)
-    .sort((a,b)=>b[1]-a[1])
-    .slice(0,12);
-
-  // Show as symbol tags
-  const symRow=document.getElementById('sym-row');
-  if(symRow)symRow.innerHTML=patterns.map(([t])=>`<div class="sym" onclick="setTheme('${t}')">${t}</div>`).join('');
-
-  // Get echo responses for these patterns
-  const patternNames=patterns.map(([t])=>t);
-  if(!patternNames.length) return;
-
-  const{data:responses}=await db.from('echo_responses').select('*').order('created_at',{ascending:false});
-  if(!responses||!responses.length){
-    return; // stays hidden — nothing real to show yet
-  }
-  const echoSection=document.getElementById('echoes');
-  if(echoSection)echoSection.style.display='';
-
-  // Group responses by echo_text (pattern)
-  const grouped={};
-  responses.forEach(r=>{
-    if(!grouped[r.echo_text])grouped[r.echo_text]=[];
-    grouped[r.echo_text].push(r);
-  });
-
-  // Build display — show patterns that have responses
-  const items=Object.entries(grouped)
-    .filter(([pattern])=>patternNames.some(p=>pattern.toLowerCase().includes(p)||p.toLowerCase().includes(p)))
-    .slice(0,5);
-
-  if(!items.length){
-    document.getElementById('ech-items').innerHTML=`<div class="ech-empty">Patterns are forming. Responses will appear here as the conversation deepens.</div>`;
-    return;
-  }
-
-  const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('ech-items').innerHTML=items.map(([pattern,resps])=>{
-    // Extract thread name from pattern string like '"aliveness" has appeared in 3 entries.'
-    const match=pattern.match(/"([^"]+)"/);
-    const threadName=match?match[1]:pattern;
-    const entryCount=counts[threadName]||0;
-    return`<div class="ech-item">
-      <div class="ech-item-pattern">
-        ${threadName}
-        ${entryCount?`<span class="ech-item-count">&mdash; ${entryCount} entr${entryCount===1?'y':'ies'}</span>`:''}
-      </div>
-      <div class="ech-item-responses">
-        ${resps.slice(0,3).map(r=>`
-          <div>
-            <div class="ech-item-response">&ldquo;${r.response}&rdquo;</div>
-            <div class="ech-item-date">${new Date(r.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'})}</div>
-          </div>`).join('')}
-      </div>
-    </div>`;
-  }).join('');
+  // The dark "Echoes · What Continues" section was retired — this fed it and is no longer needed.
+  // Left as a no-op rather than deleted outright, in case a real continuation-trail feature replaces it later.
+  return;
 }
 
 let fnOffset=6;
