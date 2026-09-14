@@ -124,6 +124,7 @@
     .fn-card-threads{display:flex;gap:.3rem;flex-wrap:wrap}
     .fn-card-thread{font-family:var(--s);font-size:10px;font-style:italic;color:var(--ink-faint);cursor:pointer;transition:color .2s}
     .fn-card-read{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500;flex-shrink:0}
+    .fn-card-intel-lbl{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--moss);font-weight:500;margin-bottom:.6rem}
     .entry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;margin-top:1rem}
 
     /* ENTRY READING PAGE */
@@ -153,6 +154,20 @@
     .entry-wander-date{font-size:9px;letter-spacing:.08em;color:var(--ink-faint);margin-bottom:.25rem}
     .entry-wander-title{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);transition:color .2s}
     .entry-wander-item:hover .entry-wander-title{color:var(--amber)}
+
+    /* FIELD INTELLIGENCE reading page — same visual family as a Field Note, not a different product */
+    .entry-tended{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint);margin-bottom:2rem}
+    .entry-fi-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.75rem}
+    .entry-roots{margin-bottom:2.5rem;border-top:1px solid var(--rule);padding-top:1.5rem}
+    .entry-roots-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);font-weight:500}
+    .entry-roots-arrow{transition:transform .2s}
+    .entry-roots-toggle.open .entry-roots-arrow{transform:rotate(180deg)}
+    .entry-roots-body{display:none;margin-top:1.25rem}
+    .entry-roots-body.open{display:block}
+    .entry-root-item{padding:1rem 0;border-bottom:1px solid var(--rule)}
+    .entry-root-item:last-child{border-bottom:none}
+    .entry-root-type{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.35rem}
+    .entry-root-text{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.7}
   </style>
 </head>
 <body>
@@ -230,20 +245,26 @@ function formatDate(dateStr){
 }
 
 // Shared uniform card — must stay visually identical to index.html's buildCard()
-function buildAlmanacCard(e){
+// type is 'note' (default) or 'intelligence' — only the label and href pattern differ.
+function buildAlmanacCard(e,type){
+  type = type || 'note';
+  const isIntel = type==='intelligence';
   const href = `/almanac/${e.slug || e.id}`;
+  const excerpt = isIntel ? (e.what_im_noticing||'') : (e.body||'');
+  const dateLabel = isIntel ? (e.started_label||formatDate(e.created_at)) : (e.date_label||formatDate(e.entry_date));
   return`<div class="fn-card-wrap">
     <a class="fn-card" href="${href}">
-      ${e.photo_url?`<div class="fn-card-thumb-wrap"><img src="${e.photo_url}" class="fn-card-thumb" alt=""></div>` : ''}
+      ${isIntel?'<div class="fn-card-intel-lbl">Field Intelligence</div>':''}
+      ${e.photo_url||e.hero_photo_url?`<div class="fn-card-thumb-wrap"><img src="${e.photo_url||e.hero_photo_url}" class="fn-card-thumb" alt=""></div>` : ''}
       <div class="fn-card-meta">
-        ${e.date_label||formatDate(e.entry_date)}
-        ${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
-        ${e.subject?`<span style="color:var(--monarch);font-weight:500">&middot; ${e.subject}</span>`:''}
+        ${dateLabel}
+        ${!isIntel&&e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
+        ${!isIntel&&e.subject?`<span style="color:var(--monarch);font-weight:500">&middot; ${e.subject}</span>`:''}
       </div>
       <div class="fn-card-title">${e.title}</div>
-      ${e.body?`<div class="fn-card-excerpt">${e.body}</div>`:''}
+      ${excerpt?`<div class="fn-card-excerpt">${excerpt}</div>`:''}
       <div class="fn-card-footer">
-        <div class="fn-card-threads">${(e.threads||[]).map(t=>`<span class="fn-card-thread">${t}</span>`).join('')}</div>
+        <div class="fn-card-threads">${(e.threads||e.themes||[]).map(t=>`<span class="fn-card-thread">${t}</span>`).join('')}</div>
         <span class="fn-card-read">Read more &rarr;</span>
       </div>
     </a>
@@ -266,12 +287,24 @@ async function renderEntryReadingPage(slug){
   const body=document.getElementById('entry-reading-body');
   wrap.style.display='block';
 
-  const{data:e,error}=await db.from('entries').select('*').eq('slug',slug).eq('public',true).single();
-  if(error||!e){
-    body.innerHTML='<div class="loading">This entry could not be found — it may have been unpublished, or the link may be out of date.</div>';
+  // Check Field Notes first, then Field Intelligence — slugs are unique enough
+  // in practice (title + random suffix) that this order rarely matters.
+  const{data:e}=await db.from('entries').select('*').eq('slug',slug).eq('public',true).single();
+  if(e){
+    await renderFieldNote(e,body);
     return;
   }
 
+  const{data:inv}=await db.from('field_intelligence_entries').select('*').eq('slug',slug).eq('public',true).single();
+  if(inv){
+    await renderInvestigationReading(inv,body);
+    return;
+  }
+
+  body.innerHTML='<div class="loading">This entry could not be found — it may have been unpublished, or the link may be out of date.</div>';
+}
+
+async function renderFieldNote(e,body){
   // Related entries via existing Mycelium connections
   const{data:links}=await db.from('mycelium').select('*').eq('entry_id',e.id);
   let wanderHtml='';
@@ -319,6 +352,86 @@ async function renderEntryReadingPage(slug){
   `;
 }
 
+async function renderInvestigationReading(inv,body){
+  // Sources attached to this investigation — external citations shown directly,
+  // internal ones (observations/entries/profiles/related investigations) shown
+  // as plain labels since their own content is private or lives elsewhere.
+  const{data:sources}=await db.from('field_intelligence_sources').select('*').eq('field_intelligence_entry_id',inv.id).order('selected_order',{ascending:true});
+  let sourcesHtml='';
+  const externalSources=(sources||[]).filter(s=>s.external_url||s.external_note);
+  if(externalSources.length){
+    sourcesHtml=`<div class="entry-prompt" style="margin-bottom:2.5rem">
+      <div class="entry-prompt-lbl">Sources &amp; further reading</div>
+      ${externalSources.map(s=>s.external_url
+        ?`<div style="margin-top:.5rem"><a href="${s.external_url}" target="_blank" rel="noopener" style="color:var(--amber-d);font-family:var(--s);font-style:italic;font-size:15px">${s.external_note||s.external_url}</a></div>`
+        :`<div style="margin-top:.5rem;font-family:var(--s);font-style:italic;font-size:15px;color:var(--ink-mid)">${s.external_note}</div>`
+      ).join('')}
+    </div>`;
+  }
+
+  // Follow the Roots — only approved, public claims. Collapsible, and only
+  // rendered at all if something has actually cleared Evidence Review.
+  const{data:roots}=await db.from('field_intelligence_roots').select('*').eq('field_intelligence_entry_id',inv.id).eq('public',true).eq('human_approved',true);
+  let rootsHtml='';
+  if(roots&&roots.length){
+    rootsHtml=`<div class="entry-roots">
+      <div class="entry-roots-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.classList.toggle('open')">
+        <span>Follow the Roots</span><span class="entry-roots-arrow">&darr;</span>
+      </div>
+      <div class="entry-roots-body">
+        ${roots.map(r=>`<div class="entry-root-item"><div class="entry-root-type">${r.root_type.replace('_',' ')}</div><div class="entry-root-text">${r.human_wording||''}</div></div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Related investigations and entries, via field_intelligence_sources
+  let wanderHtml='';
+  const relatedInvIds=(sources||[]).map(s=>s.related_investigation_id).filter(Boolean);
+  const relatedEntryIds=(sources||[]).map(s=>s.entry_id).filter(Boolean);
+  const wanderItems=[];
+  if(relatedInvIds.length){
+    const{data:relInv}=await db.from('field_intelligence_entries').select('id,title,slug,started_label,created_at').in('id',relatedInvIds).eq('public',true);
+    (relInv||[]).forEach(r=>wanderItems.push({title:r.title,slug:r.slug||r.id,date:r.started_label||formatDate(r.created_at)}));
+  }
+  if(relatedEntryIds.length){
+    const{data:relEntries}=await db.from('entries').select('id,title,slug,date_label,entry_date').in('id',relatedEntryIds).eq('public',true);
+    (relEntries||[]).forEach(r=>wanderItems.push({title:r.title,slug:r.slug||r.id,date:r.date_label||formatDate(r.entry_date)}));
+  }
+  if(wanderItems.length){
+    wanderHtml=`<div class="entry-wander-lbl">Keep wandering</div>`+wanderItems.map(r=>`
+      <a class="entry-wander-item" href="/almanac/${r.slug}">
+        <div class="entry-wander-date">${r.date||''}</div>
+        <div class="entry-wander-title">${r.title}</div>
+      </a>`).join('');
+  }
+
+  const lastTended = inv.last_tended_at
+    ? new Date(inv.last_tended_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})
+    : null;
+
+  body.innerHTML=`
+    <div class="entry-meta">
+      <span class="entry-type" style="color:var(--moss)">Field Intelligence</span>
+      ${inv.started_label?`&middot; ${inv.started_label}`:''}
+    </div>
+    <div class="entry-title">${inv.title||''}</div>
+    ${lastTended?`<div class="entry-tended">Last tended ${lastTended}${inv.update_note?' &mdash; '+inv.update_note:''}</div>`:''}
+    ${inv.hero_photo_url?`<div class="entry-img-wrap"><img src="${inv.hero_photo_url}" class="entry-img" alt=""></div>`:''}
+
+    ${inv.what_im_noticing?`<div class="entry-fi-section"><div class="entry-fi-lbl">What I'm Noticing</div><div class="entry-body" style="margin-bottom:1.5rem">${inv.what_im_noticing}</div></div>`:''}
+    ${inv.what_i_found?`<div class="entry-fi-section"><div class="entry-fi-lbl">What I Found</div><div class="entry-body" style="margin-bottom:1.5rem">${inv.what_i_found}</div></div>`:''}
+    ${inv.what_im_making_of_it?`<div class="entry-fi-section"><div class="entry-fi-lbl">What I'm Making of It</div><div class="entry-body" style="margin-bottom:1.5rem">${inv.what_im_making_of_it}</div></div>`:''}
+    ${inv.what_im_still_wondering?`<div class="entry-fi-section"><div class="entry-fi-lbl">What I'm Still Wondering</div><div class="entry-body" style="margin-bottom:1.5rem">${inv.what_im_still_wondering}</div></div>`:''}
+    ${inv.final_question?`<div class="entry-prompt"><div class="entry-prompt-lbl">A question to carry</div><div class="entry-prompt-body">${inv.final_question}</div></div>`:''}
+
+    ${(inv.themes||[]).length?`<div class="entry-threads">${inv.themes.map(t=>`<span class="entry-thread">${t}</span>`).join('')}</div>`:''}
+
+    ${sourcesHtml}
+    ${rootsHtml}
+    ${wanderHtml}
+  `;
+}
+
 async function init(){
   const slug = getSlugFromPath();
   if(slug){
@@ -335,10 +448,11 @@ async function init(){
     .order('season',{ascending:false});
 
   // Load content — using correct date field per type
-  const[{data:entries},{data:profiles},{data:events}]=await Promise.all([
+  const[{data:entries},{data:profiles},{data:events},{data:investigations}]=await Promise.all([
     db.from('entries').select('id,title,body,entry_date,date_label,moon_phase,photo_url,threads,branches,subject,slug,public').eq('public',true).not('entry_date','is',null).order('entry_date',{ascending:false}),
     db.from('community_profiles').select('id,name,type,featured_image,date_noticed,photos_public').eq('visibility','public').not('date_noticed','is',null),
-    db.from('events').select('id,title,event_date,category,location').eq('public',true).not('event_date','is',null)
+    db.from('events').select('id,title,event_date,category,location').eq('public',true).not('event_date','is',null),
+    db.from('field_intelligence_entries').select('id,title,slug,started_label,what_im_noticing,hero_photo_url,themes,created_at,public').eq('public',true)
   ]);
 
   // Group content by season key
@@ -347,22 +461,31 @@ async function init(){
     const sk=getSeasonForDate(e.entry_date);
     if(!sk)return;
     const k=seasonKey(sk.season,sk.year);
-    if(!grouped[k])grouped[k]={entries:[],profiles:[],events:[]};
+    if(!grouped[k])grouped[k]={entries:[],profiles:[],events:[],investigations:[]};
     grouped[k].entries.push(e);
   });
   (profiles||[]).forEach(p=>{
     const sk=getSeasonForDate(p.date_noticed);
     if(!sk)return;
     const k=seasonKey(sk.season,sk.year);
-    if(!grouped[k])grouped[k]={entries:[],profiles:[],events:[]};
+    if(!grouped[k])grouped[k]={entries:[],profiles:[],events:[],investigations:[]};
     grouped[k].profiles.push(p);
   });
   (events||[]).forEach(e=>{
     const sk=getSeasonForDate(e.event_date);
     if(!sk)return;
     const k=seasonKey(sk.season,sk.year);
-    if(!grouped[k])grouped[k]={entries:[],profiles:[],events:[]};
+    if(!grouped[k])grouped[k]={entries:[],profiles:[],events:[],investigations:[]};
     grouped[k].events.push(e);
+  });
+  (investigations||[]).forEach(i=>{
+    // Field Intelligence entries are dated by when the investigation started,
+    // same as Field Notes use entry_date — created_at is the closest equivalent.
+    const sk=getSeasonForDate(i.created_at);
+    if(!sk)return;
+    const k=seasonKey(sk.season,sk.year);
+    if(!grouped[k])grouped[k]={entries:[],profiles:[],events:[],investigations:[]};
+    grouped[k].investigations.push(i);
   });
 
   // Discover all seasons from content if no record exists
@@ -388,23 +511,30 @@ async function init(){
     const[season,yearStr]=k.split('-');
     const year=parseInt(yearStr);
     const record=(seasonRecords||[]).find(s=>s.season===season&&s.year===year);
-    const content=grouped[k]||{entries:[],profiles:[],events:[]};
+    const content=grouped[k]||{entries:[],profiles:[],events:[],investigations:[]};
     const eras=record?.almanac_season_collections?.map(c=>c.branch)||[];
 
     const totalEntries=content.entries.length;
     const totalProfiles=content.profiles.length;
     const totalEvents=content.events.length;
-    const hasContent=totalEntries+totalProfiles+totalEvents>0;
+    const totalInvestigations=content.investigations.length;
+    const hasContent=totalEntries+totalProfiles+totalEvents+totalInvestigations>0;
 
     // Counts
     const countsHtml=[
       totalEntries?`<div class="season-count"><div class="season-count-n">${totalEntries}</div><div class="season-count-lbl">Field Note${totalEntries!==1?'s':''}</div></div>`:'',
+      totalInvestigations?`<div class="season-count"><div class="season-count-n">${totalInvestigations}</div><div class="season-count-lbl">Field Intelligence</div></div>`:'',
       totalProfiles?`<div class="season-count"><div class="season-count-n">${totalProfiles}</div><div class="season-count-lbl">First noticed</div></div>`:'',
       totalEvents?`<div class="season-count"><div class="season-count-n">${totalEvents}</div><div class="season-count-lbl">Event${totalEvents!==1?'s':''}</div></div>`:'',
     ].filter(Boolean).join('');
 
-    // Journal entries (preview: up to 8 of each) — shared uniform card, same as homepage
-    const entriesHtml=content.entries.length?`<div class="entry-grid">${content.entries.slice(0,8).map(e=>buildAlmanacCard(e)).join('')}</div>`:'';
+    // Field Notes + Field Intelligence, merged into one grid, sorted together by date —
+    // same uniform card system, the FIELD INTELLIGENCE label is the only distinction
+    const combined=[
+      ...content.entries.map(e=>({...e,_type:'note',_date:e.entry_date})),
+      ...content.investigations.map(i=>({...i,_type:'intelligence',_date:i.created_at}))
+    ].sort((a,b)=>new Date(b._date)-new Date(a._date));
+    const entriesHtml=combined.length?`<div class="entry-grid">${combined.slice(0,8).map(e=>buildAlmanacCard(e,e._type)).join('')}</div>`:'';
 
     const profilesHtml=content.profiles.slice(0,6).map(p=>`
       <div class="journal-profile">
