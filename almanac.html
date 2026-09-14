@@ -111,7 +111,7 @@
     .footer-link:hover{color:var(--amber)}
     /* Shared uniform Field Note card — must match index.html exactly */
     .fn-card-wrap{position:relative}
-    .fn-card{background:white;padding:1.5rem;cursor:pointer;border:1px solid var(--rule-m);transition:border-color .2s;display:block;text-decoration:none}
+    .fn-card{background:white;padding:1.5rem;cursor:pointer;border:1px solid var(--rule-m);transition:border-color .2s;display:flex;flex-direction:column;height:100%;text-decoration:none}
     .fn-card:hover{border-color:var(--amber-w)}
     .fn-card-thumb-wrap{width:100%;height:180px;overflow:hidden;margin-bottom:.85rem;position:relative}
     .fn-card-thumb{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
@@ -120,7 +120,7 @@
     .fn-card-title{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:.45rem;transition:color .2s}
     .fn-card:hover .fn-card-title{color:var(--amber)}
     .fn-card-excerpt{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.6;margin-bottom:.7rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
-    .fn-card-footer{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+    .fn-card-footer{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-top:auto;padding-top:.5rem}
     .fn-card-threads{display:flex;gap:.3rem;flex-wrap:wrap}
     .fn-card-thread{font-family:var(--s);font-size:10px;font-style:italic;color:var(--ink-faint);cursor:pointer;transition:color .2s}
     .fn-card-read{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500;flex-shrink:0}
@@ -134,8 +134,8 @@
     .entry-type{color:var(--amber)}
     .entry-title{font-family:var(--s);font-size:clamp(28px,5vw,38px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:2rem}
     .entry-img-wrap{width:100%;margin-bottom:2.5rem}
-    .entry-img{width:100%;max-height:480px;object-fit:cover;display:block}
-    .entry-body{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink-mid);line-height:2;white-space:pre-wrap;margin-bottom:2.5rem}
+    .entry-img{width:100%;max-height:360px;object-fit:cover;display:block}
+    .entry-body{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink-mid);line-height:1.65;white-space:pre-wrap;margin-bottom:2.5rem}
     .entry-threads{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--rule)}
     .entry-thread{font-family:var(--s);font-size:12px;font-style:italic;color:var(--ink-faint)}
     .entry-thread:hover{color:var(--amber)}
