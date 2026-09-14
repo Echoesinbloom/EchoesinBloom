@@ -146,6 +146,14 @@
     .wn-preview-card-img{width:100%;height:160px;object-fit:cover;display:block}
     .wn-preview-card-empty{width:100%;height:160px;background:rgba(40,30,15,.04);display:flex;align-items:center;justify-content:center}
     .wn-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.85rem}
+
+    /* FIELD INTELLIGENCE — one featured investigation, manually chosen. Restrained on purpose. */
+    .fi-featured{padding:3rem 2rem;max-width:600px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+    .fi-featured-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--moss);font-weight:500;margin-bottom:1rem}
+    .fi-featured-title{font-family:var(--s);font-size:24px;font-style:italic;font-weight:300;color:var(--ink);line-height:1.3;margin-bottom:.75rem}
+    .fi-featured-excerpt{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.7;margin-bottom:1.25rem}
+    .fi-featured-link{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);text-decoration:none;font-weight:500}
+    .fi-featured-link:hover{opacity:.7}
     .wn-title{font-family:var(--s);font-size:clamp(28px,5vw,40px);font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:1rem}
     .wn-body{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink-mid);line-height:1.8;margin-bottom:.75rem}
     .wn-sub{font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-soft);line-height:1.7;margin-bottom:1.5rem}
@@ -500,6 +508,13 @@
   <div class="cx"><div class="cx-in"><em style="display:block;color:var(--amber-d);margin-bottom:.6rem;font-size:14px">Why do certain images keep arriving before we understand what they mean?</em>Certain images recur — the butterfly, the spiral, the field, the garden. Not because I chose them. Because they kept showing up. This inquiry is about learning to trust what returns before understanding why it matters.</div></div>
   <div class="ci" onclick="toggleCi(this)"><span class="ci-dash">&mdash;</span><span class="ci-t">The relationship between attention and becoming</span><span class="ci-badge b-seed">Seed</span><span class="ci-arrow">&#x25BE;</span></div>
   <div class="cx"><div class="cx-in"><em style="display:block;color:var(--amber-d);margin-bottom:.6rem;font-size:14px">How does what we choose to notice shape who we are becoming?</em>A question still forming. Something about how the things we pay attention to shape who we're becoming — and how choosing what to notice might be one of the most significant acts available to us.</div></div>
+</div>
+
+<div class="fi-featured" id="fi-featured" style="display:none">
+  <div class="fi-featured-lbl">Field Intelligence &middot; What I'm tracking</div>
+  <div class="fi-featured-title" id="fi-featured-title"></div>
+  <div class="fi-featured-excerpt" id="fi-featured-excerpt"></div>
+  <a class="fi-featured-link" id="fi-featured-link" href="#">Explore the inquiry &rarr;</a>
 </div>
 
 <div class="wn-block">
@@ -1525,6 +1540,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   loadCyclesPublic();
   loadWNPreview();
   loadWnAhTail();
+  loadFeaturedInvestigation();
 });
 
 window.toggleMoon=toggleMoon;window.toggleMoonDeep=toggleMoonDeep;
@@ -1532,6 +1548,21 @@ window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
+async function loadFeaturedInvestigation(){
+  const el=document.getElementById('fi-featured');
+  if(!el)return;
+  const{data,error}=await db.from('field_intelligence_entries')
+    .select('title,slug,id,what_im_noticing')
+    .eq('featured',true).eq('public',true)
+    .limit(1).maybeSingle();
+  if(error||!data)return; // stays hidden — no featured investigation right now, and that's fine
+  document.getElementById('fi-featured-title').textContent=data.title||'';
+  const excerpt=(data.what_im_noticing||'');
+  document.getElementById('fi-featured-excerpt').textContent = excerpt.length>180 ? excerpt.slice(0,180).trim()+'…' : excerpt;
+  document.getElementById('fi-featured-link').href=`/almanac/${data.slug||data.id}`;
+  el.style.display='block';
+}
+
 async function loadWNPreview(){
   const el=document.getElementById('wn-preview');
   if(!el)return;
