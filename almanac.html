@@ -52,7 +52,7 @@
     .season-title{font-family:var(--s);font-size:18px;font-style:italic;color:var(--amber);line-height:1.4;margin-bottom:1.5rem}
 
     /* Season reflection */
-    .season-reflection{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-soft);line-height:1.9;max-width:560px;margin-bottom:2.5rem;padding-left:1.25rem;border-left:1px solid var(--amber-w)}
+    .season-reflection{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-soft);line-height:1.9;max-width:560px;margin-bottom:2.5rem;padding-left:1.25rem;border-left:1px solid var(--amber-w);white-space:pre-wrap}
 
     /* Content counts — small, quiet */
     .season-counts{display:flex;flex-wrap:wrap;gap:1.5rem;margin-bottom:2rem}
@@ -109,6 +109,50 @@
     .footer-text{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-faint)}
     .footer-link{color:var(--ink-soft);text-decoration:none}
     .footer-link:hover{color:var(--amber)}
+    /* Shared uniform Field Note card — must match index.html exactly */
+    .fn-card-wrap{position:relative}
+    .fn-card{background:white;padding:1.5rem;cursor:pointer;border:1px solid var(--rule-m);transition:border-color .2s;display:block;text-decoration:none}
+    .fn-card:hover{border-color:var(--amber-w)}
+    .fn-card-thumb-wrap{width:100%;height:180px;overflow:hidden;margin-bottom:.85rem;position:relative}
+    .fn-card-thumb{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+    .fn-card-meta{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+    .fn-card-moon{color:var(--ink-faint)}
+    .fn-card-title{font-family:var(--s);font-size:17px;font-style:italic;color:var(--ink);line-height:1.2;margin-bottom:.45rem;transition:color .2s}
+    .fn-card:hover .fn-card-title{color:var(--amber)}
+    .fn-card-excerpt{font-family:var(--s);font-size:13px;font-style:italic;color:var(--ink-soft);line-height:1.6;margin-bottom:.7rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
+    .fn-card-footer{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+    .fn-card-threads{display:flex;gap:.3rem;flex-wrap:wrap}
+    .fn-card-thread{font-family:var(--s);font-size:10px;font-style:italic;color:var(--ink-faint);cursor:pointer;transition:color .2s}
+    .fn-card-read{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:500;flex-shrink:0}
+    .entry-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;margin-top:1rem}
+
+    /* ENTRY READING PAGE */
+    .entry-back{display:inline-block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-decoration:none;margin-bottom:2.5rem;transition:color .2s}
+    .entry-back:hover{color:var(--amber)}
+    .entry-meta{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1rem;display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+    .entry-type{color:var(--amber)}
+    .entry-title{font-family:var(--s);font-size:clamp(28px,5vw,38px);font-weight:300;font-style:italic;color:var(--ink);line-height:1.15;margin-bottom:2rem}
+    .entry-img-wrap{width:100%;margin-bottom:2.5rem}
+    .entry-img{width:100%;max-height:480px;object-fit:cover;display:block}
+    .entry-body{font-family:var(--s);font-size:18px;font-style:italic;color:var(--ink-mid);line-height:2;white-space:pre-wrap;margin-bottom:2.5rem}
+    .entry-threads{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--rule)}
+    .entry-thread{font-family:var(--s);font-size:12px;font-style:italic;color:var(--ink-faint)}
+    .entry-thread:hover{color:var(--amber)}
+    .entry-prompt{background:var(--parch);padding:1.5rem 1.75rem;margin-bottom:2.5rem}
+    .entry-prompt-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.6rem}
+    .entry-prompt-body{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);line-height:1.75;white-space:pre-wrap}
+    .entry-echoes{margin-bottom:3rem}
+    .entry-echoes-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;margin-bottom:1.25rem;padding-top:1.5rem;border-top:1px solid var(--rule)}
+    .entry-echo-item{padding:1.25rem 0;border-bottom:1px solid var(--rule)}
+    .entry-echo-item:last-child{border-bottom:none}
+    .entry-echo-meta{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.4rem}
+    .entry-echo-body{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.75;white-space:pre-wrap}
+    .entry-wander-lbl{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:1.25rem}
+    .entry-wander-item{display:block;padding:.85rem 0;border-bottom:1px solid var(--rule);text-decoration:none}
+    .entry-wander-item:last-child{border-bottom:none}
+    .entry-wander-date{font-size:9px;letter-spacing:.08em;color:var(--ink-faint);margin-bottom:.25rem}
+    .entry-wander-title{font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-mid);transition:color .2s}
+    .entry-wander-item:hover .entry-wander-title{color:var(--amber)}
   </style>
 </head>
 <body>
@@ -124,7 +168,7 @@
   </div>
 </nav>
 
-<div class="hero">
+<div class="hero" id="almanac-hero">
   <div class="hero-eyebrow">The Almanac</div>
   <h1 class="hero-title">A memory of<br>the ecosystem.</h1>
   <p class="hero-body">Organized through seasons rather than categories. A record of what was growing, what was noticed, what bloomed, what kept returning — and the conditions that shaped it all, season by season, year by year.</p>
@@ -132,6 +176,12 @@
 
 <div class="seasons" id="seasons">
   <div class="loading">Reading the seasons...</div>
+</div>
+
+<!-- ENTRY READING PAGE — shown instead of the season listing when the URL is /almanac/[slug] -->
+<div id="entry-reading" style="display:none;max-width:640px;margin:0 auto;padding:3rem 2rem 5rem">
+  <a href="/almanac" class="entry-back">&larr; Back to the Almanac</a>
+  <div id="entry-reading-body"><div class="loading">Reading the entry...</div></div>
 </div>
 
 <footer class="footer">
@@ -179,7 +229,103 @@ function formatDate(dateStr){
   return MONTHS_SHORT[d.getMonth()+1]+' '+d.getDate();
 }
 
+// Shared uniform card — must stay visually identical to index.html's buildCard()
+function buildAlmanacCard(e){
+  const href = `/almanac/${e.slug || e.id}`;
+  return`<div class="fn-card-wrap">
+    <a class="fn-card" href="${href}">
+      ${e.photo_url?`<div class="fn-card-thumb-wrap"><img src="${e.photo_url}" class="fn-card-thumb" alt=""></div>` : ''}
+      <div class="fn-card-meta">
+        ${e.date_label||formatDate(e.entry_date)}
+        ${e.moon_phase?`<span class="fn-card-moon">&middot; ${e.moon_phase}</span>`:''}
+        ${e.subject?`<span style="color:var(--monarch);font-weight:500">&middot; ${e.subject}</span>`:''}
+      </div>
+      <div class="fn-card-title">${e.title}</div>
+      ${e.body?`<div class="fn-card-excerpt">${e.body}</div>`:''}
+      <div class="fn-card-footer">
+        <div class="fn-card-threads">${(e.threads||[]).map(t=>`<span class="fn-card-thread">${t}</span>`).join('')}</div>
+        <span class="fn-card-read">Read more &rarr;</span>
+      </div>
+    </a>
+  </div>`;
+}
+
+// ---- Single-entry reading page ----
+function getSlugFromPath(){
+  const match = window.location.pathname.match(/^\/almanac\/(.+)$/);
+  if(match) return decodeURIComponent(match[1]).replace(/\/$/,'');
+  // Fallback in case the /almanac/* redirect rule isn't set up yet
+  const params = new URLSearchParams(window.location.search);
+  return params.get('entry') || null;
+}
+
+async function renderEntryReadingPage(slug){
+  document.getElementById('almanac-hero').style.display='none';
+  document.getElementById('seasons').style.display='none';
+  const wrap=document.getElementById('entry-reading');
+  const body=document.getElementById('entry-reading-body');
+  wrap.style.display='block';
+
+  const{data:e,error}=await db.from('entries').select('*').eq('slug',slug).eq('public',true).single();
+  if(error||!e){
+    body.innerHTML='<div class="loading">This entry could not be found — it may have been unpublished, or the link may be out of date.</div>';
+    return;
+  }
+
+  // Related entries via existing Mycelium connections
+  const{data:links}=await db.from('mycelium').select('*').eq('entry_id',e.id);
+  let wanderHtml='';
+  if(links&&links.length){
+    const ids=links.map(l=>l.connected_id).filter(Boolean);
+    if(ids.length){
+      const{data:related}=await db.from('entries').select('id,title,slug,date_label,entry_date').in('id',ids).eq('public',true);
+      if(related&&related.length){
+        wanderHtml=`<div class="entry-wander-lbl">Keep wandering</div>`+related.map(r=>`
+          <a class="entry-wander-item" href="/almanac/${r.slug||r.id}">
+            <div class="entry-wander-date">${r.date_label||formatDate(r.entry_date)}</div>
+            <div class="entry-wander-title">${r.title}</div>
+          </a>`).join('');
+      }
+    }
+  }
+
+  // Echoes — reflections tied to this entry
+  const{data:echoes}=await db.from('note_echoes').select('*').eq('parent_entry_id',e.id).eq('public',true).order('created_at',{ascending:true});
+  let echoesHtml='';
+  if(echoes&&echoes.length){
+    echoesHtml=`<div class="entry-echoes">
+      <div class="entry-echoes-lbl">Echoes &mdash; the conversation continues</div>
+      ${echoes.map(ec=>`
+        <div class="entry-echo-item">
+          <div class="entry-echo-meta">${ec.date_label||''}${ec.moon_phase?' &middot; '+ec.moon_phase:''}</div>
+          <div class="entry-echo-body">${ec.body||''}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  body.innerHTML=`
+    <div class="entry-meta">
+      ${e.date_label||formatDate(e.entry_date)}
+      ${e.moon_phase?`&middot; ${e.moon_phase}`:''}
+      ${e.type?`<span class="entry-type">&middot; ${e.type}</span>`:''}
+    </div>
+    <div class="entry-title">${e.title}</div>
+    ${e.photo_url?`<div class="entry-img-wrap"><img src="${e.photo_url}" class="entry-img" alt=""></div>`:''}
+    <div class="entry-body">${e.body||''}</div>
+    ${(e.threads||[]).length?`<div class="entry-threads">${e.threads.map(t=>`<span class="entry-thread">${t}</span>`).join('')}</div>`:''}
+    ${e.reflection?`<div class="entry-prompt"><div class="entry-prompt-lbl">A question to sit with</div><div class="entry-prompt-body">${e.reflection}</div></div>`:''}
+    ${echoesHtml}
+    ${wanderHtml}
+  `;
+}
+
 async function init(){
+  const slug = getSlugFromPath();
+  if(slug){
+    await renderEntryReadingPage(slug);
+    return;
+  }
+
   const container=document.getElementById('seasons');
 
   // Load all season records
@@ -190,7 +336,7 @@ async function init(){
 
   // Load content — using correct date field per type
   const[{data:entries},{data:profiles},{data:events}]=await Promise.all([
-    db.from('entries').select('id,title,entry_date,branches,public').eq('public',true).not('entry_date','is',null).order('entry_date',{ascending:false}),
+    db.from('entries').select('id,title,body,entry_date,date_label,moon_phase,photo_url,threads,branches,subject,slug,public').eq('public',true).not('entry_date','is',null).order('entry_date',{ascending:false}),
     db.from('community_profiles').select('id,name,type,featured_image,date_noticed,photos_public').eq('visibility','public').not('date_noticed','is',null),
     db.from('events').select('id,title,event_date,category,location').eq('public',true).not('event_date','is',null)
   ]);
@@ -257,12 +403,8 @@ async function init(){
       totalEvents?`<div class="season-count"><div class="season-count-n">${totalEvents}</div><div class="season-count-lbl">Event${totalEvents!==1?'s':''}</div></div>`:'',
     ].filter(Boolean).join('');
 
-    // Journal entries (preview: up to 8 of each)
-    const entriesHtml=content.entries.slice(0,8).map(e=>`
-      <div class="journal-entry">
-        <div class="journal-entry-date">${formatDate(e.entry_date)}</div>
-        <div class="journal-entry-title"><a href="/#field-notes">${e.title}</a></div>
-      </div>`).join('');
+    // Journal entries (preview: up to 8 of each) — shared uniform card, same as homepage
+    const entriesHtml=content.entries.length?`<div class="entry-grid">${content.entries.slice(0,8).map(e=>buildAlmanacCard(e)).join('')}</div>`:'';
 
     const profilesHtml=content.profiles.slice(0,6).map(p=>`
       <div class="journal-profile">
