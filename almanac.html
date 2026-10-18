@@ -168,7 +168,12 @@
     .entry-root-item:last-child{border-bottom:none}
     .entry-root-type{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.35rem}
     .entry-root-text{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.7}
-  </style>
+  
+/* Phones: let the header wrap instead of forcing the page wider than the screen */
+@media(max-width:700px){.nav{flex-wrap:wrap;row-gap:.55rem;padding:.9rem 1.25rem}.nav-links{flex-wrap:wrap;gap:.45rem 1.1rem}}
+
+.entry-nav{display:flex;flex-wrap:wrap;gap:.4rem 1.5rem;margin-bottom:2.5rem}.entry-nav .entry-back{margin-bottom:0}
+</style>
 </head>
 <body>
 
@@ -353,6 +358,12 @@ async function renderFieldNote(e,body){
 }
 
 async function renderInvestigationReading(inv,body){
+  // The Conditions of Discovery page: a clear way back to the homepage's Currently Incubating section
+  if(/^the-conditions-of-discovery(-|$)/.test(inv.slug||'')&&!document.getElementById('cod-home-link')){
+    const back=document.querySelector('#entry-reading .entry-back');
+    if(back){ const nav=document.createElement('div'); nav.className='entry-nav'; back.parentNode.insertBefore(nav,back); nav.appendChild(back);
+      const a=document.createElement('a'); a.id='cod-home-link'; a.className='entry-back'; a.href='/#incubating'; a.innerHTML='&larr; Return to Currently Incubating'; nav.appendChild(a); }
+  }
   // Sources attached to this investigation — external citations shown directly,
   // internal ones (observations/entries/profiles/related investigations) shown
   // as plain labels since their own content is private or lives elsewhere.
@@ -586,6 +597,7 @@ async function init(){
       :`<p style="font-family:var(--s);font-size:14px;font-style:italic;color:var(--ink-faint)">This season is still beginning.</p>`}
     </div>`;
   }).join('');
+  openSeasonFromHash();
 }
 
 function unfoldSeason(btn,key){
@@ -603,6 +615,15 @@ function unfoldSeason(btn,key){
   }
 }
 
+
+// Open the season named in the address (for example /almanac#season-summer-2026), so a link can land on that season's record
+function openSeasonFromHash(){
+  const h=location.hash; if(!/^#season-[a-z]+-\d{4}$/.test(h))return;
+  const el=document.querySelector(h); if(!el)return;
+  const key=h.replace('#season-',''); const btn=el.querySelector('.season-unfold'); const journal=document.getElementById('journal-'+key);
+  if(btn&&journal&&!journal.classList.contains('open')) unfoldSeason(btn,key);
+  setTimeout(()=>el.scrollIntoView({block:'start'}),150);
+}
 document.addEventListener('DOMContentLoaded',init);
 window.unfoldSeason=unfoldSeason;
 </script>
