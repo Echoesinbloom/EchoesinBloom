@@ -441,6 +441,9 @@
 @media(max-width:700px){.nav{flex-wrap:wrap;row-gap:.55rem;padding:.9rem 1.25rem}.nav-links{flex-wrap:wrap;gap:.45rem 1.1rem}
   .inm,.inc{padding-left:1.25rem;padding-right:1.25rem}.fn-intro{padding-left:1.25rem;padding-right:1.25rem}.inc-q{font-size:20px}
   .a-body{font-size:16px;line-height:1.75}.fn-head{flex-wrap:wrap;row-gap:.35rem}}
+
+/* Field Notes header: "Browse the Almanac" is a comfortable tap target on a phone */
+.fn-head a{display:inline-flex;align-items:center;min-height:44px}
 </style>
 </head>
 <body>
@@ -519,14 +522,14 @@
   </div>
 </div>
 
-<section class="inm" id="in-motion" style="display:none" aria-labelledby="inm-h">
+<section class="inm" id="in-motion" aria-labelledby="inm-h">
   <div class="inm-in">
     <div class="inm-lbl" id="inm-h">In Motion</div>
-    <div class="inm-title" id="inm-title"></div>
-    <div class="inm-sub" id="inm-sub"></div>
-    <div class="inm-dates" id="inm-dates"></div>
-    <p class="inm-desc" id="inm-desc"></p>
-    <a class="inm-link" id="inm-link" href="/almanac">Follow the investigation &rarr;</a>
+    <div class="inm-title" id="inm-title">The Breadcrumb Investigation</div>
+    <div class="inm-sub" id="inm-sub">An experiment in finding my voice by using it.</div>
+    <div class="inm-dates" id="inm-dates">October 26 &ndash; November 24, 2026</div>
+    <p class="inm-desc" id="inm-desc">Thirty days of following my curiosity out loud. An exploration of expression, participation, and what becomes visible when we practice something rather than only think about it.</p>
+    <a class="inm-link" id="inm-link" href="/almanac/the-breadcrumb-investigation">Follow the investigation &rarr;</a>
   </div>
 </section>
 
@@ -697,6 +700,16 @@
 </div>
 
 <script>
+(function(){ /* Browsers that block site storage (some in-app browsers, strict privacy modes) make localStorage throw, which used to stop the page half-loaded. Fall back to memory so the page always loads. */
+  try{ window.localStorage.getItem('eib-probe'); }catch(e){ var mem={}; var fake={getItem:function(k){return Object.prototype.hasOwnProperty.call(mem,k)?mem[k]:null;},setItem:function(k,v){mem[k]=String(v);},removeItem:function(k){delete mem[k];},clear:function(){mem={};},key:function(i){return Object.keys(mem)[i]||null;},get length(){return Object.keys(mem).length;}};
+    try{ Object.defineProperty(window,'localStorage',{value:fake,configurable:true}); }catch(e2){} }
+})();
+(function(){ /* If the database library cannot load, give the page an empty stand-in so everything built into the page still appears. */
+  if(window.supabase&&window.supabase.createClient)return;
+  var empty={data:null,error:{message:'offline'}};
+  function chain(){ return new Proxy(function(){},{get:function(t,k){ if(k==='then')return function(res){res(empty);}; return chain; },apply:function(){return chain();}}); }
+  window.supabase={createClient:function(){ return {from:chain,rpc:chain,auth:{getSession:function(){return Promise.resolve({data:{session:null}});},onAuthStateChange:function(){return {data:{subscription:{unsubscribe:function(){}}}};},signInWithPassword:function(){return Promise.resolve({error:{message:'offline'}});},signOut:function(){return Promise.resolve({});}},storage:{from:chain}}; }};
+})();
 const SB_URL='https://polewlvnwokvvoajsdfy.supabase.co';
 const SB_KEY='sb_publishable_MhZlQIwtcZyLf7iicRAYcQ_s7UY8tWs';
 const ADMIN_EMAIL='echoesinbloom@pm.me';
@@ -1529,12 +1542,7 @@ window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;wind
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
 const IN_MOTION_COPY={'the-breadcrumb-investigation':{sub:"An experiment in finding my voice by using it.",desc:"Thirty days of following my curiosity out loud. An exploration of expression, participation, and what becomes visible when we practice something rather than only think about it."}};
-async function loadInMotion(){
-  const el=document.getElementById('in-motion'); if(!el)return;
-  const{data,error}=await db.from('field_intelligence_entries')
-    .select('title,slug,id,what_im_noticing,started_label')
-    .eq('featured',true).eq('public',true).order('last_tended_at',{ascending:false}).limit(1).maybeSingle();
-  if(error||!data)return; // stays hidden: nothing is featured, and that is fine (so there is never a link to a page that is not ready)
+function fillInMotion(data){
   const copy=IN_MOTION_COPY[data.slug]||{};
   const paras=String(data.what_im_noticing||'').split(/\n\s*\n|<\/p>/).map(s=>{const t=document.createElement('div');t.innerHTML=s;return (t.textContent||'').replace(/\s+/g,' ').trim();}).filter(Boolean);
   document.getElementById('inm-title').textContent=data.title||'';
@@ -1542,19 +1550,29 @@ async function loadInMotion(){
   const dt=document.getElementById('inm-dates'); dt.textContent=data.started_label||''; dt.style.display=data.started_label?'block':'none';
   const ds=document.getElementById('inm-desc'); ds.textContent=copy.desc||paras[1]||''; ds.style.display=(copy.desc||paras[1])?'block':'none';
   document.getElementById('inm-link').setAttribute('href','/almanac/'+data.slug);
-  el.style.display='block';
+}
+async function loadInMotion(){
+  // The Breadcrumb Investigation is built into the page, so In Motion is always there. A published record in the database takes over;
+  // a published Breadcrumb record that is NOT featured means you have retired it, and the band is hidden.
+  const el=document.getElementById('in-motion'); if(!el)return;
+  try{
+    const{data:feat}=await db.from('field_intelligence_entries').select('title,slug,id,what_im_noticing,started_label').eq('featured',true).eq('public',true).order('last_tended_at',{ascending:false}).limit(1).maybeSingle();
+    if(feat){ fillInMotion(feat); el.style.display='block'; return; }
+    const{data:bc}=await db.from('field_intelligence_entries').select('slug').eq('slug','the-breadcrumb-investigation').eq('public',true).maybeSingle();
+    if(bc) el.style.display='none';
+  }catch(e){ /* the built-in band stays */ }
 }
 const SEASON_RANK={spring:1,summer:2,autumn:3,winter:4};
-function seasonParts(label){const p=String(label).split(' ');return{season:(p[0]||'').toLowerCase(),year:+p[1]||0};}
+function almanacSeason(d){ d=d||new Date(); const m=d.getMonth()+1,y=d.getFullYear(); if(m>=3&&m<=5)return{season:'spring',year:y}; if(m>=6&&m<=8)return{season:'summer',year:y}; if(m>=9&&m<=11)return{season:'autumn',year:y}; return{season:'winter',year:m===12?y:y-1}; }
+function seasonLabelOf(s){return s.season.charAt(0).toUpperCase()+s.season.slice(1)+' '+s.year;}
 function applyHeroInquiry(q,intro){
   const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const t=document.getElementById('hero-title'); if(t&&q)t.innerHTML=esc(q).replace(/\n/g,'<br>');
   const w=document.getElementById('hero-body-wrap'); if(w&&intro){ w.innerHTML=String(intro).split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean).map(p=>'<p class="hero-body">'+esc(p)+'</p>').join(''); }
 }
 async function loadSeasonInquiry(){
-  const label=getCurrentSeason(); const s=document.getElementById('hero-season-text'); if(s)s.textContent=label;
+  const cur=almanacSeason(); const s=document.getElementById('hero-season-text'); if(s)s.textContent=seasonLabelOf(cur);
   try{
-    const cur=seasonParts(label);
     const{data}=await db.from('almanac_seasons').select('*');
     const rows=(data||[]).filter(r=>r.inquiry_question&&String(r.inquiry_question).trim())
       .filter(r=>(+r.year<cur.year)||(+r.year===cur.year&&(SEASON_RANK[String(r.season).toLowerCase()]||0)<=SEASON_RANK[cur.season]));
@@ -1565,9 +1583,8 @@ async function loadSeasonInquiry(){
 }
 function loadRevisitLink(){
   const a=document.getElementById('fn-revisit'); if(!a)return;
-  const cur=seasonParts(getCurrentSeason()); const prev={summer:'spring',autumn:'summer',winter:'autumn',spring:'winter'}[cur.season];
-  const cap=prev.charAt(0).toUpperCase()+prev.slice(1);
-  a.textContent='Revisit '+cap+' '+cur.year+' \u2192'; a.setAttribute('href','/almanac#season-'+prev+'-'+cur.year);
+  const cur=almanacSeason(); const prev={summer:'spring',autumn:'summer',winter:'autumn',spring:'winter'}[cur.season]; const py=cur.season==='spring'?cur.year-1:cur.year;
+  a.textContent='Revisit '+seasonLabelOf({season:prev,year:py})+' \u2192'; a.setAttribute('href','/almanac#season-'+prev+'-'+py);
 }
 const INCUBATING=[
  {id:'discovery',name:'Discovery & Surprise',q:'Can we choose to be surprised?',p:"I\u2019m exploring whether chance, curiosity, discernment, and participation influence the discoveries we make, and whether we can create room for what we cannot anticipate.",link:{label:'Explore the Conditions of Discovery',slug:'the-conditions-of-discovery'}},
@@ -1581,10 +1598,10 @@ const INCUBATING=[
 async function loadIncubating(){
   const list=document.getElementById('inc-list'); if(!list)return;
   const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  list.innerHTML=INCUBATING.map(it=>'<li><details class="inc-item" id="inc-'+esc(it.id)+'"><summary><span class="inc-name">'+esc(it.name)+'</span><span class="inc-q">'+esc(it.q)+'</span></summary><div class="inc-body"><p>'+esc(it.p)+'</p>'+(it.link?'<a class="inc-link" data-slug="'+esc(it.link.slug)+'" href="#" hidden>'+esc(it.link.label)+' &rarr;</a>':'')+'</div></details></li>').join('');
+  list.innerHTML=INCUBATING.map(it=>'<li><details class="inc-item" id="inc-'+esc(it.id)+'"><summary><span class="inc-name">'+esc(it.name)+'</span><span class="inc-q">'+esc(it.q)+'</span></summary><div class="inc-body"><p>'+esc(it.p)+'</p>'+(it.link?'<a class="inc-link" data-slug="'+esc(it.link.slug)+'" href="/almanac/'+esc(it.link.slug)+'">'+esc(it.link.label)+' &rarr;</a>':'')+'</div></details></li>').join('');
   for(const a of list.querySelectorAll('a.inc-link[data-slug]')){
     try{ const{data}=await db.from('field_intelligence_entries').select('slug').ilike('slug',a.dataset.slug+'%').eq('public',true).limit(1);
-      if(data&&data[0]&&data[0].slug){ a.href='/almanac/'+data[0].slug; a.hidden=false; } }catch(e){}
+      if(data&&data[0]&&data[0].slug){ a.href='/almanac/'+data[0].slug; } }catch(e){}
   }
 }
 
