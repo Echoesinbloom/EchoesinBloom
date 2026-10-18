@@ -16,7 +16,7 @@
       --amber:#c87030;--amber-d:#a05020;--amber-w:rgba(200,112,48,.2);
       --moss:#6a8a58;
       --ink:#1a1710;--ink-mid:#3a3428;--ink-soft:#6a6258;--ink-faint:#a89e90;
-      --rule:rgba(40,30,15,.09);--rule-m:rgba(40,30,15,.14);
+      --rule:rgba(40,30,15,.09);--rule-m:rgba(40,30,15,.14); --moss-d:#4a6038;--on-dark:#f0e4cc;--on-dark-mid:#b09878;--fog-pale:#c8d0d8;--monarch:#8b5e3c;
       --s:'Cormorant Garamond',serif;--n:'Jost',sans-serif;
     }
     body{font-family:var(--n);background:var(--linen);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
@@ -169,10 +169,63 @@
     .entry-root-type{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.35rem}
     .entry-root-text{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-mid);line-height:1.7}
   
+/* The Breadcrumb Investigation: the dated record on an investigation page */
+.fi-log{margin:0 0 2.5rem}
+.fi-log-item{padding:1rem 0;border-bottom:1px solid var(--rule)}
+.fi-log-item:last-child{border-bottom:none}
+.fi-log-date{font-family:var(--n);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.35rem}
+.fi-log-title{display:block;font-family:var(--s);font-size:21px;font-style:italic;font-weight:300;color:var(--ink);text-decoration:none;line-height:1.3;margin-bottom:.35rem}
+.fi-log-excerpt{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-soft);line-height:1.65;margin-bottom:.5rem}
+.fi-log-video{display:inline-block;font-family:var(--n);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber-d);text-decoration:none;font-weight:500}
+.fi-log-videowrap{margin:1.25rem 0 1.5rem}
+.fi-log-empty{font-family:var(--s);font-size:15px;font-style:italic;color:var(--ink-faint)}
+@media(max-width:600px){.fi-log-title{font-size:19px}.fi-log-excerpt{font-size:14px}.fi-log-video{display:inline-flex;align-items:center;min-height:44px}}
 /* Phones: let the header wrap instead of forcing the page wider than the screen */
 @media(max-width:700px){.nav{flex-wrap:wrap;row-gap:.55rem;padding:.9rem 1.25rem}.nav-links{flex-wrap:wrap;gap:.45rem 1.1rem}}
 
+
+/* The four possible conditions (Conditions of Discovery investigation) */
+@media(min-width:720px){.cond-grid{grid-template-columns:1fr 1fr}.cond[open]{grid-column:1/-1}}
+
 .entry-nav{display:flex;flex-wrap:wrap;gap:.4rem 1.5rem;margin-bottom:2.5rem}.entry-nav .entry-back{margin-bottom:0}
+
+/* Investigation overview and the season link */
+.entry-sub{font-family:var(--s);font-size:22px;font-style:italic;color:var(--amber-d);line-height:1.35;margin:-.4rem 0 .8rem}
+.entry-dates{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1.6rem}
+.fi-log-img{display:block;margin-bottom:.8rem}.fi-log-img img{display:block;width:100%;height:210px;object-fit:cover;border-radius:2px}
+.fi-explore{margin:0 0 1rem}.fi-explore a{display:inline-flex;align-items:center;min-height:44px;font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-soft);text-decoration:none}.fi-explore a:hover{color:var(--amber-d)}
+@media(max-width:600px){.fi-log-img img{height:180px}.entry-sub{font-size:20px}}
+
+.fi-intro{font-size:16.5px;font-style:normal;line-height:1.78;color:var(--ink-mid)}
+
+.season-inmotion{display:block;margin:0 0 1.75rem;padding:1.35rem 1.4rem 1.2rem;background:var(--deep);background-image:radial-gradient(ellipse at 15% 0%,rgba(200,112,48,.08) 0%,transparent 60%);text-decoration:none;border-radius:2px}
+.season-inmotion span{display:block}
+.season-inmotion .sim-lbl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:.7rem}
+.season-inmotion .sim-title{font-family:var(--s);font-size:25px;font-style:italic;font-weight:300;color:var(--on-dark);line-height:1.15;margin-bottom:.45rem}
+.season-inmotion .sim-dates{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--fog-pale);margin-bottom:.8rem}
+.season-inmotion .sim-desc{font-family:var(--s);font-size:16px;color:var(--on-dark-mid);line-height:1.65;margin-bottom:.9rem}
+.season-inmotion .sim-go{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:500;text-decoration:underline;text-decoration-color:rgba(200,112,48,.5);text-underline-offset:5px;padding:.4rem 0}
+.fi-cards{margin-top:1.1rem}
+.fi-card-item{display:flex;flex-direction:column}.fi-card-item .fn-card-wrap{flex:1}
+.fi-card-item .fi-log-video{margin-top:.5rem}
+.fi-more{margin:0 0 1.6rem}.fi-more summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;min-height:44px;font-family:var(--s);font-size:16px;font-style:italic;color:var(--ink-soft)}
+.fi-more summary::-webkit-details-marker{display:none}.fi-more summary::after{content:" +";margin-left:.4rem;font-style:normal}.fi-more[open] summary::after{content:" \2212"}
+.fi-more summary:focus-visible{outline:2px solid var(--amber-d);outline-offset:3px}.fi-more[open] summary{margin-bottom:.4rem}
+
+/* Conditions of Discovery: four readable sections */
+.cond-wrap{margin:1.2rem 0 2rem}
+.cond-sec{padding:1.5rem 0;border-top:1px solid var(--rule-m)}.cond-sec:last-child{border-bottom:1px solid var(--rule-m)}
+.cond-name{font-family:var(--s);font-size:28px;font-style:italic;font-weight:300;color:var(--ink);line-height:1.15;margin:0 0 .35rem}
+.cond-q{font-family:var(--s);font-size:18px;font-style:italic;color:var(--amber-d);line-height:1.4;margin:0 0 .8rem}
+.cond-body{font-family:var(--s);font-size:16.5px;font-style:normal;color:var(--ink-mid);line-height:1.78;margin:0;max-width:34rem}
+.cond-closing{margin:2rem 0 2.2rem}.cond-closing .entry-wander-lbl{margin-bottom:.8rem}
+.cond-note{font-family:var(--s);font-size:15.5px;font-style:italic;color:var(--ink-soft);line-height:1.7;margin:.9rem 0 0;max-width:34rem}
+@media(max-width:600px){.cond-name{font-size:26px}}
+
+/* Back links: a comfortable 44px tap target and readable colour on a phone */
+.entry-back{display:inline-flex;align-items:center;min-height:44px;margin-bottom:1.1rem;color:var(--ink-soft)}
+.entry-back:hover{color:var(--amber-d)}
+.entry-nav{margin-bottom:1.1rem}
 </style>
 </head>
 <body>
@@ -214,6 +267,12 @@
 </footer>
 
 <script>
+(function(){ /* If the database library cannot load, give the page an empty stand-in so everything built into the page still appears. */
+  if(window.supabase&&window.supabase.createClient)return;
+  var empty={data:null,error:{message:'offline'}};
+  function chain(){ return new Proxy(function(){},{get:function(t,k){ if(k==='then')return function(res){res(empty);}; return chain; },apply:function(){return chain();}}); }
+  window.supabase={createClient:function(){ return {from:chain,rpc:chain,auth:{getSession:function(){return Promise.resolve({data:{session:null}});},onAuthStateChange:function(){return {data:{subscription:{unsubscribe:function(){}}}};},signInWithPassword:function(){return Promise.resolve({error:{message:'offline'}});},signOut:function(){return Promise.resolve({});}},storage:{from:chain}}; }};
+})();
 const SB_URL='https://polewlvnwokvvoajsdfy.supabase.co';
 const SB_KEY='sb_publishable_MhZlQIwtcZyLf7iicRAYcQ_s7UY8tWs';
 const{createClient}=supabase;
@@ -259,7 +318,7 @@ function buildAlmanacCard(e,type){
   const dateLabel = isIntel ? (e.started_label||formatDate(e.created_at)) : (e.date_label||formatDate(e.entry_date));
   return`<div class="fn-card-wrap">
     <a class="fn-card" href="${href}">
-      ${isIntel?'<div class="fn-card-intel-lbl">Field Intelligence</div>':''}
+      ${isIntel?'<div class="fn-card-intel-lbl">Investigation</div>':''}
       ${e.photo_url||e.hero_photo_url?`<div class="fn-card-thumb-wrap"><img src="${e.photo_url||e.hero_photo_url}" class="fn-card-thumb" alt=""></div>` : ''}
       <div class="fn-card-meta">
         ${dateLabel}
@@ -300,15 +359,69 @@ async function renderEntryReadingPage(slug){
     return;
   }
 
-  const{data:inv}=await db.from('field_intelligence_entries').select('*').eq('slug',slug).eq('public',true).single();
+  const{data:inv}=await db.from('field_intelligence_entries').select('id,created_at,slug,title,status,started_label,themes,what_im_noticing,what_i_found,what_im_making_of_it,what_im_still_wondering,final_question,hero_photo_url,last_tended_at,update_note,public,featured').eq('slug',slug).eq('public',true).single();
   if(inv){
     await renderInvestigationReading(inv,body);
+    return;
+  }
+  if(BUILTIN_INVESTIGATIONS[slug]){
+    await renderInvestigationReading(Object.assign({},BUILTIN_INVESTIGATIONS[slug]),body);
     return;
   }
 
   body.innerHTML='<div class="loading">This entry could not be found — it may have been unpublished, or the link may be out of date.</div>';
 }
 
+
+// ---- The Breadcrumb Investigation support: small helpers (additive) ----
+function bcEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function bcSafeLink(url){ // only ordinary https links are ever shown
+  if(!url)return null; try{const u=new URL(String(url).trim()); if(u.protocol!=='https:')return null;
+    return {href:u.href,label:/tiktok\./i.test(u.hostname)?'Watch on TikTok':'Watch the video'};}catch(e){return null;}
+}
+function bcExcerpt(html,max){const d=document.createElement('div');d.innerHTML=html||'';const t=(d.textContent||'').replace(/\s+/g,' ').trim();return t.length>max?t.slice(0,max).trim()+'\u2026':t;}
+function bcWindow(label){ // reads "October 26 \u2013 November 24, 2026" from the investigation's started label
+  if(!label)return null; const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const hits=[...String(label).matchAll(new RegExp('('+M.join('|')+')\\s+(\\d{1,2})(?:,?\\s*(\\d{4}))?','g'))];
+  if(hits.length<2)return null; const yr=(hits.find(h=>h[3])||[])[3]; if(!yr)return null;
+  const mk=h=>new Date(+(h[3]||yr),M.indexOf(h[1]),+h[2],12,0,0);
+  const s=mk(hits[0]),e=mk(hits[1]); return e>=s?{start:s,end:e}:null;
+}
+function bcDay(iso,win){ if(!win||!iso)return null; const d=new Date(iso+'T12:00:00'); if(d<win.start||d>win.end)return null; return Math.round((d-win.start)/86400000)+1; }
+
+// ---- Investigation overview: presentation copy (wording only; the data is generic and lives in the investigation record) ----
+
+// ---- Investigations built into the page, so they always appear (a published record in the database takes over) ----
+const BUILTIN_NIL='00000000-0000-0000-0000-000000000000';
+const BUILTIN_INVESTIGATIONS={
+  'the-breadcrumb-investigation':{id:BUILTIN_NIL,slug:'the-breadcrumb-investigation',title:'The Breadcrumb Investigation',status:'noticing',started_label:'October 26 \u2013 November 24, 2026',themes:[],created_at:'2026-10-19T00:00:00+00:00',public:true,featured:true,
+    what_im_noticing:"I\u2019ve been leaving breadcrumbs.\n\nObservations, questions, and connections that emerge through everyday life. Some lead to further inquiry. Others take on meaning much later.\n\nLately, I\u2019ve been exploring the relationship between thought, movement, bodily awareness, and expression. How do we translate what we\u2019re experiencing into something we can communicate? What changes when that translation happens in real time?\n\nFor thirty days, I\u2019m experimenting with speaking aloud, following whatever observations, questions, and encounters catch my attention. The challenge is to develop greater fluency between thought and expression, to see what changes through repetition, and to notice what emerges through participation.\n\nI\u2019ve chosen one lunar cycle as the timeframe, from just after October\u2019s full moon to the next full moon in November. It\u2019s another opportunity to observe rhythm, repetition, and change without deciding in advance what those patterns will mean.\n\nI don\u2019t know where the breadcrumbs will lead.\n\nThat\u2019s part of the investigation."},
+  'the-conditions-of-discovery':{id:BUILTIN_NIL,slug:'the-conditions-of-discovery',title:'Conditions of Discovery',status:'noticing',started_label:'October 2026',themes:[],created_at:'2026-10-12T00:00:00+00:00',public:true,featured:false,
+    what_im_noticing:"I\u2019ve been wondering whether discovery is entirely accidental, or whether the way we live changes what we have an opportunity to encounter.\n\nFour possible conditions keep appearing in that question. I\u2019m interested in how they interact, where they don\u2019t, and whether they actually help explain what we discover."}
+};
+function bcWithBuiltIns(list){ const have=new Set((list||[]).map(i=>i.slug)); const out=(list||[]).slice(); Object.keys(BUILTIN_INVESTIGATIONS).forEach(k=>{ if(!have.has(k))out.push(Object.assign({},BUILTIN_INVESTIGATIONS[k])); }); return out; }
+const INVESTIGATION_COPY={
+  // The Breadcrumb Investigation: a defined experiment with a dated record
+  'the-breadcrumb-investigation':{kind:'Field Experiment',subtitle:'One lunar cycle of thinking out loud.',recordHeading:'Following the Breadcrumbs',introLabel:false,leadParagraphs:2,
+    blurb:'Thirty days of following my curiosity out loud. An exploration of expression, participation, and what becomes visible when we practice something rather than only think about it.',
+    context:{slug:'the-conditions-of-discovery',label:'Explore the Conditions of Discovery'}},
+  // Conditions of Discovery: an ongoing inquiry, no end date. To change this wording, edit the text below.
+  'the-conditions-of-discovery':{eyebrow:'Ongoing Investigation \u00b7 Echoes in Bloom',subtitle:'Can we choose to be surprised?',showDates:false,recordHeading:'Related Field Notes',introLabel:false,
+    conditions:[
+      {k:'chance',name:'Chance',q:'What encounters us unexpectedly?',body:'Chance introduces possibilities we didn\u2019t necessarily anticipate or seek out. We can\u2019t guarantee unexpected encounters, but perhaps the places we go, the routines we change, and the people we meet influence what we have the opportunity to discover.'},
+      {k:'curiosity',name:'Curiosity',q:'What draws us closer?',body:'Sometimes curiosity leads us toward an experience. Other times, an experience makes us curious. I\u2019m interested in how our questions shape what we pay attention to, and what becomes visible when we look again.'},
+      {k:'discernment',name:'Discernment',q:'What deserves further attention?',body:'Not every coincidence is a meaningful connection, and not every discomfort is a reason to turn away. Discernment asks us to examine assumptions, consider evidence and limits, and recognize when to continue, question, or step back.'},
+      {k:'participation',name:'Participation',q:'What becomes possible through engagement?',body:'There\u2019s a difference between noticing something and becoming involved. Asking a question, entering an unfamiliar place, beginning an experiment, or joining a conversation may change what becomes available for us to understand.'}
+    ],
+    closing:{heading:'Still investigating',text:'These aren\u2019t four steps to follow or a formula for producing discovery. They\u2019re possibilities I\u2019m examining through observations, conversations, experiments, and experiences that sometimes challenge my assumptions.',note:'Related Field Notes and developments can accumulate here as connections are confirmed.'},
+    context:{slug:'the-breadcrumb-investigation',label:'Follow the Breadcrumb Investigation'}}
+};
+const MONTHS_FULL=['','January','February','March','April','May','June','July','August','September','October','November','December'];
+function bcIso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function bcMonthDay(d){return MONTHS_FULL[d.getMonth()+1]+' '+d.getDate();}
+function bcSafeImg(url){const u=String(url||'').trim(); return (/^https:\/\//i.test(u)||/^data:image\//i.test(u))?u:null;}
+function bcSplitParas(s){ s=String(s||''); if(/<p[\s>]/i.test(s)){ const m=s.match(/<p[\s>][\s\S]*?<\/p>/gi); return {parts:(m&&m.length)?m:[s],sep:''}; } return {parts:s.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean),sep:'\n\n'}; }
+function bcInvSeasonDate(i){const w=bcWindow(i.started_label); return w?bcIso(w.start):String(i.created_at||'').slice(0,10);}
 async function renderFieldNote(e,body){
   // Related entries via existing Mycelium connections
   const{data:links}=await db.from('mycelium').select('*').eq('entry_id',e.id);
@@ -327,7 +440,16 @@ async function renderFieldNote(e,body){
     }
   }
 
-  // Echoes — reflections tied to this entry
+  // Part of an investigation (shown only when both the note and the investigation are public)
+  let partOfHtml='';
+  try{ const{data:memb}=await db.from('field_intelligence_sources').select('field_intelligence_entry_id').eq('entry_id',e.id);
+    const invIds=[...new Set((memb||[]).map(m=>m.field_intelligence_entry_id).filter(Boolean))];
+    if(invIds.length){ const{data:invs}=await db.from('field_intelligence_entries').select('id,title,slug,started_label,created_at').in('id',invIds).eq('public',true);
+      if(invs&&invs.length){ partOfHtml=`<div class="entry-wander-lbl">Part of</div>`+invs.map(r=>`<a class="entry-wander-item" href="/almanac/${bcEsc(r.slug||r.id)}"><div class="entry-wander-date">${bcEsc(r.started_label||formatDate(r.created_at))}</div><div class="entry-wander-title">${bcEsc(r.title)}</div></a>`).join('')+'<div style="height:1.5rem"></div>'; } }
+  }catch(err){ /* the connection lookup is optional; the note still reads fine */ }
+  const vid=bcSafeLink(e.link_url);
+  const videoHtml=vid?`<div class="fi-log-videowrap"><a class="fi-log-video" href="${bcEsc(vid.href)}" target="_blank" rel="noopener">${vid.label} &rarr;</a></div>`:'';
+  // Echoes \u2014 reflections tied to this entry
   const{data:echoes}=await db.from('note_echoes').select('*').eq('parent_entry_id',e.id).eq('public',true).order('created_at',{ascending:true});
   let echoesHtml='';
   if(echoes&&echoes.length){
@@ -350,13 +472,24 @@ async function renderFieldNote(e,body){
     <div class="entry-title">${e.title}</div>
     ${e.photo_url?`<div class="entry-img-wrap"><img src="${e.photo_url}" class="entry-img" alt=""></div>`:''}
     <div class="entry-body">${e.body||''}</div>
+    ${videoHtml}
     ${(e.threads||[]).length?`<div class="entry-threads">${e.threads.map(t=>`<span class="entry-thread">${t}</span>`).join('')}</div>`:''}
     ${e.reflection?`<div class="entry-prompt"><div class="entry-prompt-lbl">A question to sit with</div><div class="entry-prompt-body">${e.reflection}</div></div>`:''}
     ${echoesHtml}
-    ${wanderHtml}
+    ${partOfHtml}${wanderHtml}
   `;
 }
 
+
+// ---- The four possible conditions, shown on the Conditions of Discovery investigation (additive) ----
+function bcConditionsHtml(copy){
+  const cs=copy.conditions||[]; if(!cs.length)return '';
+  return `<div class="cond-wrap">`+cs.map(c=>`<section class="cond-sec" id="cond-${bcEsc(c.k)}"><h3 class="cond-name">${bcEsc(c.name)}</h3><p class="cond-q">${bcEsc(c.q)}</p><p class="cond-body">${bcEsc(c.body)}</p></section>`).join('')+`</div>`;
+}
+function bcClosingHtml(copy,hasRelated){
+  const c=copy.closing; if(!c)return '';
+  return `<div class="cond-closing"><div class="entry-wander-lbl">${bcEsc(c.heading)}</div><p class="cond-body">${bcEsc(c.text)}</p>${(c.note&&!hasRelated)?`<p class="cond-note">${bcEsc(c.note)}</p>`:''}</div>`;
+}
 async function renderInvestigationReading(inv,body){
   // The Conditions of Discovery page: a clear way back to the homepage's Currently Incubating section
   if(/^the-conditions-of-discovery(-|$)/.test(inv.slug||'')&&!document.getElementById('cod-home-link')){
@@ -367,7 +500,7 @@ async function renderInvestigationReading(inv,body){
   // Sources attached to this investigation — external citations shown directly,
   // internal ones (observations/entries/profiles/related investigations) shown
   // as plain labels since their own content is private or lives elsewhere.
-  const{data:sources}=await db.from('field_intelligence_sources').select('*').eq('field_intelligence_entry_id',inv.id).order('selected_order',{ascending:true});
+  const{data:sources}=await db.from('field_intelligence_sources').select('id,field_intelligence_entry_id,entry_id,related_investigation_id,selected_order,created_at').eq('field_intelligence_entry_id',inv.id).order('selected_order',{ascending:true});
   let sourcesHtml='';
   const externalSources=(sources||[]).filter(s=>s.external_url||s.external_note);
   if(externalSources.length){
@@ -382,7 +515,7 @@ async function renderInvestigationReading(inv,body){
 
   // Follow the Roots — only approved, public claims. Collapsible, and only
   // rendered at all if something has actually cleared Evidence Review.
-  const{data:roots}=await db.from('field_intelligence_roots').select('*').eq('field_intelligence_entry_id',inv.id).eq('public',true).eq('human_approved',true);
+  const{data:roots}=await db.from('field_intelligence_roots').select('root_type,human_wording').eq('field_intelligence_entry_id',inv.id).eq('public',true).eq('human_approved',true);
   let rootsHtml='';
   if(roots&&roots.length){
     rootsHtml=`<div class="entry-roots">
@@ -395,41 +528,56 @@ async function renderInvestigationReading(inv,body){
     </div>`;
   }
 
-  // Related investigations and entries, via field_intelligence_sources
-  let wanderHtml='';
-  const relatedInvIds=(sources||[]).map(s=>s.related_investigation_id).filter(Boolean);
-  const relatedEntryIds=(sources||[]).map(s=>s.entry_id).filter(Boolean);
+  // Related investigations (connected from either end) and the dated record of Field Notes
+  let wanderHtml='', logHtml='';
+  const relatedInvIds=new Set((sources||[]).map(s=>s.related_investigation_id).filter(Boolean));
+  try{ const{data:rev}=await db.from('field_intelligence_sources').select('field_intelligence_entry_id').eq('related_investigation_id',inv.id);
+       (rev||[]).forEach(r=>{ if(r.field_intelligence_entry_id) relatedInvIds.add(r.field_intelligence_entry_id); }); }catch(err){}
+  relatedInvIds.delete(inv.id);
+  const relatedEntryIds=[...new Set((sources||[]).map(s=>s.entry_id).filter(Boolean))];
   const wanderItems=[];
-  if(relatedInvIds.length){
-    const{data:relInv}=await db.from('field_intelligence_entries').select('id,title,slug,started_label,created_at').in('id',relatedInvIds).eq('public',true);
-    (relInv||[]).forEach(r=>wanderItems.push({title:r.title,slug:r.slug||r.id,date:r.started_label||formatDate(r.created_at)}));
-  }
-  if(relatedEntryIds.length){
-    const{data:relEntries}=await db.from('entries').select('id,title,slug,date_label,entry_date').in('id',relatedEntryIds).eq('public',true);
-    (relEntries||[]).forEach(r=>wanderItems.push({title:r.title,slug:r.slug||r.id,date:r.date_label||formatDate(r.entry_date)}));
-  }
-  if(wanderItems.length){
-    wanderHtml=`<div class="entry-wander-lbl">Keep wandering</div>`+wanderItems.map(r=>`
-      <a class="entry-wander-item" href="/almanac/${r.slug}">
-        <div class="entry-wander-date">${r.date||''}</div>
-        <div class="entry-wander-title">${r.title}</div>
-      </a>`).join('');
-  }
-
+  if(relatedInvIds.size){ const{data:relInv}=await db.from('field_intelligence_entries').select('id,title,slug,started_label,created_at').in('id',[...relatedInvIds]).eq('public',true);
+    (relInv||[]).forEach(r=>wanderItems.push({title:r.title,slug:r.slug||r.id,date:r.started_label||formatDate(r.created_at)})); }
+  const win=bcWindow(inv.started_label);
+  const isCoD=/^the-conditions-of-discovery(-|$)/.test(inv.slug||'');
+  let rows=[];
+  if(relatedEntryIds.length){ const{data:logEntries}=await db.from('entries').select('id,title,slug,body,entry_date,date_label,link_url,photo_url,created_at,threads').in('id',relatedEntryIds).eq('public',true);
+    rows=(logEntries||[]).slice().sort((x,y)=>{const dx=x.entry_date||'',dy=y.entry_date||''; return dx<dy?-1:dx>dy?1:(x.created_at||'')<(y.created_at||'')?-1:1;}); }
+  const copy=INVESTIGATION_COPY[inv.slug]||(isCoD?INVESTIGATION_COPY['the-conditions-of-discovery']:{});
+  const sk=getSeasonForDate(win?bcIso(win.start):String(inv.created_at||'').slice(0,10))||{season:'autumn',year:new Date().getFullYear()};
+  const seasonLabel=SEASON_DISPLAY[sk.season]+' '+sk.year, seasonHref='/almanac#season-'+sk.season+'-'+sk.year;
+  const kind=copy.kind||(win?'Field Experiment':'Investigation'); const heading=copy.recordHeading||'An unfolding record';
+  if(rows.length){
+    const cardsHtml=rows.map(r=>{
+      const vid=bcSafeLink(r.link_url);
+      const card=buildAlmanacCard({id:r.id,slug:bcEsc(r.slug||r.id),title:bcEsc(r.title),body:bcEsc(bcExcerpt(r.body,220)),date_label:bcEsc(r.date_label||formatDate(r.entry_date)),entry_date:r.entry_date,photo_url:bcSafeImg(r.photo_url)||'',threads:(r.threads||[]).map(bcEsc)},'note');
+      return `<div class="fi-card-item">${card}${vid?`<a class="fi-log-video" href="${bcEsc(vid.href)}" target="_blank" rel="noopener">${vid.label} &rarr;</a>`:''}</div>`;}).join('');
+    logHtml=`<div class="fi-log"><div class="entry-wander-lbl">${heading}</div><div class="entry-grid fi-cards">${cardsHtml}</div></div>`; }
+  else if(win){ const begins=win.start>new Date();
+    logHtml=`<div class="fi-log"><div class="entry-wander-lbl">${heading}</div><div class="fi-log-empty">${begins?'The investigation begins '+bcMonthDay(win.start)+'. Field Notes will gather here as it unfolds.':'Field Notes will gather here as it unfolds.'}</div></div>`; }
+  let introHtml='';
+  if(inv.what_im_noticing){ const sp=bcSplitParas(inv.what_im_noticing), n=copy.leadParagraphs;
+    if(n&&sp.parts.length>n){ introHtml=`<div class="entry-body fi-intro">${sp.parts.slice(0,n).join(sp.sep)}</div><details class="fi-more"><summary>Read the full introduction</summary><div class="entry-body fi-intro">${sp.parts.slice(n).join(sp.sep)}</div></details>`; }
+    else introHtml=`<div class="entry-body fi-intro" style="margin-bottom:1.5rem">${inv.what_im_noticing}</div>`; }
+  let exploreHtml='';
+  if(win){ exploreHtml+=`<div class="fi-explore"><a href="${seasonHref}">&larr; Explore all of ${seasonLabel}</a></div>`; }
+  if(copy.context){ let cslug=copy.context.slug; try{ const{data:cx}=await db.from('field_intelligence_entries').select('slug').ilike('slug',copy.context.slug+'%').eq('public',true).limit(1); if(cx&&cx[0]&&cx[0].slug)cslug=cx[0].slug; }catch(err){}
+    exploreHtml+=`<div class="fi-explore"><a href="/almanac/${bcEsc(cslug)}">${bcEsc(copy.context.label)} &rarr;</a></div>`;
+    for(let q=wanderItems.length-1;q>=0;q--){ if(String(wanderItems[q].slug||'').indexOf(copy.context.slug)===0)wanderItems.splice(q,1); } }
+  if(wanderItems.length){ wanderHtml=`<div class="entry-wander-lbl">Keep wandering</div>`+wanderItems.map(r=>`<a class="entry-wander-item" href="/almanac/${bcEsc(r.slug)}"><div class="entry-wander-date">${bcEsc(r.date||'')}</div><div class="entry-wander-title">${bcEsc(r.title)}</div></a>`).join(''); }
   const lastTended = inv.last_tended_at
     ? new Date(inv.last_tended_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})
     : null;
 
   body.innerHTML=`
-    <div class="entry-meta">
-      <span class="entry-type" style="color:var(--moss)">Field Intelligence</span>
-      ${inv.started_label?`&middot; ${inv.started_label}`:''}
-    </div>
+    <div class="entry-meta"><span class="entry-type" style="color:var(--moss-d)">${copy.eyebrow?bcEsc(copy.eyebrow):'Almanac &middot; '+seasonLabel+' &middot; '+kind}</span></div>
     <div class="entry-title">${inv.title||''}</div>
+    ${copy.subtitle?`<div class="entry-sub">${copy.subtitle}</div>`:''}
+    ${(inv.started_label&&copy.showDates!==false)?`<div class="entry-dates">${inv.started_label}</div>`:''}
     ${lastTended?`<div class="entry-tended">Last tended ${lastTended}${inv.update_note?' &mdash; '+inv.update_note:''}</div>`:''}
     ${inv.hero_photo_url?`<div class="entry-img-wrap"><img src="${inv.hero_photo_url}" class="entry-img" alt=""></div>`:''}
 
-    ${inv.what_im_noticing?`<div class="entry-fi-section"><div class="entry-fi-lbl">What I'm Noticing</div><div class="entry-body" style="margin-bottom:1.5rem">${inv.what_im_noticing}</div></div>`:''}
+    ${inv.what_im_noticing?`<div class="entry-fi-section">${copy.introLabel===false?'':'<div class="entry-fi-lbl">What I\'m Noticing</div>'}${introHtml}</div>`:''}
     ${inv.what_i_found?`<div class="entry-fi-section"><div class="entry-fi-lbl">What I Found</div><div class="entry-body" style="margin-bottom:1.5rem">${inv.what_i_found}</div></div>`:''}
     ${inv.what_im_making_of_it?`<div class="entry-fi-section"><div class="entry-fi-lbl">What I'm Making of It</div><div class="entry-body" style="margin-bottom:1.5rem">${inv.what_im_making_of_it}</div></div>`:''}
     ${inv.what_im_still_wondering?`<div class="entry-fi-section"><div class="entry-fi-lbl">What I'm Still Wondering</div><div class="entry-body" style="margin-bottom:1.5rem">${inv.what_im_still_wondering}</div></div>`:''}
@@ -437,7 +585,11 @@ async function renderInvestigationReading(inv,body){
 
     ${(inv.themes||[]).length?`<div class="entry-threads">${inv.themes.map(t=>`<span class="entry-thread">${t}</span>`).join('')}</div>`:''}
 
+    ${bcConditionsHtml(copy)}
+    ${bcClosingHtml(copy,rows.length>0)}
     ${sourcesHtml}
+    ${logHtml}
+    ${exploreHtml}
     ${rootsHtml}
     ${wanderHtml}
   `;
@@ -489,10 +641,10 @@ async function init(){
     if(!grouped[k])grouped[k]={entries:[],profiles:[],events:[],investigations:[]};
     grouped[k].events.push(e);
   });
-  (investigations||[]).forEach(i=>{
+  bcWithBuiltIns(investigations).forEach(i=>{
     // Field Intelligence entries are dated by when the investigation started,
     // same as Field Notes use entry_date — created_at is the closest equivalent.
-    const sk=getSeasonForDate(i.created_at);
+    const sk=getSeasonForDate(bcInvSeasonDate(i));
     if(!sk)return;
     const k=seasonKey(sk.season,sk.year);
     if(!grouped[k])grouped[k]={entries:[],profiles:[],events:[],investigations:[]};
@@ -534,7 +686,7 @@ async function init(){
     // Counts
     const countsHtml=[
       totalEntries?`<div class="season-count"><div class="season-count-n">${totalEntries}</div><div class="season-count-lbl">Field Note${totalEntries!==1?'s':''}</div></div>`:'',
-      totalInvestigations?`<div class="season-count"><div class="season-count-n">${totalInvestigations}</div><div class="season-count-lbl">Field Intelligence</div></div>`:'',
+      totalInvestigations?`<div class="season-count"><div class="season-count-n">${totalInvestigations}</div><div class="season-count-lbl">Investigation${totalInvestigations!==1?'s':''}</div></div>`:'',
       totalProfiles?`<div class="season-count"><div class="season-count-n">${totalProfiles}</div><div class="season-count-lbl">First noticed</div></div>`:'',
       totalEvents?`<div class="season-count"><div class="season-count-n">${totalEvents}</div><div class="season-count-lbl">Event${totalEvents!==1?'s':''}</div></div>`:'',
     ].filter(Boolean).join('');
@@ -545,7 +697,7 @@ async function init(){
       ...content.entries.map(e=>({...e,_type:'note',_date:e.entry_date})),
       ...content.investigations.map(i=>({...i,_type:'intelligence',_date:i.created_at}))
     ].sort((a,b)=>new Date(b._date)-new Date(a._date));
-    const entriesHtml=combined.length?`<div class="entry-grid">${combined.slice(0,8).map(e=>buildAlmanacCard(e,e._type)).join('')}</div>`:'';
+    const entriesHtml=combined.length?`<div class="entry-grid">${combined.map(e=>buildAlmanacCard(e,e._type)).join('')}</div>`:'';
 
     const profilesHtml=content.profiles.slice(0,6).map(p=>`
       <div class="journal-profile">
@@ -573,13 +725,15 @@ async function init(){
 
     const unfoldLabel=hasContent?'Read this season':'Nothing recorded yet';
 
-    return`<div class="season" id="season-${k}">
+    const expHtml=(content.investigations||[]).filter(iv=>bcWindow(iv.started_label)).map(iv=>{ const c=INVESTIGATION_COPY[iv.slug]||{}; const blurb=c.blurb||bcExcerpt(iv.what_im_noticing,170); return `<a class="season-inmotion" href="/almanac/${bcEsc(iv.slug||iv.id)}"><span class="sim-lbl">In Motion this season</span><span class="sim-title">${bcEsc(iv.title)}</span><span class="sim-dates">${bcEsc(iv.started_label)}</span>${blurb?`<span class="sim-desc">${bcEsc(blurb)}</span>`:''}<span class="sim-go">Follow the investigation &rarr;</span></a>`;}).join('');
+  return`<div class="season" id="season-${k}">
       <div class="season-eyebrow">${SEASON_DISPLAY[season]} ${year}</div>
       <div class="season-name">${SEASON_DISPLAY[season]}</div>
       <div class="season-year">${year}</div>
       ${record?.title?`<div class="season-title">${record.title}</div>`:''}
       ${record?.reflection?`<div class="season-reflection">${record.reflection}</div>`:''}
       ${countsHtml?`<div class="season-counts">${countsHtml}</div>`:''}
+    ${expHtml}
       ${hasContent?`
         <button class="season-unfold" onclick="unfoldSeason(this,'${k}')">
           <span>${unfoldLabel}</span>
