@@ -444,6 +444,10 @@
 
 /* Field Notes header: "Browse the Almanac" is a comfortable tap target on a phone */
 .fn-head a{display:inline-flex;align-items:center;min-height:44px}
+
+.inc-links{display:flex;flex-direction:column;align-items:flex-start}.inc-links:empty{display:none}
+
+#inm-more .inm-item{margin-top:1.9rem;padding-top:1.9rem;border-top:1px solid rgba(240,228,204,.14)}
 </style>
 </head>
 <body>
@@ -525,11 +529,21 @@
 <section class="inm" id="in-motion" aria-labelledby="inm-h">
   <div class="inm-in">
     <div class="inm-lbl" id="inm-h">In Motion</div>
-    <div class="inm-title" id="inm-title">The Breadcrumb Investigation</div>
-    <div class="inm-sub" id="inm-sub">An experiment in finding my voice by using it.</div>
-    <div class="inm-dates" id="inm-dates">October 26 &ndash; November 24, 2026</div>
-    <p class="inm-desc" id="inm-desc">Thirty days of following my curiosity out loud. An exploration of expression, participation, and what becomes visible when we practice something rather than only think about it.</p>
-    <a class="inm-link" id="inm-link" href="/almanac/the-breadcrumb-investigation">Follow the investigation &rarr;</a>
+    <div class="inm-item" id="inm-item-1">
+      <div class="inm-title" id="inm-title">The Breadcrumb Investigation</div>
+      <div class="inm-sub" id="inm-sub">An experiment in finding my voice by using it.</div>
+      <div class="inm-dates" id="inm-dates">October 26 &ndash; November 24, 2026</div>
+      <p class="inm-desc" id="inm-desc">Thirty days of following my curiosity out loud. An exploration of expression, participation, and what becomes visible when we practice something rather than only think about it.</p>
+      <a class="inm-link" id="inm-link" href="/almanac/the-breadcrumb-investigation">Follow the investigation &rarr;</a>
+    </div>
+    <div id="inm-more">
+      <div class="inm-item">
+        <div class="inm-title">Signs of Life</div>
+        <div class="inm-sub">What do we choose to make visible?</div>
+        <p class="inm-desc">Lately, I&rsquo;ve been spending a lot of time walking through neighborhoods I might not otherwise visit. I&rsquo;ve started paying attention to the things people put outside.</p>
+        <a class="inm-link" href="/almanac/signs-of-life">Explore the signs &rarr;</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1541,25 +1555,57 @@ window.toggleCi=toggleCi;
 window.openAdminModal=openAdminModal;window.closeAdminModal=closeAdminModal;window.checkAdmin=checkAdmin;window.exitAdmin=exitAdmin;
 window.openEditOverlay=openEditOverlay;window.closeEditOverlay=closeEditOverlay;window.saveAllEdits=saveAllEdits;window.editAbout=editAbout;
 window.unpublishEntry=unpublishEntry;window.loadPublicEchoes=loadPublicEchoes;window.loadPublicEchoResponses=loadPublicEchoResponses;
-const IN_MOTION_COPY={'the-breadcrumb-investigation':{sub:"An experiment in finding my voice by using it.",desc:"Thirty days of following my curiosity out loud. An exploration of expression, participation, and what becomes visible when we practice something rather than only think about it."}};
-function fillInMotion(data){
-  const copy=IN_MOTION_COPY[data.slug]||{};
+const IN_MOTION_COPY={
+  'the-breadcrumb-investigation':{sub:"An experiment in finding my voice by using it.",desc:"Thirty days of following my curiosity out loud. An exploration of expression, participation, and what becomes visible when we practice something rather than only think about it."},
+  // Signs of Life (built in, like the Breadcrumb Investigation). A published, featured record in the database takes over.
+  'signs-of-life':{sub:"What do we choose to make visible?",desc:"Lately, I\u2019ve been spending a lot of time walking through neighborhoods I might not otherwise visit. I\u2019ve started paying attention to the things people put outside.",go:"Explore the signs",noDates:true}
+};
+function inmCopy(slug){ slug=String(slug||''); for(const k in IN_MOTION_COPY){ if(slug===k||slug.indexOf(k+'-')===0)return IN_MOTION_COPY[k]; } return {}; }
+function inmItem(data){
+  const copy=inmCopy(data.slug);
   const paras=String(data.what_im_noticing||'').split(/\n\s*\n|<\/p>/).map(s=>{const t=document.createElement('div');t.innerHTML=s;return (t.textContent||'').replace(/\s+/g,' ').trim();}).filter(Boolean);
-  document.getElementById('inm-title').textContent=data.title||'';
-  document.getElementById('inm-sub').textContent=copy.sub||paras[0]||'';
-  const dt=document.getElementById('inm-dates'); dt.textContent=data.started_label||''; dt.style.display=data.started_label?'block':'none';
-  const ds=document.getElementById('inm-desc'); ds.textContent=copy.desc||paras[1]||''; ds.style.display=(copy.desc||paras[1])?'block':'none';
-  document.getElementById('inm-link').setAttribute('href','/almanac/'+data.slug);
+  return {title:data.title||'',sub:copy.sub||paras[0]||'',dates:copy.noDates?'':(data.started_label||''),desc:copy.desc||paras[1]||'',go:copy.go||'Follow the investigation',href:'/almanac/'+data.slug};
 }
+function inmSetFirst(it){
+  document.getElementById('inm-title').textContent=it.title;
+  document.getElementById('inm-sub').textContent=it.sub;
+  const dt=document.getElementById('inm-dates'); dt.textContent=it.dates; dt.style.display=it.dates?'block':'none';
+  const ds=document.getElementById('inm-desc'); ds.textContent=it.desc; ds.style.display=it.desc?'block':'none';
+  const a=document.getElementById('inm-link'); a.setAttribute('href',it.href); a.textContent=it.go+' \u2192';
+}
+function inmBuild(it){
+  const d=document.createElement('div'); d.className='inm-item';
+  const add=(cls,tag,txt)=>{ if(!txt)return; const e=document.createElement(tag); e.className=cls; e.textContent=txt; d.appendChild(e); };
+  add('inm-title','div',it.title); add('inm-sub','div',it.sub); add('inm-dates','div',it.dates); add('inm-desc','p',it.desc);
+  const a=document.createElement('a'); a.className='inm-link'; a.setAttribute('href',it.href); a.textContent=it.go+' \u2192'; d.appendChild(a); return d;
+}
+const INM_BUILTIN=[
+  {slug:'the-breadcrumb-investigation',title:'The Breadcrumb Investigation',sub:'An experiment in finding my voice by using it.',dates:'October 26 \u2013 November 24, 2026',desc:'Thirty days of following my curiosity out loud. An exploration of expression, participation, and what becomes visible when we practice something rather than only think about it.',go:'Follow the investigation',href:'/almanac/the-breadcrumb-investigation'},
+  {slug:'signs-of-life',title:'Signs of Life',sub:'What do we choose to make visible?',dates:'',desc:'Lately, I\u2019ve been spending a lot of time walking through neighborhoods I might not otherwise visit. I\u2019ve started paying attention to the things people put outside.',go:'Explore the signs',href:'/almanac/signs-of-life'}
+];
 async function loadInMotion(){
-  // The Breadcrumb Investigation is built into the page, so In Motion is always there. A published record in the database takes over;
-  // a published Breadcrumb record that is NOT featured means you have retired it, and the band is hidden.
+  // In Motion shows what you are actively exploring. The Breadcrumb Investigation and Signs of Life are built into the page, in that order.
+  // A published, FEATURED record in the database takes over for its own entry. A published record that is NOT featured means you have retired it.
+  // Any other published, featured investigation joins after them. At most three are shown, so the homepage stays short.
   const el=document.getElementById('in-motion'); if(!el)return;
   try{
-    const{data:feat}=await db.from('field_intelligence_entries').select('title,slug,id,what_im_noticing,started_label').eq('featured',true).eq('public',true).order('last_tended_at',{ascending:false}).limit(1).maybeSingle();
-    if(feat){ fillInMotion(feat); el.style.display='block'; return; }
-    const{data:bc}=await db.from('field_intelligence_entries').select('slug').eq('slug','the-breadcrumb-investigation').eq('public',true).maybeSingle();
-    if(bc) el.style.display='none';
+    const{data:feat}=await db.from('field_intelligence_entries').select('title,slug,id,what_im_noticing,started_label,created_at').eq('featured',true).eq('public',true).order('created_at',{ascending:true}).limit(12);
+    const rows=feat||[]; const match=(r,key)=>String(r.slug||'')===key||String(r.slug||'').indexOf(key+'-')===0;
+    const items=[];
+    for(const bi of INM_BUILTIN){
+      const row=rows.find(r=>match(r,bi.slug));
+      if(row){ items.push(inmItem(row)); continue; }
+      let retired=false;
+      try{ const{data:pub}=await db.from('field_intelligence_entries').select('slug').ilike('slug',bi.slug+'%').eq('public',true).limit(1); retired=!!(pub&&pub[0]); }catch(e){}
+      if(!retired)items.push(bi);
+    }
+    rows.filter(r=>!INM_BUILTIN.some(bi=>match(r,bi.slug))).forEach(r=>items.push(inmItem(r)));
+    const shown=items.slice(0,3);
+    if(!shown.length){ el.style.display='none'; return; }
+    inmSetFirst(shown[0]);
+    const more=document.getElementById('inm-more'); more.innerHTML='';
+    shown.slice(1).forEach(it=>more.appendChild(inmBuild(it)));
+    el.style.display='block';
   }catch(e){ /* the built-in band stays */ }
 }
 const SEASON_RANK={spring:1,summer:2,autumn:3,winter:4};
@@ -1587,7 +1633,7 @@ function loadRevisitLink(){
   a.textContent='Revisit '+seasonLabelOf({season:prev,year:py})+' \u2192'; a.setAttribute('href','/almanac#season-'+prev+'-'+py);
 }
 const INCUBATING=[
- {id:'discovery',name:'Discovery & Surprise',q:'Can we choose to be surprised?',p:"I\u2019m exploring whether chance, curiosity, discernment, and participation influence the discoveries we make, and whether we can create room for what we cannot anticipate.",link:{label:'Explore the Conditions of Discovery',slug:'the-conditions-of-discovery'}},
+ {id:'discovery',name:'Discovery & Surprise',q:'Can we choose to be surprised?',p:"I\u2019m exploring whether chance, curiosity, discernment, and participation influence the discoveries we make, and whether we can create room for what we cannot anticipate."},
  {id:'thresholds',name:'Thresholds & Participation',q:'What changes when we cross a threshold?',p:"That space between noticing a possibility and acting on it. The decision to move closer, wait, step away, or realize we\u2019ve already crossed."},
  {id:'sensitivity',name:'Sensitivity & Discernment',q:'How do we distinguish what protects us from what holds us back?',p:"Exploring fear, boundaries, discomfort, trust, and how sensitivity informs the decisions we make."},
  {id:'expression',name:'Expression & Visibility',q:'What happens when we allow ourselves to be seen and heard?',p:"The relationship between voice, confidence, self-monitoring, authenticity, and finding language for what we mean."},
@@ -1595,16 +1641,40 @@ const INCUBATING=[
  {id:'adaptation',name:'Adaptation & Repair',q:'How do living systems respond to pressure and change?',p:"From plants developing protective structures to people learning what repair, support, and adaptation require."},
  {id:'perspective',name:'Perspective & Meaning',q:'How does where we stand shape what we\u2019re able to see?',p:"Vantage points, lived experience, environment, interpretation, and the connections we make between seemingly unrelated things."}
 ];
+// ---- How the seven questions connect to investigations ----
+// ONE flat list of pairs, so neither side owns the other:
+//   - a question can have zero, one or several investigations;
+//   - an investigation can sit under several questions, and every one of those links opens its one canonical page;
+//   - each pair is a deliberate choice made here. Nothing is ever inferred from tags or themes.
+// A link appears only when the investigation's page really exists: built into the page, or published in the database.
+// To remove a connection, delete its line. The investigation itself is untouched.
+const BUILT_IN_INVESTIGATIONS=['the-conditions-of-discovery','the-breadcrumb-investigation','signs-of-life'];
+const INQUIRY_LINKS=[
+  {inquiry:'discovery',   investigation:'the-conditions-of-discovery', label:'Explore the Conditions of Discovery'},
+  // Signs of Life: its page is built in, so both links are live.
+  {inquiry:'perspective', investigation:'signs-of-life', label:'Explore the signs'},
+  {inquiry:'thresholds',  investigation:'signs-of-life', label:'Explore the signs'}
+];
 async function loadIncubating(){
   const list=document.getElementById('inc-list'); if(!list)return;
   const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  list.innerHTML=INCUBATING.map(it=>'<li><details class="inc-item" id="inc-'+esc(it.id)+'"><summary><span class="inc-name">'+esc(it.name)+'</span><span class="inc-q">'+esc(it.q)+'</span></summary><div class="inc-body"><p>'+esc(it.p)+'</p>'+(it.link?'<a class="inc-link" data-slug="'+esc(it.link.slug)+'" href="/almanac/'+esc(it.link.slug)+'">'+esc(it.link.label)+' &rarr;</a>':'')+'</div></details></li>').join('');
-  for(const a of list.querySelectorAll('a.inc-link[data-slug]')){
-    try{ const{data}=await db.from('field_intelligence_entries').select('slug').ilike('slug',a.dataset.slug+'%').eq('public',true).limit(1);
-      if(data&&data[0]&&data[0].slug){ a.href='/almanac/'+data[0].slug; } }catch(e){}
-  }
+  list.innerHTML=INCUBATING.map(it=>'<li><details class="inc-item" id="inc-'+esc(it.id)+'"><summary><span class="inc-name">'+esc(it.name)+'</span><span class="inc-q">'+esc(it.q)+'</span></summary><div class="inc-body"><p>'+esc(it.p)+'</p><div class="inc-links" data-inquiry="'+esc(it.id)+'"></div></div></details></li>').join('');
+  // which investigations have a page to go to? (built in, or published in the database; a private draft never counts)
+  const ready={};
+  await Promise.all([...new Set(INQUIRY_LINKS.map(l=>l.investigation))].map(async slug=>{
+    let href=BUILT_IN_INVESTIGATIONS.indexOf(slug)>-1?'/almanac/'+slug:null, title=null;
+    try{ const{data}=await db.from('field_intelligence_entries').select('slug,title').ilike('slug',slug+'%').eq('public',true).limit(1);
+      if(data&&data[0]&&data[0].slug){ href='/almanac/'+data[0].slug; title=data[0].title||null; } }catch(e){}
+    if(href)ready[slug]={href:href,title:title};
+  }));
+  const seen={};
+  INQUIRY_LINKS.forEach(l=>{
+    const t=ready[l.investigation], box=list.querySelector('.inc-links[data-inquiry="'+l.inquiry+'"]'), key=l.inquiry+'|'+l.investigation;
+    if(!t||!box||seen[key])return; seen[key]=1;
+    const a=document.createElement('a'); a.className='inc-link'; a.setAttribute('data-slug',l.investigation); a.href=t.href;
+    a.textContent=(l.label||('Explore '+(t.title||'the investigation')))+' \u2192'; box.appendChild(a);
+  });
 }
-
 async function loadWNPreview(){
   const el=document.getElementById('wn-preview');
   if(!el)return;
